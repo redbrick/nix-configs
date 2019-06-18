@@ -1,0 +1,12 @@
+$ORIGIN 15.206.136.in-addr.arpa.
+$TTL 300
+@       IN      SOA     ns1.redbricktest.ml.     admins.redbricktest.ml. (
+                        2019060501      ; Serial
+                        1M              ; Slave refresh interval
+                        5M              ; Query retry interval
+                        1H              ; Expiry
+                        5M )            ; Cache time
+        IN      NS      ns1.redbricktest.ml.
+        IN      NS      ns2.redbricktest.ml.
+
+5	IN	PTR	mail.redbricktest.ml.
