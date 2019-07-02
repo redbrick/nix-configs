@@ -1,3 +1,4 @@
+{config, pkgs, ...}:
 let
   common = import ../../common/variables.nix;
 
