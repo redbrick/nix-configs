@@ -1,13 +1,5 @@
 let
-  common = import ../common/variables.nix;
-
-  dhParam = bits: pkgs.runCommandNoCC "dh${bits}.pem" {
-    # Forcing version since openssl gives 1.0.2
-    buildInputs = [ openssl_1_1 ];
-    inherit bits;
-  } ''
-    openssl dhparam -out $out ${bits}
-  '';
+  common = import ../../common/variables.nix;
 
   ldapCommon = ''
     server_host = ldap://ldap.internal/
@@ -28,6 +20,10 @@ let
   ];
 in {
   networking.firewall.allowedTCPPorts = [ 25 587 ];
+
+  security.dhparams.enable = true;
+  security.dhparams.params.smtpd_512.bits = 512;
+  security.dhparams.params.smtpd_2048.bits = 2048;
 
   services.postfix = {
     enable = true;
@@ -71,8 +67,8 @@ in {
       # virtual_alias_maps = "ldap:" ++ ./ldap-virtual-alias-maps.cf;
 
       # Generate own DHParams
-      smtpd_tls_dh512_param_file = dhParam 512;
-      smtpd_tls_dh1024_param_file = dhParam 2048;
+      smtpd_tls_dh512_param_file = security.dhparams.params.smtpd_512.path;
+      smtpd_tls_dh1024_param_file = security.dhparams.params.smtpd_2048.path;
 
       # enable SMTPD auth. Dovecot will place an `auth` socket in postfix's
       # runtime directory that we will use for authentication.

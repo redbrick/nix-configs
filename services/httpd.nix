@@ -26,6 +26,8 @@ let
       '';
     };
 in {
+
+  # Acme will automatically create the certsDir and webrootDir
   security.acme.directory = common.certsDir;
   security.acme.certs = {
     "${common.tld}" = acmeCert;

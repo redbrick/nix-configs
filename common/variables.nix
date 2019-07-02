@@ -7,4 +7,6 @@
   dovecotHost = "192.168.0.135";
   dovecotSaslPort = 3659;
   dovecotLmtpPort = 24;
+
+  ldapHost = "ldap.internal";
 }
