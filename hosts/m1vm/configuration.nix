@@ -2,11 +2,11 @@
 {
   imports = [
     ./hardware-configuration.nix
-    ../common/sysconfig.nix
-    ../services/ssh.nix
-    ../services/httpd.nix
-    ../services/dns
-    ../services/postfix
+    ../../common/sysconfig.nix
+    ../../services/ssh.nix
+    ../../services/httpd.nix
+    ../../services/dns
+    ../../services/postfix
   ];
 
   # This value determines the NixOS release with which your system is to be
