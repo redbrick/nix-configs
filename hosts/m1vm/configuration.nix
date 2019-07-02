@@ -33,4 +33,12 @@
   environment.systemPackages = with pkgs; [
     wget vim git jre screen unzip
   ];
+
+  users.users.lucasade = {
+    isNormalUser = true;
+    home = "/home/lucasade";
+    description = "Lucas";
+    extraGroups = [ "wheel" ];
+    openssh.authorizedKeys.keys = user.users.root.openssh.authorizedKeys.keys;
+  };
 }
