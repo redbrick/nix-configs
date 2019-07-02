@@ -7,6 +7,7 @@
     ../../services/httpd.nix
     ../../services/dns
     ../../services/postfix
+    ../../services/dovecot
   ];
 
   # This value determines the NixOS release with which your system is to be

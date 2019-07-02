@@ -4,8 +4,8 @@ let
 
   commonDovecot = import ./variables.nix;
 
-  authConfig = import ./auth.nix { inherit common; };
-  masterConfig = import ./master.nix { inherit common; };
+  authConfig = import ./auth.nix { inherit common pkgs; };
+  masterConfig = import ./master.nix { inherit common pkgs; };
 in {
   networking.firewall.allowedTCPPorts = [ 993 common.dovecotSaslPort common.dovecotLmtpPort ];
 
@@ -29,16 +29,16 @@ in {
 
     mailboxes = [{
       name = "Junk";
-      speical_use = "Junk";
+      specialUse = "Junk";
     } {
       name = "Trash";
-      speical_use = "Trash";
+      specialUse = "Trash";
     } {
       name = "Sent";
-      speical_use = "Sent";
+      specialUse = "Sent";
     } {
       name = "Drafts";
-      speical_use = "Drafts";
+      specialUse = "Drafts";
     }];
 
     extraConfig = ''

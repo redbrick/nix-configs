@@ -1,4 +1,5 @@
-pkgs.writeText ''
+{common, pkgs, ...}:
+pkgs.writeText "dovecot-master-config" ''
 # to improve performance, disable fsync globally - we will enable it for
 # some specific services later on
 mail_fsync = never
@@ -36,14 +37,14 @@ service imap {
 # Listen on LMTP port for postfix to deliver mail
 service lmtp {
   inet_listener {
-    port = ${common.dovecotLmtpPort}
+    port = ${builtins.toString common.dovecotLmtpPort}
   }
 }
 
 # Listen on auth socket for postfix to authenticate users
 service auth {
   inet_listener {
-    port = ${common.dovecotSaslPort}
+    port = ${builtins.toString common.dovecotSaslPort}
   }
 }
 

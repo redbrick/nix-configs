@@ -1,5 +1,6 @@
+{common, pkgs, ...}:
 let
-  ldapConfig = pkgs.writeText ''
+  ldapConfig = pkgs.writeText "dovecot-ldap-config" ''
     hosts = ${common.ldapHost}
     ldap_version = 3
     auth_bind = no
@@ -13,7 +14,7 @@ let
     default_pass_scheme = CRYPT
   '';
 
-in pkgs.writeText ''
+in pkgs.writeText "dovecot-auth-config" ''
   # cache all authentication results for one hour
   auth_cache_size = 10M
   auth_cache_ttl = 1 hour

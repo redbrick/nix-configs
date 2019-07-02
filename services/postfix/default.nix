@@ -8,7 +8,7 @@ let
     bind = no
   '';
 
-  virtualMailboxMaps = pkgs.writeText "virt-mailbox-maps" ldapCommon ++ ''
+  virtualMailboxMaps = pkgs.writeText "virt-mailbox-maps" ldapCommon + ''
     search_base = ou=accounts,o=redbrick
     query_filter = (&(objectClass=posixAccount)(uid=%u))
     result_attribute = uid
@@ -111,8 +111,8 @@ in {
       # limit maximum e-mail size to 25MB. mailbox size must be at least as big as
       # the message size for the mail to be accepted, but has no meaning after
       # that since we are using Dovecot for delivery.
-      message_size_limit = 25600000;
-      mailbox_size_limit = 25600000;
+      message_size_limit = "25600000";
+      mailbox_size_limit = "25600000";
 
       # prevent spammers from searching for valid users
       disable_vrfy_command = true;
