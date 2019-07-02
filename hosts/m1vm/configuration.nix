@@ -27,6 +27,7 @@
     prefixLength = 24;
   }];
   networking.defaultGateway = "192.168.0.254";
+  networking.nameservers = ["192.168.0.4"];
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
