@@ -8,7 +8,7 @@ let
     bind = no
   '';
 
-  virtualMailboxMaps = ldapCommon ++ ''
+  virtualMailboxMaps = pkgs.writeText "virt-mailbox-maps" ldapCommon ++ ''
     search_base = ou=accounts,o=redbrick
     query_filter = (&(objectClass=posixAccount)(uid=%u))
     result_attribute = uid
@@ -38,9 +38,6 @@ in {
     sslKey = "${common.certsDir}/${common.tld}/key.pem";
     sslCACert = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
 
-    # Set to false because Nix config for virtuals doesn't handle LDAP
-    haveVirtual = false;
-
     # disable authentication on port 25. This port should only be used by other
     # mail servers
     enableSubmission = true;
@@ -64,23 +61,23 @@ in {
       proxy_interfaces = "136.206.15.5";
 
       virtual_mailbox_domains = "static:${common.tld}";
-      virtual_mailbox_maps = "ldap:" ++ pkgs.writeText virtualMailboxMaps;
+      virtual_mailbox_maps = "ldap:${virtualMailboxMaps}";
       # virtual_alias_maps = "ldap:" ++ ./ldap-virtual-alias-maps.cf;
 
       # Generate own DHParams
-      smtpd_tls_dh512_param_file = security.dhparams.params.smtpd_512.path;
-      smtpd_tls_dh1024_param_file = security.dhparams.params.smtpd_2048.path;
+      smtpd_tls_dh512_param_file = config.security.dhparams.params.smtpd_512.path;
+      smtpd_tls_dh1024_param_file = config.security.dhparams.params.smtpd_2048.path;
 
       # enable SMTPD auth. Dovecot will place an `auth` socket in postfix's
       # runtime directory that we will use for authentication.
       # https://wiki.dovecot.org/HowTo/PostfixAndDovecotSASL
       smtpd_sasl_auth_enable = true;
       smtpd_sasl_type = "dovecot";
-      smtpd_sasl_path = "inet:${common.dovecotHost}:${common.dovecotSaslPort}";
+      smtpd_sasl_path = "inet:${common.dovecotHost}:${builtins.toString common.dovecotSaslPort}";
 
       # deliver mail for virtual users to Dovecot's TCP socket
       # http://www.postfix.org/lmtp.8.html
-      virtual_transport = "lmtp:inet:${common.dovecotHost}:${common.dovecotLmtpPort}";
+      virtual_transport = "lmtp:inet:${common.dovecotHost}:${builtins.toString common.dovecotLmtpPort}";
 
       # cache incoming and outgoing TLS sessions
       smtpd_tls_session_cache_database = "btree:/var/tmp/smtpd_tlscache";
@@ -154,24 +151,24 @@ in {
       # reduces spam
       smtpd_helo_required = true;
 
-      smtpd_helo_restrictions = pkgs.concatStringsSep ", " (commonRestrictions ++ [
+      smtpd_helo_restrictions = builtins.concatStringsSep ", " (commonRestrictions ++ [
         "reject_invalid_helo_hostname" "reject_non_fqdn_helo_hostname"
         # This will reject all incoming mail without a HELO hostname that
         # properly resolves in DNS. This is a somewhat restrictive check and may
         # reject legitimate mail.
         "reject_unknown_helo_hostname"
       ]);
-      smtpd_sender_restrictions = pkgs.concatStringsSep ", " (commonRestrictions ++ [
+      smtpd_sender_restrictions = builtins.concatStringsSep ", " (commonRestrictions ++ [
         "reject_non_fqdn_sender" "reject_unknown_sender_domain"
       ]);
-      smtpd_recipient_restrictions = pkgs.concatStringsSep ", " (commonRestrictions ++ [
+      smtpd_recipient_restrictions = builtins.concatStringsSep ", " (commonRestrictions ++ [
         "reject_non_fqdn_recipient" "reject_unknown_recipient_domain"
         "reject_unverified_recipient"
       ]);
-      smtpd_data_restrictions = pkgs.concatStringsSep ", " (commonRestrictions ++ [
+      smtpd_data_restrictions = builtins.concatStringsSep ", " (commonRestrictions ++ [
         "reject_multi_recipient_bounce"
       ]);
-      smtpd_relay_restrictions = pkgs.concatStringsSep ", " [
+      smtpd_relay_restrictions = builtins.concatStringsSep ", " [
         "permit_mynetworks" "permit_sasl_authenticated"
         # !!! THIS SETTING PREVENTS YOU FROM BEING AN OPEN RELAY !!!
         "reject_unauth_destination"

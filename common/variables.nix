@@ -2,7 +2,7 @@
   tld = "redbricktest.ml";
 
   certsDir = "/var/lib/acme";
-  webrootDir = certsDir + "/.webroot";
+  webrootDir = "/var/lib/acme/.webroot";
 
   dovecotHost = "192.168.0.135";
   dovecotSaslPort = 3659;
