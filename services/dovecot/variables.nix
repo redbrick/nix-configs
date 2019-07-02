@@ -1,0 +1,3 @@
+{
+    configPath = "/etc/dovecot.d";
+}
