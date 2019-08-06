@@ -12,9 +12,15 @@ in {
   networking.domain = common.tld;
   networking.nameservers = ["192.168.0.4"];
   networking.proxy.default = "http://proxy.internal:3128/";
-  networking.proxy.noProxy = "127.0.0.1,localhost,internal";
+  networking.proxy.noProxy = "127.0.0.1,localhost,*.internal";
 
   # Enable rsyslog
   services.rsyslogd.enable = true;
   services.rsyslogd.extraConfig = "*.* @log.internal:6514;RSYSLOG_SyslogProtocol23Format";
+
+  # List packages installed in system profile. To search, run:
+  # $ nix search wget
+  environment.systemPackages = with pkgs; [
+    wget vim git jre screen unzip
+  ];
 }

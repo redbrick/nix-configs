@@ -29,17 +29,11 @@
   networking.defaultGateway = "192.168.0.254";
   networking.nameservers = ["192.168.0.4"];
 
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
-  environment.systemPackages = with pkgs; [
-    wget vim git jre screen unzip
-  ];
-
   users.users.lucasade = {
     isNormalUser = true;
     home = "/home/lucasade";
     description = "Lucas";
     extraGroups = [ "wheel" ];
-    openssh.authorizedKeys.keys = user.users.root.openssh.authorizedKeys.keys;
+    openssh.authorizedKeys.keys = config.users.users.root.openssh.authorizedKeys.keys;
   };
 }
