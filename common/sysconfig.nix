@@ -9,6 +9,12 @@ in {
     defaultLocale = "en_IE.UTF-8";
   };
 
+  # Set sensible kernel parameters
+  boot.kernelParams = [
+    "boot.shell_on_fail"
+    "panic=30" "boot.panic_on_fail" # reboot the machine upon fatal boot issues
+  ];
+
   # Use Redbrick DNS and HTTP proxy
   networking.domain = common.tld;
   networking.nameservers = ["192.168.0.4"];
@@ -22,6 +28,27 @@ in {
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    wget vim git jre screen unzip
+    wget vim git screen unzip
   ];
+
+  # Enable accounting so systemd-cgtop can show IO load
+  systemd.enableCgroupAccounting = true;
+
+  # Enable and configure ZFS. It won't affect anything
+  # if a machine doesn't use it
+  boot.supportedFilesystems = [ "zfs" ];
+  boot.zfs = {
+    enableUnstable = true;
+    forceImportRoot = false;
+    forceImportAll = false;
+  };
+  services.zfs.autoScrub.enable = true;
+  services.zfs.autoSnapshot = {
+    enable = true;
+    frequent = 8;
+    hourly = 0;
+    daily = 7;
+    weekly = 0;
+    monthly = 1;
+  };
 }
