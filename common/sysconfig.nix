@@ -31,6 +31,9 @@ in {
     wget vim git screen unzip
   ];
 
+  # Allow unfree packages
+  nixpkgs.config.allowUnfree = true;
+
   # Enable accounting so systemd-cgtop can show IO load
   systemd.enableCgroupAccounting = true;
 
