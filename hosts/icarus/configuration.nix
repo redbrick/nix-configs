@@ -4,6 +4,7 @@
     ./hardware-configuration.nix
     ../../common/sysconfig.nix
     ../../services/ssh.nix
+    ../../services/gluster.nix
   ];
 
   # This value determines the NixOS release with which your system is to be
