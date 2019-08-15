@@ -18,11 +18,14 @@
   boot.loader.grub.version = 2;
   boot.loader.grub.device = "/dev/sda";
 
-  networking.hostName = "daedalus";
-  networking.interfaces.eno1.ipv4.addresses = [{
-    address = "192.168.0.50";
-    prefixLength = 24;
-  }];
-  networking.defaultGateway = "192.168.0.254";
-  networking.nameservers = ["192.168.0.4"];
+  networking = {
+    hostName = "daedalus";
+    hostId = "0f127302";
+
+    interfaces.eno1.ipv4.addresses = [{
+      address = "192.168.0.50";
+      prefixLength = 24;
+    }];
+    defaultGateway = "192.168.0.254";
+  };
 }

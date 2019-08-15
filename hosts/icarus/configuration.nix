@@ -18,11 +18,14 @@
   boot.loader.grub.version = 2;
   boot.loader.grub.device = "/dev/sda";
 
-  networking.hostName = "icarus";
-  networking.interfaces.eno1.ipv4.addresses = [{
-    address = "192.168.0.150";
-    prefixLength = 24;
-  }];
-  networking.defaultGateway = "192.168.0.254";
-  networking.nameservers = ["192.168.0.4"];
+  networking = {
+    hostName = "icarus";
+    hostId = "94851fc9";
+
+    interfaces.eno1.ipv4.addresses = [{
+      address = "192.168.0.150";
+      prefixLength = 24;
+    }];
+    defaultGateway = "192.168.0.254";
+  };
 }
