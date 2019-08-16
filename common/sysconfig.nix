@@ -25,6 +25,12 @@ in {
   services.rsyslogd.enable = true;
   services.rsyslogd.extraConfig = "*.* @log.internal:6514;RSYSLOG_SyslogProtocol23Format";
 
+  # Enable LDAP
+  users.ldap.enable = true;
+  users.ldap.timeLimit = 2;
+  users.ldap.server = "ldap://ldap.internal/";
+  users.ldap.base = "o=redbrick";
+
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
