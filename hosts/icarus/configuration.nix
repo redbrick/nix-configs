@@ -24,5 +24,5 @@ in {
     hostName = "icarus";
     hostId = "94851fc9";
     defaultGateway = "192.168.0.254";
-  } // (variables.bondConfig [ "eno1" "eno2" ] 192.168.0.150);
+  } // (variables.bondConfig [ "eno1" "eno2" ] "192.168.0.150");
 }
