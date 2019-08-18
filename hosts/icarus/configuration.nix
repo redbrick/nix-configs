@@ -1,5 +1,7 @@
 { config, pkgs, ... }:
-{
+let
+  variables = import ../../common/variables.nix;
+in {
   imports = [
     ./hardware-configuration.nix
     ../../common/sysconfig.nix
@@ -21,11 +23,6 @@
   networking = {
     hostName = "icarus";
     hostId = "94851fc9";
-
-    interfaces.eno1.ipv4.addresses = [{
-      address = "192.168.0.150";
-      prefixLength = 24;
-    }];
     defaultGateway = "192.168.0.254";
-  };
+  } // (variables.bondConfig [ "eno1" "eno2" ] 192.168.0.150);
 }
