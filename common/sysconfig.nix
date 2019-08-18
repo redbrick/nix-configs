@@ -17,6 +17,7 @@ in {
 
   # Use Redbrick DNS and HTTP proxy
   networking.domain = common.tld;
+  networking.search = [ "internal" ]; # Networking.domain is appended by Nix
   networking.nameservers = ["192.168.0.4"];
   networking.proxy.default = "http://proxy.internal:3128/";
   networking.proxy.noProxy = "127.0.0.1,localhost,*.internal";
@@ -34,7 +35,7 @@ in {
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    wget vim git screen unzip megacli ipmitool
+    wget vim git screen tmux unzip megacli ipmitool smartmontools htop
   ];
 
   # Allow unfree packages
