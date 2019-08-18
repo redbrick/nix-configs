@@ -34,7 +34,7 @@ in {
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    wget vim git screen unzip
+    wget vim git screen unzip megacli ipmitool
   ];
 
   # Allow unfree packages
