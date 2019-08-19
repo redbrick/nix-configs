@@ -3,7 +3,7 @@
 # to /etc/nixos/configuration.nix instead.
 { config, lib, pkgs, ... }:
 let
-  common = import ../common/variables.nix;
+  common = import ../../common/variables.nix;
 in {
   imports =
     [ <nixpkgs/nixos/modules/installer/scan/not-detected.nix>
