@@ -23,9 +23,9 @@ in {
       fsType = "ext4";
     };
 
-  fileSystems."/gstorage/brick1" = common.zfsMountConfig "zbrick1";
-  fileSystems."/gstorage/brick2" = common.zfsMountConfig "zbrick2";
-  fileSystems."/gstorage/brick3" = common.zfsMountConfig "zbrick3";
+  fileSystems."/gstorage/brick1/gvhomes" = common.zfsMountConfig "zbrick1/gvhomes";
+  fileSystems."/gstorage/brick2/gvhomes" = common.zfsMountConfig "zbrick2/gvhomes";
+  fileSystems."/gstorage/brick3/gvhomes" = common.zfsMountConfig "zbrick3/gvhomes";
 
   swapDevices =
     [ { device = "/dev/disk/by-uuid/66307090-88b1-4467-acfe-a22c2a06e2ce"; }
