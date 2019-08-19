@@ -45,4 +45,10 @@
       prefixLength = 24;
     }];
   };
+
+  zfsMountConfig = device: {
+    inherit device;
+    fsType = "zfs";
+    options = [ "nofail" ];
+  };
 }

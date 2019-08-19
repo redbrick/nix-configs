@@ -2,8 +2,9 @@
 # and may be overwritten by future invocations.  Please make changes
 # to /etc/nixos/configuration.nix instead.
 { config, lib, pkgs, ... }:
-
-{
+let
+  common = import ../common/variables.nix;
+in {
   imports =
     [ <nixpkgs/nixos/modules/installer/scan/not-detected.nix>
     ];
@@ -21,6 +22,10 @@
     { device = "/dev/disk/by-uuid/2566bfc9-6da9-433e-afe8-ad07abf0e19a";
       fsType = "ext4";
     };
+
+  fileSystems."/gstorage/brick1" = common.zfsMountConfig "zbrick1";
+  fileSystems."/gstorage/brick2" = common.zfsMountConfig "zbrick2";
+  fileSystems."/gstorage/brick3" = common.zfsMountConfig "zbrick3";
 
   swapDevices =
     [ { device = "/dev/disk/by-uuid/e915505b-9777-4362-ab8e-0b6d069e3916"; }
