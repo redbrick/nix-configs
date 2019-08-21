@@ -4,7 +4,7 @@
     ./hardware-configuration.nix
     ../../common/sysconfig.nix
     ../../services/ssh.nix
-    ../../services/httpd.nix
+    ../../services/httpd
     ../../services/dns
     ../../services/postfix
     ../../services/dovecot
