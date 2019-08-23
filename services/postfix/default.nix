@@ -185,4 +185,11 @@ in {
       "reject_unknown_client_hostname"
     ];
   };
+
+  # Enable rspamd and connect to postfix.
+  # That's too easy..
+  services.rspamd = {
+    enable = true;
+    postfix.enable = true;
+  };
 }
