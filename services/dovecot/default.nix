@@ -4,7 +4,9 @@ let
 
   commonDovecot = import ./variables.nix;
 
-  authConfig = import ./auth.nix { inherit common pkgs; };
+  vmailUserName = "vmail";
+
+  authConfig = import ./auth.nix { inherit common pkgs vmailUserName; };
   masterConfig = import ./master.nix { inherit common pkgs; };
 in {
   networking.firewall.allowedTCPPorts = [ 993 common.dovecotSaslPort common.dovecotLmtpPort ];
@@ -17,13 +19,15 @@ in {
     enable = true;
     enableImap = true;
     enableLmtp = true;
+    enablePAM = false;
+    showPAMFailure = false;
 
     sslServerCert = "${common.certsDir}/${common.tld}/fullchain.pem";
     sslServerKey = "${common.certsDir}/${common.tld}/key.pem";
     sslCACert = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
 
-    mailUser = "vmail";
-    mailGroup = "vmail";
+    mailUser = vmailUserName;
+    mailGroup = vmailUserName;
 
     mailLocation = "maildir:~/Maildir:INDEX=/var/mail/indexes/%u";
 
@@ -42,6 +46,14 @@ in {
     }];
 
     extraConfig = ''
+      # to improve performance, disable fsync globally - we will enable it for
+      # some specific services later on
+      mail_fsync = never
+
+      auth_verbose = yes
+
+      mail_debug = yes
+
       namespace inbox {
         separator = /
         inbox = yes
@@ -56,15 +68,14 @@ in {
 
       protocol lmtp {
         mail_fsync = optimized
-        mail_plugins = $mail_plugins sieve
+        mail_plugins = $mail_plugins
       }
 
       # require SSL for all non-localhost connections
       ssl = required
 
       # require modern crypto - taken from Mozilla's SSL recommendations page
-      ssl_dh_parameters_length = 2048
-      ssl_protocols = !SSLv2 !SSLv3 !TLSv1 !TLSv1.1 TLSv1.2
+      ssl_min_protocol = TLSv1.2
       ssl_cipher_list = ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA256
       ssl_prefer_server_ciphers = yes
 
@@ -80,12 +91,12 @@ in {
 
       plugin {
         # location of users' sieve directory and their "active" sieve script
-        sieve = file:~/sieve;active=~/.dovecot.sieve
+        # sieve = file:~/sieve;active=~/.dovecot.sieve
 
         # directory of global sieve scripts to run before and after processing ALL
         # incoming mail
-        sieve_before = /usr/local/etc/dovecot/sieve-before.d
-        sieve_after  = /usr/local/etc/dovecot/sieve-after.d
+        # sieve_before = /usr/local/etc/dovecot/sieve-before.d
+        # sieve_after  = /usr/local/etc/dovecot/sieve-after.d
 
         # make sieve aware of user+tag@domain.tld aliases
         recipient_delimiter = +

@@ -8,12 +8,12 @@ let
     bind = no
   '';
 
-  virtualMailboxMaps = pkgs.writeText "virt-mailbox-maps" ldapCommon + ''
+  virtualMailboxMaps = pkgs.writeText "virt-mailbox-maps" (ldapCommon + ''
     search_base = ou=accounts,o=redbrick
     query_filter = (&(objectClass=posixAccount)(uid=%u))
     result_attribute = uid
     result_format = %s@${common.tld}
-  '';
+  '');
 
   commonRestrictions = [
     "permit_mynetworks" "permit_sasl_authenticated"
@@ -60,8 +60,8 @@ in {
       # http://www.postfix.org/BASIC_CONFIGURATION_README.html#proxy_interfaces
       proxy_interfaces = "136.206.15.5";
 
-      virtual_mailbox_domains = "static:${common.tld}";
-      virtual_mailbox_maps = "ldap:${virtualMailboxMaps}";
+      virtual_mailbox_domains = "${common.tld}";
+      virtual_mailbox_maps = "hash:/var/lib/postfix/aliases";
       # virtual_alias_maps = "ldap:" ++ ./ldap-virtual-alias-maps.cf;
 
       # Generate own DHParams

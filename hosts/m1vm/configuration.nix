@@ -22,6 +22,7 @@
   boot.loader.grub.device = "/dev/vda";
 
   networking.hostName = "m1cr0man";
+  networking.hostId = "";
   networking.interfaces.enp1s0.ipv4.addresses = [{
     address = "192.168.0.135";
     prefixLength = 24;
