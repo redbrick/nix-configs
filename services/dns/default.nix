@@ -24,6 +24,7 @@
         name = "15.206.136.in-addr.arpa";
       }
       {
+        file = "";
         masters = [ "192.168.0.4" ];
         master = false;
         name = "internal";
