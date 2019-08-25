@@ -1,3 +1,4 @@
+{ lib, ... }:
 {
   services.bind = {
     enable = true;
@@ -31,6 +32,11 @@
       }
     ];
   };
+
+  # Fix issues where services can't resolve their targets
+  systemd.services.bind.requiredBy = [
+    "syslog.service"
+  ];
 
   networking.firewall.allowedTCPPorts = [ 53 ];
   networking.firewall.allowedUDPPorts = [ 53 ];

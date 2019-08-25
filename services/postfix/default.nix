@@ -3,7 +3,7 @@ let
   common = import ../../common/variables.nix;
 
   ldapCommon = ''
-    server_host = ldap://ldap.internal/
+    server_host = ldap://${common.ldapHost}/
     version = 3
     bind = no
   '';

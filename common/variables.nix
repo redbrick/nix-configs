@@ -8,7 +8,8 @@
   dovecotSaslPort = 3659;
   dovecotLmtpPort = 24;
 
-  ldapHost = "ldap.internal";
+  # Hard coded otherwise NSCD will crash systems during boot if network is down
+  ldapHost = "192.168.0.4";
 
   bondConfig = interfaces: address: {
     bonds.bond0 = {
