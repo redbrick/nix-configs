@@ -34,9 +34,10 @@
   };
 
   # Fix issues where services can't resolve their targets
-  systemd.services.bind.requiredBy = [
-    "syslog.service"
-  ];
+  systemd.services.nscd.requires = [ "network-online.target" ];
+  systemd.services.nscd.after = [ "network-online.target" ];
+  systemd.services.resolvconf.requires = [ "network-online.target" ];
+  systemd.services.resolvconf.after = [ "network-online.target" ];
 
   networking.firewall.allowedTCPPorts = [ 53 ];
   networking.firewall.allowedUDPPorts = [ 53 ];

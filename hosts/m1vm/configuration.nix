@@ -21,14 +21,15 @@
   boot.loader.grub.version = 2;
   boot.loader.grub.device = "/dev/vda";
 
-  networking.hostName = "m1cr0man";
-  networking.hostId = "68b41103";
-  networking.interfaces.enp1s0.ipv4.addresses = [{
-    address = "192.168.0.135";
-    prefixLength = 24;
-  }];
-  networking.defaultGateway = "192.168.0.254";
-  networking.nameservers = ["192.168.0.4"];
+  networking = {
+    hostName = "m1cr0man";
+    hostId = "68b41103";
+    defaultGateway = "192.168.0.254";
+    interfaces.enp1s0.ipv4.addresses = [{
+      address = "192.168.0.135";
+      prefixLength = 24;
+    }];
+  };
 
   users.users.lucasade = {
     isNormalUser = true;
