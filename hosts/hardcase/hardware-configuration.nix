@@ -22,6 +22,12 @@
       fsType = "zfs";
     };
 
+  # zfs create -o dedup=off -o mountpoint=legacy -o recordsize=4K  zroot/postgres
+  fileSystems."/zroot/postgres" =
+    { device = "zroot/postgres";
+      fsType = "zfs";
+    };
+
   fileSystems."/boot" =
     { device = "/dev/disk/by-uuid/0b075b97-42b6-4444-a16f-8f0e86aae318";
       fsType = "ext4";
