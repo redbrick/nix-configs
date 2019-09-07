@@ -1,0 +1,136 @@
+#
+# Redbrick Account LDAP Schema
+#
+# Dermot Duffy - 2003/May/4
+#
+# $Id$
+# 
+# Drop in replacement for the account parts of nis.schema
+# Contains ordering, renumbering and substr access which 
+# nis.schema does not.
+#
+# Depends upon common.schema
+#
+# OID Base is 1.3.6.1.4.1.9736.15.1.2 (See README for more)
+#
+# Attribute Type Definitions
+
+#attributetype ( 1.3.6.1.4.1.9736.15.1.2.1.1 NAME 'uidNumber'
+#	DESC 'An integer uniquely identifying a user'
+#	EQUALITY integerMatch
+#	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27 
+#	SINGLE-VALUE )
+
+#attributetype ( 1.3.6.1.4.1.9736.15.1.2.1.2 NAME 'gidNumber'
+#	DESC 'An integer uniquely identifying a group'
+#	EQUALITY integerMatch
+#	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27 
+#	SINGLE-VALUE )
+
+attributetype ( 1.3.6.1.4.1.9736.15.1.2.1.3 NAME 'gecos'
+        DESC 'The GECOS field'
+        EQUALITY caseIgnoreMatch
+        SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+	SINGLE-VALUE )
+
+attributetype ( 1.3.6.1.4.1.9736.15.1.2.1.4 NAME 'homeDirectory'
+	DESC 'The home directory'
+	EQUALITY caseExactIA5Match
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26 
+	SINGLE-VALUE )
+
+attributetype ( 1.3.6.1.4.1.9736.15.1.2.1.5 NAME 'loginShell'
+	DESC 'The login shell'
+	EQUALITY caseExactIA5Match
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26 
+	SINGLE-VALUE )
+
+attributetype ( 1.3.6.1.4.1.9736.15.1.2.1.6 NAME 'shadowLastChange'
+	EQUALITY integerMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27 
+	SINGLE-VALUE )
+
+attributetype ( 1.3.6.1.4.1.9736.15.1.2.1.7 NAME 'shadowMin'
+	EQUALITY integerMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27 
+	SINGLE-VALUE )
+
+attributetype ( 1.3.6.1.4.1.9736.15.1.2.1.8 NAME 'shadowMax'
+	EQUALITY integerMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27 
+	SINGLE-VALUE )
+
+attributetype ( 1.3.6.1.4.1.9736.15.1.2.1.9 NAME 'shadowWarning'
+	EQUALITY integerMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27 
+	SINGLE-VALUE )
+
+attributetype ( 1.3.6.1.4.1.9736.15.1.2.1.10 NAME 'shadowInactive'
+	EQUALITY integerMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27 
+	SINGLE-VALUE )
+
+attributetype ( 1.3.6.1.4.1.9736.15.1.2.1.11 NAME 'shadowExpire'
+	EQUALITY integerMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27 
+	SINGLE-VALUE )
+
+attributetype ( 1.3.6.1.4.1.9736.15.1.2.1.12 NAME 'shadowFlag'
+	EQUALITY integerMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27 
+	SINGLE-VALUE )
+
+attributetype ( 1.3.6.1.4.1.9736.15.1.2.1.13 NAME 'memberUid'
+	EQUALITY caseExactIA5Match
+	SUBSTR caseExactIA5SubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26 )
+
+attributetype ( 1.3.6.1.4.1.9736.15.1.2.1.14 NAME 'flag'
+        DESC 'A generic flags associated with this user'
+        EQUALITY caseIgnoreIA5Match
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.26 )
+
+attributetype ( 1.3.6.1.4.1.9736.15.1.2.1.15 NAME 'quota'
+        DESC 'Quota information'
+        EQUALITY caseIgnoreIA5Match
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.26 )
+
+attributetype ( 1.3.6.1.4.1.9736.15.1.2.1.16 NAME 'sambaPassword'
+       DESC 'The samba password of user'
+       EQUALITY octetStringMatch
+       SYNTAX 1.3.6.1.4.1.1466.115.121.1.40{128} 
+       SINGLE-VALUE )
+
+# Object Class Definitions
+
+objectclass ( 1.3.6.1.4.1.9736.15.1.2.2.1 NAME 'posixAccount' 
+	SUP top 
+	STRUCTURAL	
+	DESC 'An account with standard POSIX attributes'
+	MUST ( uid $ uidNumber $ gidNumber $ homeDirectory $ userPassword $ loginShell )
+	MAY ( cn $ gecos $ description $ flag $ quota $ sambaPassword ) )
+
+
+objectclass ( 1.3.6.1.4.1.9736.15.1.2.2.2 NAME 'shadowAccount' 
+	SUP top 
+	AUXILIARY
+	DESC 'Standard shadow parameters'
+	MUST uid
+	MAY ( userPassword $ shadowLastChange $ shadowMin $
+	      shadowMax $ shadowWarning $ shadowInactive $
+	      shadowExpire $ shadowFlag $ description $ sambaPassword ) )
+
+objectclass ( 1.3.6.1.4.1.9736.15.1.2.2.3 NAME 'posixGroup' 
+	SUP top 
+	STRUCTURAL
+	DESC 'A unix group'
+	MUST ( cn $ gidNumber )
+	MAY ( userPassword $ memberUid $ description ) )
+
+objectclass ( 1.3.6.1.4.1.9736.15.1.2.2.4 NAME 'dcuAccount' 
+	SUP top 
+	STRUCTURAL	
+	DESC 'A DCU account'
+	MUST ( cn )
+	MAY ( gecos $ mail $ givenName $ sn $ l ) )

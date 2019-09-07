@@ -1,0 +1,19 @@
+#
+# Redbrick User Database LDAP Schema
+#
+# Dermot Duffy - 2003/May/15
+#
+# $Id$
+#
+# OID Base is 1.3.6.1.4.1.9736.15.1.1 (See ldap schema README for more)
+#
+# User database information
+#
+# Attribute Type Definitions
+
+attributetype ( 1.3.6.1.4.1.9736.15.1.1.1.1
+        NAME ( 'username' )
+        DESC 'A username'
+        EQUALITY caseIgnoreMatch
+        SUBSTR caseIgnoreSubstringsMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256} )

@@ -1,0 +1,186 @@
+#
+# Redbrick User Database LDAP Schema
+# 
+# Dermot Duffy - 2003/May/3
+#
+# $Id$
+#
+# OID Base is 1.3.6.1.4.1.9736.15.1.3 (See README for more)
+#
+# User database information
+#
+# Attribute Type Definitions
+
+attributetype ( 1.3.6.1.4.1.9736.15.1.3.1.1 NAME 'photopath'
+	DESC 'The path to a photo'
+	EQUALITY caseExactIA5Match
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26 )
+
+attributetype ( 1.3.6.1.4.1.9736.15.1.3.1.2 NAME 'altmail'
+        DESC 'An alternate email address'
+        EQUALITY caseIgnoreIA5Match
+        SUBSTR caseIgnoreIA5SubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256} )
+
+attributetype (  1.3.6.1.4.1.9736.15.1.3.1.3 NAME 'newbie'
+        DESC 'A new account?'
+        EQUALITY booleanMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.7 )
+
+attributetype (  1.3.6.1.4.1.9736.15.1.3.1.4 NAME 'id'
+        DESC 'An integer identifying number'
+        EQUALITY integerMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.27 )
+
+attributetype (  1.3.6.1.4.1.9736.15.1.3.1.5 NAME 'course'
+        DESC 'A course identifier'
+        EQUALITY caseIgnoreIA5Match
+        SUBSTR caseIgnoreIA5SubstringsMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{5} )
+
+attributetype (  1.3.6.1.4.1.9736.15.1.3.1.6 NAME 'date'
+	DESC 'A representation of a date'
+	EQUALITY caseIgnoreIA5Match
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26 )
+
+# Various boring attributes, important that each one have a different
+# oid otherwise they're counted as one single entity, which means
+# MUST clauses only take one of them.
+
+attributetype ( 1.3.6.1.4.1.9736.15.1.3.1.6.1 NAME 'created'
+	SUP date )
+
+attributetype ( 1.3.6.1.4.1.9736.15.1.3.1.6.2 NAME 'updated'
+	SUP date )
+
+attributetype ( 1.3.6.1.4.1.9736.15.1.3.1.6.3 NAME 'birthday'
+	SUP date )
+
+attributetype ( 1.3.6.1.4.1.9736.15.1.3.7.1 NAME 'createdby'
+	SUP username )
+
+attributetype ( 1.3.6.1.4.1.9736.15.1.3.7.2 NAME 'updatedby'
+	SUP username )
+
+attributetype ( 1.3.6.1.4.1.9736.15.1.3.1.8 NAME 'year'
+        DESC 'A college year 1-4/C/X'
+        EQUALITY caseIgnoreIA5Match
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.26 )
+
+attributetype ( 1.3.6.1.4.1.9736.15.1.3.1.9 NAME 'yearsPaid'
+        DESC 'Number of years paid by this user'
+    	ORDERING integerOrderingMatch
+	EQUALITY integerMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.27 )
+
+# Object Class Definitions
+
+objectclass ( 1.3.6.1.4.1.9736.15.1.3.2.1 NAME 'userdb'
+	SUP top
+	ABSTRACT
+	DESC 'User database information'
+	MUST ( cn $ altmail $ newbie $ created $ createdby $ updated $ updatedby )
+	MAY ( sn $ description $ photopath $ course $ year $ id $ birthday $ host $ yearsPaid $ flag ) )
+
+objectclass ( 1.3.6.1.4.1.9736.15.1.3.2.2 NAME 'payinguser'
+	SUP userdb
+	AUXILIARY
+	DESC 'A paying user account'
+	MUST ( yearsPaid ) )
+
+objectclass ( 1.3.6.1.4.1.9736.15.1.3.2.3 NAME 'payingdcuuser'
+	SUP payinguser
+	AUXILIARY
+	DESC 'A paying DCU user account'
+	MUST ( id ) )
+
+objectclass ( 1.3.6.1.4.1.9736.15.1.3.2.4 NAME 'associat'
+	SUP payingdcuuser
+	AUXILIARY
+	DESC 'A Redbrick associat' )
+
+objectclass ( 1.3.6.1.4.1.9736.15.1.3.2.5 NAME 'staff'
+	SUP payingdcuuser
+	AUXILIARY
+	DESC 'A DCU staff member' )
+
+objectclass ( 1.3.6.1.4.1.9736.15.1.3.2.7 NAME 'studentuser'
+	SUP payingdcuuser
+	AUXILIARY
+	DESC 'A DCU student' 
+	MUST ( year $ course ) )
+
+objectclass ( 1.3.6.1.4.1.9736.15.1.3.2.8 NAME 'committe'
+	SUP studentuser
+	AUXILIARY
+	DESC 'Committee member' ) )
+
+objectclass ( 1.3.6.1.4.1.9736.15.1.3.2.9 NAME 'member'
+	SUP studentuser
+	AUXILIARY
+	DESC 'Run o-the-mill member' ) )
+
+objectclass ( 1.3.6.1.4.1.9736.15.1.3.2.10 NAME 'freeuser'
+	SUP userdb
+	AUXILIARY 
+	DESC 'Non paying user' ) )
+
+
+objectclass ( 1.3.6.1.4.1.9736.15.1.3.2.6 NAME 'founders'
+	SUP freeuser
+	AUXILIARY
+	DESC 'A Redbrick founder' )
+
+
+objectclass ( 1.3.6.1.4.1.9736.15.1.3.2.11 NAME 'redbrick'
+	SUP freeuser
+	AUXILIARY
+	DESC 'Redbrick user type' ) )
+
+objectclass ( 1.3.6.1.4.1.9736.15.1.3.2.12 NAME 'reserved'
+	STRUCTURAL
+	MUST ( description $ uid )
+	MAY ( cn $ flag ) 
+	DESC 'Reserved user type' ) )
+
+objectclass ( 1.3.6.1.4.1.9736.15.1.3.2.13 NAME 'system'
+	SUP freeuser
+	AUXILIARY
+	DESC 'System user type' ) )
+
+objectclass ( 1.3.6.1.4.1.9736.15.1.3.2.14 NAME 'dcu'
+	SUP freeuser
+	AUXILIARY
+	DESC 'DCU user type' ) )
+
+objectclass ( 1.3.6.1.4.1.9736.15.1.3.2.15 NAME 'guest'
+	SUP userdb
+	AUXILIARY
+	DESC 'Guest user type' ) )
+
+objectclass ( 1.3.6.1.4.1.9736.15.1.3.2.16 NAME 'intersoc'
+	SUP freeuser
+	AUXILIARY
+	DESC 'Intersocs user' ) )
+
+objectclass ( 1.3.6.1.4.1.9736.15.1.3.2.17 NAME 'club'
+	SUP freeuser
+	AUXILIARY
+	DESC 'DCU Club user' ) )
+
+objectclass ( 1.3.6.1.4.1.9736.15.1.3.2.18 NAME 'society'
+	SUP freeuser
+	AUXILIARY
+	DESC 'DCU Society user' ) )
+
+objectclass ( 1.3.6.1.4.1.9736.15.1.3.2.19 NAME 'projects'
+	SUP freeuser
+	AUXILIARY
+	DESC 'Redbrick project user' ) )
+
+# Extra non standard
+
+objectclass ( 1.3.6.1.4.1.9736.15.1.3.2.20 NAME 'admin'
+	SUP userdb
+	AUXILIARY )
+
