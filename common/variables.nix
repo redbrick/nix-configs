@@ -9,7 +9,8 @@
   dovecotLmtpPort = 24;
 
   # Hard coded otherwise NSCD will crash systems during boot if network is down
-  ldapHost = "192.168.0.4";
+  # 50 = daedalus
+  ldapHost = "192.168.0.50";
 
   bondConfig = interfaces: address: {
     bonds.bond0 = {
