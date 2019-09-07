@@ -7,8 +7,15 @@ in {
     enable = true;
     suffix = "o=redbrick";
     rootdn = "cn=root,ou=ldap,o=redbrick";
+    defaultSchemas = false; # We don't use the nis.schema
     database = "hdb";
+    extraDatabaseConfig = ''
+      cachesize 1000000
+    '';
     extraConfig = ''
+      include ${pkgs.openldap.out}/etc/schema/core.schema
+      include ${pkgs.openldap.out}/etc/schema/cosine.schema
+      include ${pkgs.openldap.out}/etc/schema/inetorgperson.schema
       include ${./schema/common.schema}
       include ${./schema/system.schema}
       include ${./schema/userdb.schema}
