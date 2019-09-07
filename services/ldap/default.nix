@@ -1,6 +1,6 @@
 { pkgs, config, ... }:
 let
-  rootpwFile = "/var/lib/private/ldap.secret";
+  rootpwFile = "/var/secrets/ldap.secret";
 in {
   services.openldap = {
     inherit rootpwFile;
