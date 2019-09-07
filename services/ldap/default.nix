@@ -1,3 +1,6 @@
+# Required initial setup:
+# Add /var/secrets/ldap.secret
+# Add /var/db/ldap/DB_CONFIG
 { pkgs, config, ... }:
 let
   rootpwFile = "/var/secrets/ldap.secret";
@@ -56,4 +59,6 @@ in {
         by * read
     '';
   };
+
+  networking.firewall.allowedTCPPorts = [ 389 ];
 }
