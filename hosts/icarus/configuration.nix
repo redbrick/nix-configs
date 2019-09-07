@@ -7,7 +7,7 @@ in {
     ../../common/sysconfig.nix
     ../../services/ssh.nix
     ../../services/gluster.nix
-    ../../services/ldap.nix
+    ../../services/ldap
   ];
 
   # This value determines the NixOS release with which your system is to be

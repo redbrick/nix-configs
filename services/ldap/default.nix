@@ -19,7 +19,22 @@ in {
     database = "hdb";
     extraDatabaseConfig = ''
       cachesize 100000
-    '';
+    '' + (if (config.redbrick.ldapSlaveTo == null) then ''
+
+      # Master config
+      overlay syncprov
+      syncprov-checkpoint 100 10
+    '' else ''
+      syncrepl rid=000
+        provider=ldap://${config.redbrick.ldapSlaveTo}:389
+        type=refreshAndPersist
+        retry="5 5 300 +"
+        attrs="*,+"
+        binddn="cn=slurpd,ou=ldap,o=redbrick"
+        bindmethod=simple
+        credentials=${lib.fileContents slurpdpwFile}
+        searchbase="o=redbrick"
+    '');
     extraConfig = ''
       include ${pkgs.openldap.out}/etc/schema/core.schema
       include ${pkgs.openldap.out}/etc/schema/cosine.schema
@@ -67,22 +82,7 @@ in {
       # Default ACL
       access to *
         by * read
-    '' + (if (config.redbrick.ldapSlaveTo == null) then ''
-
-      # Master config
-      overlay syncprov
-      syncprov-checkpoint 100 10
-    '' else ''
-      syncrepl rid=000
-        provider=ldap://${config.redbrick.ldapSlaveTo}:389
-        type=refreshAndPersist
-        retry="5 5 300 +"
-        attrs="*,+"
-        binddn="cn=slurpd,ou=ldap,o=redbrick"
-        bindmethod=simple
-        credentials=${lib.fileContents slurpdpwFile}
-        searchbase="o=redbrick"
-    '');
+    '';
   };
 
   networking.firewall.allowedTCPPorts = [ 389 ];
