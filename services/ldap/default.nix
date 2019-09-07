@@ -10,7 +10,7 @@ in {
     defaultSchemas = false; # We don't use the nis.schema
     database = "hdb";
     extraDatabaseConfig = ''
-      cachesize 1000000
+      cachesize 100000
     '';
     extraConfig = ''
       include ${pkgs.openldap.out}/etc/schema/core.schema
@@ -22,8 +22,6 @@ in {
 
       backend hdb
       lastmod on
-
-      cachesize 100000
 
       sizelimit unlimited
 
