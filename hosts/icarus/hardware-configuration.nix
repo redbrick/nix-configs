@@ -27,10 +27,9 @@ in {
   fileSystems."/gstorage/brick2/gvhomes" = common.zfsMountConfig "zbrick2/gvhomes";
   fileSystems."/gstorage/brick3/gvhomes" = common.zfsMountConfig "zbrick3/gvhomes";
 
-  # TODO rename to gvservices, add gvarchive
-  fileSystems."/gstorage/brick1/gvwebtree" = common.zfsMountConfig "zbrick1/gvwebtree";
-  fileSystems."/gstorage/brick2/gvwebtree" = common.zfsMountConfig "zbrick2/gvwebtree";
-  fileSystems."/gstorage/brick3/gvwebtree" = common.zfsMountConfig "zbrick3/gvwebtree";
+  fileSystems."/gstorage/brick1/gvservices" = common.zfsMountConfig "zbrick1/gvservices";
+  fileSystems."/gstorage/brick2/gvservices" = common.zfsMountConfig "zbrick2/gvservices";
+  fileSystems."/gstorage/brick3/gvservices" = common.zfsMountConfig "zbrick3/gvservices";
 
   swapDevices =
     [ { device = "/dev/disk/by-uuid/e915505b-9777-4362-ab8e-0b6d069e3916"; }
