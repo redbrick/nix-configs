@@ -89,9 +89,9 @@ in {
       !include ${masterConfig}
 
       # Enable sieve scripts
-      protocols = $protocols sieve
+      # protocols = $protocols sieve
 
-      plugin {
+      # plugin {
         # location of users' sieve directory and their "active" sieve script
         # sieve = file:~/sieve;active=~/.dovecot.sieve
 
@@ -101,11 +101,11 @@ in {
         # sieve_after  = /usr/local/etc/dovecot/sieve-after.d
 
         # make sieve aware of user+tag@domain.tld aliases
-        recipient_delimiter = +
+        # recipient_delimiter = +
 
         # maximum size of all user's sieve scripts
-        sieve_quota_max_storage = 10M
-      }
+        # sieve_quota_max_storage = 10M
+      # }
     '';
   };
 }
