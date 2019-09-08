@@ -32,7 +32,7 @@ in {
     setSendmail = true;
     origin = tld;
     hostname = "mail.${tld}";
-    destination = ["mail.${tld}" "localhost"];
+    destination = [tld "localhost"];
     recipientDelimiter = "+";
 
     sslCert = "${common.certsDir}/${tld}/fullchain.pem";
@@ -56,13 +56,12 @@ in {
       # IP address used by postfix to send outgoing mail. You only need this if
       # your machine has multiple IP addresses - set it to your MX address to
       # satisfy your SPF record.
-      # TODO allow this machine to connect to public addresses to send mail
       smtp_bind_address = "192.168.0.135";
       # http://www.postfix.org/BASIC_CONFIGURATION_README.html#proxy_interfaces
       proxy_interfaces = "136.206.15.5";
 
-      virtual_mailbox_domains = "${tld}";
-      virtual_mailbox_maps = "hash:/var/lib/postfix/aliases";
+      #virtual_mailbox_domains = "${tld}";
+      #virtual_mailbox_maps = "hash:/var/lib/postfix/aliases";
       # virtual_alias_maps = "ldap:" ++ ./ldap-virtual-alias-maps.cf;
 
       # Generate own DHParams
