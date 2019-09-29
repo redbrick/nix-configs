@@ -1,3 +1,4 @@
+{ pkgs, ... }:
 {
   services.glusterfs = {
     enable = true;
@@ -6,6 +7,24 @@
   };
 
   services.nfs.server.enable = true;
+
+  nixpkgs.overlays = [
+    (self: super: {
+
+      glusterfs = super.glusterfs.overrideAttrs (oldAttrs: {
+        separateDebugInfo = true;
+        name = "glusterfs-7.0";
+        version = "7.0rc3";
+        meta.version = "7.0rc3";
+        src = self.fetchFromGitHub {
+          owner = "gluster";
+          repo = "glusterfs";
+          rev = "bac5d7d60d14a190217fcd84fd0803a4d6a2e37d";
+          sha256 = "1y2q0jpnj3z9pwx1azh6ls2x0ciqnfja0vczj0xp9v83l2a6qa02";
+        };
+      });
+    })
+  ];
 
   # For each brick open port 49152 + brick_num
   # Our nodes have 3 bricks
