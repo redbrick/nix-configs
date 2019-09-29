@@ -7,6 +7,7 @@ in {
     ../../common/sysconfig.nix
     ../../services/ssh.nix
     ../../services/gluster.nix
+    ../../services/ldap
   ];
 
   # This value determines the NixOS release with which your system is to be
@@ -25,4 +26,7 @@ in {
     hostId = "94851fc9";
     defaultGateway = "192.168.0.254";
   } // (variables.bondConfig [ "eno1" "eno2" ] "192.168.0.150");
+
+  # Set as ldap slave to daedalus
+  redbrick.ldapSlaveTo = "daedalus.internal";
 }
