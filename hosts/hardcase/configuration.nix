@@ -7,6 +7,7 @@ in {
     ../../common/sysconfig.nix
     ../../services/ssh.nix
     ../../services/postgres.nix
+    ../../services/gitea.nix
   ];
 
   # This value determines the NixOS release with which your system is to be
