@@ -28,6 +28,12 @@
       fsType = "zfs";
     };
 
+  # zfs create -o mountpoint=legacy  zroot/git
+  fileSystems."/zroot/git" =
+    { device = "zroot/git";
+      fsType = "zfs";
+    };
+
   fileSystems."/boot" =
     { device = "/dev/disk/by-uuid/0b075b97-42b6-4444-a16f-8f0e86aae318";
       fsType = "ext4";
