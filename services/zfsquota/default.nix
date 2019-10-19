@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 let
   common = import ../../common/variables.nix;
   zfsPackage = if config.boot.zfs.enableUnstable then pkgs.zfsUnstable else pkgs.zfs;
@@ -9,13 +9,13 @@ let
     xargs -I {} zfs set {} ${config.redbrick.zfsquotaDataset}
   '';
 in {
+  imports = [ ./options.nix ];
+
   systemd.services.zfsquota = {
     description = "Sync ZFS quotas with LDAP";
     requires = [ "${config.redbrick.zfsquotaDataset}.mount" ];
 
-    environment = {
-      PATH = with pkgs; "${openldap}/bin:${zfsPackage}:/bin:${findutils}/bin:${gawk}/bin";
-    };
+    path = with pkgs; [ openldap zfsPackage gawk ];
 
     serviceConfig = {
       ExecStart = "${quotaScript}/bin/zfsquota.sh";
