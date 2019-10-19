@@ -8,6 +8,7 @@ in {
     ../../services/ssh.nix
     ../../services/gluster.nix
     ../../services/ldap
+    ../../services/zfsquota
   ];
 
   # This value determines the NixOS release with which your system is to be
@@ -34,4 +35,8 @@ in {
   services.nfs.server.exports = ''
     /zbackup  *(sec=sys,rw,no_subtree_check,no_root_squash)
   '';
+
+  # Sync quotas with LDAP
+  redbrick.zfsquotaDataset = "zbackup";
+  redbrick.zfsquotaSize = "300M";
 }
