@@ -29,4 +29,9 @@ in {
 
   # Set as ldap slave to daedalus
   redbrick.ldapSlaveTo = "daedalus.internal";
+
+  # Icarus is providing /storage for now
+  services.nfs.server.exports = ''
+    /zbackup  *(sec=sys,rw,no_subtree_check,no_root_squash)
+  '';
 }
