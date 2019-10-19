@@ -45,6 +45,7 @@ in {
       lastmod on
 
       sizelimit unlimited
+      loglevel ${config.services.openldap.logLevel}
 
       # ACLs
       access to dn.children="ou=2002,ou=accounts,o=redbrick"
