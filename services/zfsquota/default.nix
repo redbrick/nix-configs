@@ -2,8 +2,9 @@
 let
   common = import ../../common/variables.nix;
   zfsPackage = if config.boot.zfs.enableUnstable then pkgs.zfsUnstable else pkgs.zfs;
+  scriptName = "zfsquota.sh";
 
-  quotaScript = pkgs.writeShellScriptBin "zfsquota.sh" ''
+  quotaScript = pkgs.writeShellScriptBin scriptName ''
     ldapsearch -h ${common.ldapHost} -p 389 -xLLL -b o=redbrick objectClass=posixAccount uidNumber |\
     awk '/^uidNumber/ { print "userquota@"$2"=${config.redbrick.zfsquotaSize}" }' |\
     xargs -I {} zfs set {} ${config.redbrick.zfsquotaDataset}
@@ -18,7 +19,7 @@ in {
     path = with pkgs; [ openldap zfsPackage gawk ];
 
     serviceConfig = {
-      ExecStart = "${quotaScript}/bin/zfsquota.sh";
+      ExecStart = "${quotaScript}/bin/${scriptName}";
       Restart = "no";
     };
   };
