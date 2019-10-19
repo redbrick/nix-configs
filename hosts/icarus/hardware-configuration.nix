@@ -35,6 +35,10 @@ in {
   fileSystems."/gstorage/brick2/gvarchive" = common.zfsMountConfig "zbrick2/gvarchive";
   fileSystems."/gstorage/brick3/gvarchive" = common.zfsMountConfig "zbrick3/gvarchive";
 
+  fileSystems."/zbackup" = (common.zfsMountConfig "zbackup") // {
+    options = [ "relatime" "nosuid" "nodev" ];
+  };
+
   swapDevices =
     [ { device = "/dev/disk/by-uuid/e915505b-9777-4362-ab8e-0b6d069e3916"; }
     ];
