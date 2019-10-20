@@ -18,13 +18,15 @@ in {
 
     script = ''socat tcp-l:${toString queryPort},fork,reuseaddr system:'
       read USERNAME_RAW
-      USERNAME="''${USERNAME_RAW//[^a-zA-Z0-9]/}"
-      echo $(zfs get userquota@"$USERNAME" -Ho value ${dataset}) $(zfs get userused@"$USERNAME" -Ho value ${dataset})
+      USERNAME="''${USERNAME_RAW//[^a-zA-Z0-9_-]/}"
+      echo $(zfs get userquota@"$USERNAME" -Hpo value ${dataset}) $(zfs get userused@"$USERNAME" -Hpo value ${dataset})
       '
     '';
 
     serviceConfig = {
       Restart = "always";
+      MemoryLimit = "10M";
+      CPUShares = 10;
     };
   };
 
@@ -35,8 +37,8 @@ in {
     path = with pkgs; [ openldap zfsPackage gawk ];
 
     script = ''
-      ldapsearch -h ${common.ldapHost} -p 389 -xLLL -b o=redbrick '(&(objectClass=posixAccount)(quota=*)) uidNumber quota |\
-      awk '/^uidNumber:/ { u=$2 } /^quota:/ { q=$2 } u & q { print "userquota@"u"="q; q="";u=""; }' |\
+      ldapsearch -h ${common.ldapHost} -p 389 -xLLL -b o=redbrick '(&(objectClass=posixAccount)(quota=*))' uidNumber quota |\
+      awk '/^uidNumber:/ { u=$2 } /^quota:/ { q=$2 } u && q { print "userquota@"u"="q; q="";u=""; }' |\
       xargs -I {} zfs set {} ${dataset}
     '';
 
