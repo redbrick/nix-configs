@@ -16,11 +16,11 @@ in {
 
     path = with pkgs; [ socat zfsPackage ];
 
-    script = ''socat -u tcp-l:${queryPort},fork,reuseaddr system:'
+    script = ''socat tcp-l:${toString queryPort},fork,reuseaddr system:'
       read USERNAME_RAW
       USERNAME="''${USERNAME_RAW//[^a-zA-Z0-9]/}"
       echo $(zfs get userquota@"$USERNAME" -Ho value ${dataset}) $(zfs get userused@"$USERNAME" -Ho value ${dataset})
-      ' &
+      '
     '';
 
     serviceConfig = {
