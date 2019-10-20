@@ -20,7 +20,8 @@ rec {
 
   # Hard coded otherwise NSCD will crash systems during boot if network is down
   # 50 = daedalus
-  ldapHost = "192.168.0.50";
+  ldapHostIp = "192.168.0.50";
+  ldapHost = "ldap.internal";
 
   bondConfig = interfaces: address: {
     bonds.bond0 = {
