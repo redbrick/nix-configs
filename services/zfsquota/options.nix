@@ -5,9 +5,4 @@
     default = null;
     type = lib.types.str;
   };
-  options.redbrick.zfsquotaSize = lib.mkOption {
-    description = "Amount of space to give users";
-    default = "100M";
-    type = lib.types.str;
-  };
 }
