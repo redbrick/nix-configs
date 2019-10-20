@@ -38,5 +38,5 @@ in {
 
   # Sync quotas with LDAP
   redbrick.zfsquotaDataset = "zbackup";
-  redbrick.zfsquotaSize = "300M";
+  redbrick.zfsquotaSize = "1G";
 }
