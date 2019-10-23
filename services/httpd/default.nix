@@ -14,6 +14,7 @@ let
   acmeVhost = domain: {
     hostName = domain;
     serverAliases = [ "*.${domain}" ];
+    listen = [{ port = 80; }];
     servedDirs = [{
       urlPath = "/.well-known/acme-challenge";
       dir = "${common.webrootDir}/.well-known/acme-challenge";
@@ -36,10 +37,12 @@ in {
 
   services.httpd = {
     enable = true;
+    adminAddr = "admins+httpd@${common.tld}";
     multiProcessingModule = "event";
     maxClients = 250;
     sslServerKey = "${common.certsDir}/${common.tld}/key.pem";
     sslServerCert = "${common.certsDir}/${common.tld}/fullchain.pem";
+    extraModules = [ "userdir" ]
 
     extraConfig = ''
       ProxyPreserveHost On
@@ -47,14 +50,36 @@ in {
 
     virtualHosts = [
       (acmeVhost common.tld)
-    ];
+      {
+        hostName  = "www.${common.tld}";
+        documentRoot = "/storage/webtree/redbrick/htdocs";
+        listen = [{ port = 443; }];
+        enableSSL = true;
+        serverAliases = [ comman.tld ];
+        extraConfig = ''
+          Options Includes Indexes SymLinksIfOwnerMatch MultiViews ExecCGI
 
-    adminAddr = "admins+httpd@${common.tld}";
-    hostName = "localhost";
-
-    # Only acme certs are accessible via port 80,
-    # everything else is explicitly upgraded to https
-    listen = [{ port = 80; }];
+          Alias /auth/ "/storage/webtree/redbrick/extras/auth/"
+          Alias /cgi-bin/ "/storage/webtree/redbrick/extras/cgi-bin/"
+          Alias /cmt/ "/storage/webtree/redbrick/extras/cmt/"
+          Alias /includes/ "/storage/webtree/redbrick/extras/includes/"
+          Alias /robots.txt "/storage/webtree/redbrick/extras/robots.txt"
+          UserDir public_html
+          UserDir disabled root
+          <Directory /home/*/*/public_html>
+            AllowOverride AuthConfig FileInfo Indexes Limit AuthConfig Options=ExecCGI,Includes,IncludesNoExec,Indexes,MultiViews,SymlinksIfOwnerMatch
+            Options Indexes SymLinksIfOwnerMatch Includes ExecCGI
+          </Directory>
+          <Directory /home/*/*/*/public_html>
+            AllowOverride AuthConfig FileInfo Indexes Limit AuthConfig Options=ExecCGI,Includes,IncludesNoExec,Indexes,MultiViews,SymlinksIfOwnerMatch
+            Options Indexes SymLinksIfOwnerMatch Includes ExecCGI
+          </Directory>
+        '';
+      }
+    ]
+    ++ vhosts.vhost
+    ++ vhosts.vhostRedirect
+    ++ vhosts.vhostProxy;
   };
 
   networking.firewall.allowedTCPPorts = [ 80 443 ];
