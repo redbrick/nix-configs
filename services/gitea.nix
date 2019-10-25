@@ -1,5 +1,7 @@
 let
   common = import ../common/variables.nix;
+  secrets = import /var/secrets/gitea.nix;
+  tokenPath = "/var/secrets/gitea_token.secret";
 
   stateDir = "/var/lib/gitea";
   repositoryRoot = "/zroot/git";
@@ -70,16 +72,12 @@ in {
 
       [security]
       INSTALL_LOCK   = true
-      SECRET_KEY     = ZaAgYxsMt3
-      INTERNAL_TOKEN = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYmYiOjE0OTI2MDcxMDR9.T3CCdLpGcXvOzC_Wg7Uq8fN-YE3TCJPofGmiHnaypUg
+      SECRET_KEY     = ${secrets.secret_key}
+      INTERNAL_TOKEN_URI = file:${tokenPath}
 
       [openid]
       ENABLE_OPENID_SIGNUP = false
       ENABLE_OPENID_SIGNIN = false
-
-      [oauth2]
-      JWT_SECRET = 0l4Md3fIHiSXRVK4gFpvO2CFXqhb8qSzWLuHPioWUyo
-
     '';
   };
 
