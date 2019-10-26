@@ -42,13 +42,14 @@ in {
     maxClients = 250;
     sslServerKey = "${common.certsDir}/${common.tld}/key.pem";
     sslServerCert = "${common.certsDir}/${common.tld}/fullchain.pem";
-    extraModules = [ "userdir" ]
 
     extraConfig = ''
+      ProxyRequests off
+      ProxyVia Off
       ProxyPreserveHost On
     '';
 
-    virtualHosts = [
+    virtualHosts = vhosts ++ [
       (acmeVhost common.tld)
       {
         hostName  = "www.${common.tld}";
@@ -76,10 +77,7 @@ in {
           </Directory>
         '';
       }
-    ]
-    ++ vhosts.vhost
-    ++ vhosts.vhostRedirect
-    ++ vhosts.vhostProxy;
+    ];
   };
 
   networking.firewall.allowedTCPPorts = [ 80 443 ];
