@@ -8,6 +8,7 @@
     ../../services/dns
     ../../services/postfix
     ../../services/dovecot
+    ../../services/certs
   ];
 
   # This value determines the NixOS release with which your system is to be

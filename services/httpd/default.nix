@@ -2,13 +2,6 @@ let
   common = import ../common/variables.nix;
   vhosts = import ./vhosts.nix;
 
-  # Define common settings for all ACME cert configurations
-  acmeCert = {
-    email = "admins+acme@${common.tld}";
-    webroot = common.webrootDir;
-    postRun = "systemctl reload httpd.service";
-  };
-
   # Define a base vhost for all TLDs. This will serve only ACME on port 80
   # Everything else is promoted to HTTPS
   acmeVhost = domain: {
@@ -28,12 +21,6 @@ let
     '';
   };
 in {
-
-  # Acme will automatically create the certsDir and webrootDir
-  security.acme.directory = common.certsDir;
-  security.acme.certs = {
-    "${common.tld}" = acmeCert;
-  };
 
   services.httpd = {
     enable = true;
