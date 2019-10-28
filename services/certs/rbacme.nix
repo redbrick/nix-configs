@@ -6,6 +6,7 @@ with lib;
 let
 
   cfg = config.security.acme;
+  directory = "/var/lib/acme";
 
   certOpts = { name, ... }: {
     options = {
@@ -142,7 +143,7 @@ in {
           certToServices = cert: data:
               let
                 cpath = lpath + optionalString (data.activationDelay != null) ".staging";
-                lpath = "${cfg.directory}/${cert}";
+                lpath = "${directory}/${cert}";
                 rights = if data.allowKeysForGroup then "750" else "700";
                 renewHook = pkgs.writeScript "lego-renew-hook" ''
                   touch ${cpath}/renewed
@@ -167,9 +168,9 @@ in {
                   };
                   path = with pkgs; [ lego systemd ];
                   preStart = ''
-                    mkdir -p '${cfg.directory}'
-                    chown 'root:root' '${cfg.directory}'
-                    chmod 755 '${cfg.directory}'
+                    mkdir -p '${directory}'
+                    chown 'root:root' '${directory}'
+                    chmod 755 '${directory}'
                     if [ ! -d '${cpath}' ]; then
                       mkdir '${cpath}'
                     fi

@@ -43,7 +43,7 @@ in {
         documentRoot = "/storage/webtree/redbrick/htdocs";
         listen = [{ port = 443; }];
         enableSSL = true;
-        serverAliases = [ comman.tld ];
+        serverAliases = [ common.tld ];
         extraConfig = ''
           Options Includes Indexes SymLinksIfOwnerMatch MultiViews ExecCGI
 
