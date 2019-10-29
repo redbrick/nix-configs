@@ -9,8 +9,8 @@ in {
     legoCerts."${common.tld}" = {
       email = "admins+acme@${common.tld}";
       dnsProvider = "rfc2136";
-      credentialsFile = /var/secrets/certs.secret;
-      extraDomains = "*.${common.tld}";
+      credentialsFile = "/var/secrets/certs.secret";
+      extraDomains."*.${common.tld}" = null;
     };
   };
 }

@@ -1,5 +1,5 @@
 let
-  common = import ../common/variables.nix;
+  common = import ../../common/variables.nix;
   vhosts = import ./vhosts.nix;
 
   # Define a base vhost for all TLDs. This will serve only ACME on port 80
