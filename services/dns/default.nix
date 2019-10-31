@@ -5,6 +5,15 @@ let
   keysPath = "/var/secrets/dnskeys.conf";
   keyName = "dnsupdate.${common.tld}.";
 in {
+  # Enable eddsa support
+  nixpkgs.overlays = [
+    (self: super: {
+      bind = super.bind.overrideAttrs (oldAttrs: {
+        configureFlags = lib.remove "--without-eddsa" oldAttrs.configureFlags;
+      });
+    })
+  ];
+
   services.bind = {
     enable = true;
 
