@@ -1,5 +1,10 @@
 { lib, ... }:
-{
+let
+  common = import ../../common/variables.nix;
+
+  keysPath = "/var/secrets/dnskeys.conf";
+  keyName = "dnsupdate.${common.tld}.";
+in {
   services.bind = {
     enable = true;
 
@@ -11,6 +16,10 @@
       "136.206.16.0/24"
     ];
 
+    extraConfig = ''
+      include "${keysPath}";
+    '';
+
     zones = [
       {
         # Not using common.tld here becaue we actually want to configure
@@ -18,6 +27,7 @@
         file = ./redbricktest.ml;
         master = true;
         name = "redbricktest.ml";
+        extraConfig = "allow-update { key ${keyName}; };";
       }
       {
         file = ./redbricktest.ml.rr;
