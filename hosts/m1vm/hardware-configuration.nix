@@ -17,6 +17,11 @@
       fsType = "ext4";
     };
 
+  fileSystems."/storage" =
+    { device = "icarus.internal:/zbackup";
+      fsType = "nfs";
+    };
+
   swapDevices =
     [ { device = "/dev/disk/by-uuid/7ca217d6-538e-4919-a57f-c5cbaeb93832"; }
     ];
