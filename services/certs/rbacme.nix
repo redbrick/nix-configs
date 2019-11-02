@@ -207,11 +207,11 @@ in {
                     cd '${cpath}'
 
                     if [ -e ${cpath}/renewed ]; then
-                      cp .lego/certificates/${data.domain}.crt cert.pem
-                      cp .lego/certificates/${data.domain}.issuer.crt chain.pem
-                      cp .lego/certificates/${data.domain}.key key.pem
-                      cat .lego/certificates/${data.domain}.crt .lego/certificates/${data.domain}.issuer.crt > fullchain.pem
-                      cat .lego/certificates/${data.domain}.key .lego/certificates/${data.domain}.crt .lego/certificates/${data.domain}.issuer.crt > full.pem
+                      cp .lego/certificates/*${data.domain}.crt cert.pem
+                      cp .lego/certificates/*${data.domain}.issuer.crt chain.pem
+                      cp .lego/certificates/*${data.domain}.key key.pem
+                      cat .lego/certificates/*${data.domain}.crt .lego/certificates/*${data.domain}.issuer.crt > fullchain.pem
+                      cat .lego/certificates/*${data.domain}.key .lego/certificates/*${data.domain}.crt .lego/certificates/*${data.domain}.issuer.crt > full.pem
                       chmod ${rights} "${cpath}/"{key,fullchain,full,chain,cert}.pem
                       chown '${data.user}:${data.group}' "${cpath}/"{key,fullchain,full,chain,cert}.pem
 
