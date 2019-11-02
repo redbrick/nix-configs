@@ -6,7 +6,7 @@ let
 
   keysPath = "/var/secrets/dnskeys.conf";
   keyName = "dnsupdate.${common.tld}.";
-  workingDir = "/var/db/bind";
+  zonePath = "/var/db/bind";
 in {
   # Enable eddsa support
   nixpkgs.overlays = [
@@ -17,8 +17,6 @@ in {
     })
   ];
 
-  systemd.tmpfiles.rules = [ "d ${workingDir} 0700 named root -" ];
-
   services.bind = {
     enable = true;
 
@@ -28,10 +26,6 @@ in {
       "136.206.15.0/23"
     ];
 
-    extraOptions = ''
-      directory "${workingDir}";
-    '';
-
     extraConfig = ''
       include "${keysPath}";
     '';
@@ -40,13 +34,13 @@ in {
       {
         # Not using common.tld here becaue we actually want to configure
         # a specific domain
-        file = ./redbricktest.ml;
+        file = "${zonePath}/redbricktest.ml";
         master = true;
         name = "redbricktest.ml";
         extraConfig = "allow-update { key ${keyName}; };";
       }
       {
-        file = ./redbricktest.ml.rr;
+        file = "${zonePath}/redbricktest.ml.rr";
         master = true;
         name = "15.206.136.in-addr.arpa";
       }
