@@ -116,6 +116,13 @@ let
         '';
         example = "/var/src/secrets/example.org-route53-api-token";
       };
+
+      extraFlags = mkOption {
+        type = types.listOf types.str;
+        example = "[ \"--dns.disable-cp\" ]";
+        default = [];
+        description = "Extra flags to LEGo";
+      };
     };
   };
 
@@ -127,7 +134,7 @@ in {
       default = { };
       type =  with types; attrsOf (submodule certOpts);
       description = ''
-        Attribute set of certificates to get signed and renewed by LEGO.
+        Attribute set of certificates to get signed and renewed by LEGo.
       '';
       example = options.security.acme.certs.example;
     };
@@ -151,7 +158,8 @@ in {
                 globalOpts = optionals (!cfg.production) ["--server" "https://acme-staging-v02.api.letsencrypt.org/directory"]
                           ++ concatLists (mapAttrsToList (name: root: [ "--domains" name ]) data.extraDomains)
                           ++ [ "--domains" data.domain "--email" data.email "--accept-tos" ]
-                          ++ (if data.dnsProvider != null then [ "--dns" data.dnsProvider ] else [ "--http.webroot" data.webroot ]);
+                          ++ (if data.dnsProvider != null then [ "--dns" data.dnsProvider ] else [ "--http.webroot" data.webroot ])
+                          ++ data.extraFlags;
                 renewOpts = [ "renew" "--renew-hook" renewHook "--days" (toString cfg.validMin) ];
                 acmeService = {
                   description = "Renew ACME Certificate for ${cert}";
