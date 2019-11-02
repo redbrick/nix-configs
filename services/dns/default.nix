@@ -28,8 +28,11 @@ in {
       "136.206.15.0/23"
     ];
 
-    extraConfig = ''
+    extraOptions = ''
       directory "${workingDir}";
+    '';
+
+    extraConfig = ''
       include "${keysPath}";
     '';
 
