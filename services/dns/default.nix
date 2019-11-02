@@ -1,9 +1,12 @@
+# Requires tsig-keygen dnsupdate.${common.tld} > /var/secrets/dnskeys.conf
+# chown named:root chmod 400
 { lib, ... }:
 let
   common = import ../../common/variables.nix;
 
   keysPath = "/var/secrets/dnskeys.conf";
   keyName = "dnsupdate.${common.tld}.";
+  workingDir = "/var/db/bind";
 in {
   # Enable eddsa support
   nixpkgs.overlays = [
@@ -14,18 +17,19 @@ in {
     })
   ];
 
+  systemd.tmpfiles.rules = [ "d ${workingDir} 0700 named root -" ];
+
   services.bind = {
     enable = true;
 
     cacheNetworks = [
       "127.0.0.0/24"
-      "192.168.0.0/24"
-      "192.168.1.0/24"
-      "136.206.15.0/24"
-      "136.206.16.0/24"
+      "192.168.0.0/23"
+      "136.206.15.0/23"
     ];
 
     extraConfig = ''
+      directory "${workingDir}";
       include "${keysPath}";
     '';
 
