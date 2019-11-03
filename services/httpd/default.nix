@@ -20,6 +20,34 @@ let
       RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI} [R=301]
     '';
   };
+
+  redbrickVhost = domain: {
+    hostName  = "www.${domain}";
+    documentRoot = "${vhosts.webtree}/redbrick/htdocs";
+    listen = [{ port = 443; }];
+    enableSSL = true;
+    extraModules = [ "suexec" ];
+    serverAliases = [ domain ];
+    extraConfig = ''
+      Options Includes Indexes SymLinksIfOwnerMatch MultiViews ExecCGI
+
+      Alias /auth/ "${vhosts.webtree}/redbrick/extras/auth/"
+      Alias /cgi-bin/ "${vhosts.webtree}/redbrick/extras/cgi-bin/"
+      Alias /cmt/ "${vhosts.webtree}/redbrick/extras/cmt/"
+      Alias /includes/ "${vhosts.webtree}/redbrick/extras/includes/"
+      Alias /robots.txt "${vhosts.webtree}/redbrick/extras/robots.txt"
+      UserDir public_html
+      UserDir disabled root
+      <Directory /home/*/*/public_html>
+        AllowOverride AuthConfig FileInfo Indexes Limit AuthConfig Options=ExecCGI,Includes,IncludesNoExec,Indexes,MultiViews,SymlinksIfOwnerMatch
+        Options Indexes SymLinksIfOwnerMatch Includes ExecCGI
+      </Directory>
+      <Directory /home/*/*/*/public_html>
+        AllowOverride AuthConfig FileInfo Indexes Limit AuthConfig Options=ExecCGI,Includes,IncludesNoExec,Indexes,MultiViews,SymlinksIfOwnerMatch
+        Options Indexes SymLinksIfOwnerMatch Includes ExecCGI
+      </Directory>
+    '';
+  };
 in {
 
   services.httpd = {
@@ -36,35 +64,10 @@ in {
       ProxyPreserveHost On
     '';
 
-    virtualHosts = vhosts ++ [
+    virtualHosts = [
       (acmeVhost common.tld)
-      {
-        hostName  = "www.${common.tld}";
-        documentRoot = "/storage/webtree/redbrick/htdocs";
-        listen = [{ port = 443; }];
-        enableSSL = true;
-        serverAliases = [ common.tld ];
-        extraConfig = ''
-          Options Includes Indexes SymLinksIfOwnerMatch MultiViews ExecCGI
-
-          Alias /auth/ "/storage/webtree/redbrick/extras/auth/"
-          Alias /cgi-bin/ "/storage/webtree/redbrick/extras/cgi-bin/"
-          Alias /cmt/ "/storage/webtree/redbrick/extras/cmt/"
-          Alias /includes/ "/storage/webtree/redbrick/extras/includes/"
-          Alias /robots.txt "/storage/webtree/redbrick/extras/robots.txt"
-          UserDir public_html
-          UserDir disabled root
-          <Directory /home/*/*/public_html>
-            AllowOverride AuthConfig FileInfo Indexes Limit AuthConfig Options=ExecCGI,Includes,IncludesNoExec,Indexes,MultiViews,SymlinksIfOwnerMatch
-            Options Indexes SymLinksIfOwnerMatch Includes ExecCGI
-          </Directory>
-          <Directory /home/*/*/*/public_html>
-            AllowOverride AuthConfig FileInfo Indexes Limit AuthConfig Options=ExecCGI,Includes,IncludesNoExec,Indexes,MultiViews,SymlinksIfOwnerMatch
-            Options Indexes SymLinksIfOwnerMatch Includes ExecCGI
-          </Directory>
-        '';
-      }
-    ];
+      (redbrickVhost common.tld)
+    ] ++ vhosts;
   };
 
   networking.firewall.allowedTCPPorts = [ 80 443 ];

@@ -6,6 +6,7 @@ let
     inherit hostName documentRoot;
     enableSSL = true;
     serverAliases = [ "www.${hostName}" ];
+    extraModules = [ "suexec" ];
     extraConfig = ''
       Options ExecCGI Includes Indexes SymLinksIfOwnerMatch
 
