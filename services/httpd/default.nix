@@ -51,6 +51,9 @@ in {
     sslServerKey = "${common.certsDir}/${common.tld}/key.pem";
     sslServerCert = "${common.certsDir}/${common.tld}/fullchain.pem";
 
+    user = "root";
+    group = "root";
+
     extraConfig = ''
       ProxyRequests off
       ProxyVia Off
