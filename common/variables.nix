@@ -3,6 +3,8 @@
 
   certsDir = "/var/lib/acme";
   webrootDir = "/var/lib/acme/.webroot";
+  webtreeDir = "/storage/webtree";
+  homesDir = "/storage/home";
 
   dovecotHost = "192.168.0.135";
   dovecotSaslPort = 3659;

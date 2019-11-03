@@ -21,24 +21,24 @@ let
     '';
   };
 
-  redbrickVhost = domain: {
-    hostName  = "www.${domain}";
-    documentRoot = "${vhosts.webtree}/redbrick/htdocs";
+  redbrickVhost = {
+    hostName = common.tld;
+    serverAliases = [ "www.${common.tld}" ];
+    documentRoot = "${common.webtreeDir}/redbrick/htdocs";
     listen = [{ port = 443; }];
     enableSSL = true;
     extraModules = [ "suexec" ];
-    serverAliases = [ domain ];
     extraConfig = ''
       Options Includes Indexes SymLinksIfOwnerMatch MultiViews ExecCGI
 
-      Alias /auth/ "${vhosts.webtree}/redbrick/extras/auth/"
-      Alias /cgi-bin/ "${vhosts.webtree}/redbrick/extras/cgi-bin/"
-      Alias /cmt/ "${vhosts.webtree}/redbrick/extras/cmt/"
-      Alias /includes/ "${vhosts.webtree}/redbrick/extras/includes/"
-      Alias /robots.txt "${vhosts.webtree}/redbrick/extras/robots.txt"
+      Alias /auth/ "${common.webtreeDir}/redbrick/extras/auth/"
+      Alias /cgi-bin/ "${common.webtreeDir}/redbrick/extras/cgi-bin/"
+      Alias /cmt/ "${common.webtreeDir}/redbrick/extras/cmt/"
+      Alias /includes/ "${common.webtreeDir}/redbrick/extras/includes/"
+      Alias /robots.txt "${common.webtreeDir}/redbrick/extras/robots.txt"
 
       # Redirect rb.dcu.ie/~user => user.rb.dcu.ie
-      RedirectMatch 301 "^/~(.*)(/(.*))?$" "https://$1.${domain}/$2"
+      RedirectMatch 301 "^/~(.*)(/(.*))?$" "https://$1.${common.tld}/$2"
     '';
   };
 in {
@@ -59,7 +59,7 @@ in {
 
     virtualHosts = [
       (acmeVhost common.tld)
-      (redbrickVhost common.tld)
+      redbrickVhost
     ] ++ vhosts;
   };
 

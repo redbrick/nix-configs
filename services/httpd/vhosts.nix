@@ -1,6 +1,7 @@
 let
-  webtree = "/storage/webtree";
-  home = "/storage/home";
+  common = import ../../common/variables.nix;
+  webtree = common.webtreeDir;
+  home = common.homesDir;
 
   vhost = hostName: documentRoot: {
     inherit hostName documentRoot;
