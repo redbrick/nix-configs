@@ -36,16 +36,9 @@ let
       Alias /cmt/ "${vhosts.webtree}/redbrick/extras/cmt/"
       Alias /includes/ "${vhosts.webtree}/redbrick/extras/includes/"
       Alias /robots.txt "${vhosts.webtree}/redbrick/extras/robots.txt"
-      UserDir public_html
-      UserDir disabled root
-      <Directory /home/*/*/public_html>
-        AllowOverride AuthConfig FileInfo Indexes Limit AuthConfig Options=ExecCGI,Includes,IncludesNoExec,Indexes,MultiViews,SymlinksIfOwnerMatch
-        Options Indexes SymLinksIfOwnerMatch Includes ExecCGI
-      </Directory>
-      <Directory /home/*/*/*/public_html>
-        AllowOverride AuthConfig FileInfo Indexes Limit AuthConfig Options=ExecCGI,Includes,IncludesNoExec,Indexes,MultiViews,SymlinksIfOwnerMatch
-        Options Indexes SymLinksIfOwnerMatch Includes ExecCGI
-      </Directory>
+
+      # Redirect rb.dcu.ie/~user => user.rb.dcu.ie
+      RedirectMatch 301 "^/~(.*)(/(.*))?$" "https://$1.${domain}/$2"
     '';
   };
 in {
