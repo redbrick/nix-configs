@@ -65,6 +65,17 @@ in {
       AddHandler server-parsed .html
 
       AddType text/html .shtml
+
+      <Directory /home/*/*/public_html>
+        AllowOverride AuthConfig FileInfo Indexes Limit AuthConfig Options=ExecCGI,Includes,IncludesNoExec,Indexes,MultiViews,SymlinksIfOwnerMatch
+        Options Indexes SymLinksIfOwnerMatch Includes ExecCGI
+        Require all granted
+      </Directory>
+      <Directory /home/*/*/*/public_html>
+        AllowOverride AuthConfig FileInfo Indexes Limit AuthConfig Options=ExecCGI,Includes,IncludesNoExec,Indexes,MultiViews,SymlinksIfOwnerMatch
+        Options Indexes SymLinksIfOwnerMatch Includes ExecCGI
+        Require all granted
+      </Directory>
     '';
 
     virtualHosts = [
