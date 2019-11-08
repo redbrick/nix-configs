@@ -55,6 +55,16 @@ in {
       ProxyRequests off
       ProxyVia Off
       ProxyPreserveHost On
+
+      AddHandler cgi-script .cgi
+      AddHandler cgi-script .py
+      AddHandler cgi-script .sh
+      AddHandler x-httpd-php .php
+      AddHandler x-httpd-php .php3
+      AddHandler server-parsed .shtml
+      AddHandler server-parsed .html
+
+      AddType text/html .shtml
     '';
 
     virtualHosts = [
