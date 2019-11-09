@@ -40,12 +40,20 @@ let
 
   # This is appended at the bottom
   # to ensure that custom vhosts take preference
-  userVhosts = builtins.map (user: {
-    hostName = "${user.uid}.${tld}";
+  userVhosts = builtins.map (user: let
     documentRoot = "${webtree}/${builtins.substring 0 1 user.uid}/${user.uid}";
+  in {
+    inherit documentRoot;
+    hostName = "${user.uid}.${tld}";
     enableSSL = true;
     extraModules = [ "suexec" ];
     extraConfig = ''
+      <Directory "${documentRoot}">
+        AllowOverride AuthConfig FileInfo Indexes Limit AuthConfig Options=ExecCGI,Includes,IncludesNoExec,Indexes,MultiViews,SymlinksIfOwnerMatch
+        Options Indexes SymLinksIfOwnerMatch Includes ExecCGI
+        Require all granted
+      </Directory>
+
       Options ExecCGI Includes Indexes SymLinksIfOwnerMatch
       <FilesMatch \.php$>
         SetHandler "proxy:unix:${config.services.phpfpm."${user.uid}".socket}|fcgi://localhost/"
