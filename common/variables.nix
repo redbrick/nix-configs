@@ -1,10 +1,12 @@
-{
+rec {
   tld = "redbricktest.ml";
 
   certsDir = "/var/lib/acme";
   webrootDir = "/var/lib/acme/.webroot";
   webtreeDir = "/storage/webtree";
   homesDir = "/storage/home";
+
+  userWebtree = uid: "${webtreeDir}/${builtins.substring 0 1 uid}/${uid}";
 
   dovecotHost = "192.168.0.135";
   dovecotSaslPort = 3659;

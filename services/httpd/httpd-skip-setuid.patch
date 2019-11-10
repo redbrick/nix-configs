@@ -1,0 +1,21 @@
+diff --git a/Makefile.in b/Makefile.in
+index 21c76f8..3e23164 100644
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -278,14 +278,10 @@ install-suexec-binary:
+ 	fi
+ 
+ install-suexec-setuid: install-suexec-binary
+-	@if test -f $(builddir)/support/suexec; then \
+-	    chmod 4755 $(DESTDIR)$(sbindir)/suexec; \
+-	fi
++	true
+ 
+ install-suexec-caps: install-suexec-binary
+-	@if test -f $(builddir)/support/suexec; then \
+-            setcap 'cap_setuid,cap_setgid+pe' $(DESTDIR)$(sbindir)/suexec; \
+-	fi
++	true
+ 
+ suexec:
+ 	cd support && $(MAKE) suexec

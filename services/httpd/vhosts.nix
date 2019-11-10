@@ -11,7 +11,6 @@ let
     inherit hostName documentRoot;
     enableSSL = true;
     serverAliases = [ "www.${hostName}" ];
-    extraModules = [ "suexec" ];
     extraConfig = ''
       Options ExecCGI Includes Indexes SymLinksIfOwnerMatch
     '';
@@ -41,12 +40,11 @@ let
   # This is appended at the bottom
   # to ensure that custom vhosts take preference
   userVhosts = builtins.map (user: let
-    documentRoot = "${webtree}/${builtins.substring 0 1 user.uid}/${user.uid}";
+    documentRoot = common.userWebtree user.uid;
   in {
     inherit documentRoot;
     hostName = "${user.uid}.${tld}";
     enableSSL = true;
-    extraModules = [ "suexec" ];
     extraConfig = ''
       <Directory "${documentRoot}">
         AllowOverride AuthConfig FileInfo Indexes Limit AuthConfig Options=ExecCGI,Includes,IncludesNoExec,Indexes,MultiViews,SymlinksIfOwnerMatch
@@ -55,8 +53,8 @@ let
       </Directory>
 
       Options ExecCGI Includes Indexes SymLinksIfOwnerMatch
-      <FilesMatch \.php$>
-        SetHandler "proxy:unix:${config.services.phpfpm."${user.uid}".socket}|fcgi://localhost/"
+      <FilesMatch \.php3?$>
+        SetHandler "proxy:unix:/run/phpfpm/${user.uid}.sock|fcgi://localhost/"
       </FilesMatch>
     '';
   }) users;
@@ -159,6 +157,7 @@ in [
   (vhostRedirect "helpdesk.${tld}" "https://wiki.redbrick.dcu.ie/mw/Helpdesk")
   (vhostRedirect "helpdeskexam.${tld}" "https://md.redbrick.dcu.ie/s/SJzip7F9X#")
   (vhostRedirect "hoodies.${tld}" "https://redbrickdcu.typeform.com/to/Q4uIzR")
+  (vhostRedirect "parlour.${tld}" "http://www.songsfromtheparlour.com")
   (vhostRedirect "radio.theinternets.be" "http://radio.redbrick.dcu.ie")
   (vhostRedirect "techweek.${tld}" "https://techweek.dcu.ie")
   (vhostRedirect "tickets.${tld}" "https://dcusu.ticketsolve.com/shows/873599383/events/128190598")

@@ -1,6 +1,11 @@
 #!/usr/bin/env python3
+# Redbrick - m1cr0man 2019
 # stdin: ldif formatted user data with uid, homeDirectory and gidNumber fields
 # stdout: Nix formatted list of user attrsets
+# Make sure to run on a host with LDAP set up or everyone will have gid nobody
+import functools
+import os.path
+import subprocess
 import sys
 
 def user2nix(uid: str, home: str, gid: str) -> str:
@@ -8,12 +13,20 @@ def user2nix(uid: str, home: str, gid: str) -> str:
         '  {',
         f'    uid = "{uid}";',
         f'    home = "{home}";',
-        f'    gid = {gid};',
+        f'    gid = "{gid}";',
         '  }'
     ])
 
 
-def main():
+@functools.lru_cache(maxsize=128)
+def get_gid_from_number(gid: str) -> str:
+    group_query = subprocess.run(f'getent group {gid}', shell=True, encoding='utf8', stdout=subprocess.PIPE)
+    if group_query.returncode > 0:
+        return 'nobody'
+    return group_query.stdout.split(':')[0]
+
+
+def main(webtree: str):
     num_users = 0
 
     print('[')
@@ -29,11 +42,14 @@ def main():
         elif key == 'homeDirectory':
             home = val
         elif key == 'gidNumber':
-            gid = val
+            gid = get_gid_from_number(val)
 
         if uid and home and gid:
-            print(user2nix(uid=uid, home=home, gid=gid))
-            num_users += 1
+            if os.path.exists(f'{webtree}/{uid[0]}/{uid}'):
+                print(user2nix(uid=uid, home=home, gid=gid))
+                num_users += 1
+            else:
+                print(f'Skipping {uid}: missing webtree', file=sys.stderr)
             uid = home = gid = ''
 
     print(']')
@@ -42,4 +58,7 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    if len(sys.argv) < 2:
+        print(f'Usage: {sys.argv[0]} webtree_path')
+        sys.exit(1)
+    main(sys.argv[1])

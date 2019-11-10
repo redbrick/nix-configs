@@ -1,6 +1,7 @@
+{ config, pkgs, ... }:
 let
   common = import ../../common/variables.nix;
-  vhosts = import ./vhosts.nix;
+  vhosts = import ./vhosts.nix { inherit config; };
 
   # Define a base vhost for all TLDs. This will serve only ACME on port 80
   # Everything else is promoted to HTTPS
@@ -27,7 +28,6 @@ let
     documentRoot = "${common.webtreeDir}/redbrick/htdocs";
     listen = [{ port = 443; }];
     enableSSL = true;
-    extraModules = [ "suexec" ];
     extraConfig = ''
       Options Includes Indexes SymLinksIfOwnerMatch MultiViews ExecCGI
 
@@ -46,16 +46,30 @@ in {
     ./php-fpm.nix
   ];
 
+  # Enable suexec support
+  nixpkgs.overlays = [
+    (self: super: {
+      apacheHttpd = super.apacheHttpd.overrideAttrs (oldAttrs: {
+        patches = [ ./httpd-skip-setuid.patch ];
+        configureFlags = [ "--enable-suexec" ] ++ oldAttrs.configureFlags;
+      });
+    })
+  ];
+
+  # NixOS has strict control over setuid
+  security.wrappers.suexec.source = "${pkgs.apacheHttpd.out}/bin/suexec";
+
   services.httpd = {
     enable = true;
+    extraModules = [ "suexec" "proxy" "proxy_fcgi" ];
     adminAddr = "admins+httpd@${common.tld}";
     multiProcessingModule = "event";
     maxClients = 250;
     sslServerKey = "${common.certsDir}/${common.tld}/key.pem";
     sslServerCert = "${common.certsDir}/${common.tld}/fullchain.pem";
 
-    user = "root";
-    group = "root";
+    # user = "root";
+    # group = "root";
 
     extraConfig = ''
       ProxyRequests off
@@ -65,8 +79,6 @@ in {
       AddHandler cgi-script .cgi
       AddHandler cgi-script .py
       AddHandler cgi-script .sh
-      AddHandler x-httpd-php .php
-      AddHandler x-httpd-php .php3
       AddHandler server-parsed .shtml
       AddHandler server-parsed .html
 
