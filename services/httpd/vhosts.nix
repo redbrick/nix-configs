@@ -6,24 +6,22 @@ let
   webtree = common.webtreeDir;
   home = common.homesDir;
   tld = common.tld;
+  adminAddr = "webmaster@${tld}";
 
   vhost = hostName: documentRoot: {
-    inherit hostName documentRoot;
+    inherit hostName documentRoot adminAddr;
     enableSSL = true;
     serverAliases = [ "www.${hostName}" ];
-    extraConfig = ''
-      Options ExecCGI Includes Indexes SymLinksIfOwnerMatch
-    '';
   };
 
   vhostRedirect = hostName: globalRedirect: {
-    inherit hostName globalRedirect;
+    inherit hostName globalRedirect adminAddr;
     enableSSL = true;
     serverAliases = [ "www.${hostName}" ];
   };
 
   vhostProxy = hostName: proxyAddress: {
-    inherit hostName;
+    inherit hostName adminAddr;
     enableSSL = true;
     serverAliases = [ "www.${hostName}" ];
     extraConfig = ''
@@ -42,27 +40,27 @@ let
   userVhosts = builtins.map (user: let
     documentRoot = common.userWebtree user.uid;
   in {
-    inherit documentRoot;
+    inherit documentRoot adminAddr;
     hostName = "${user.uid}.${tld}";
     enableSSL = true;
     extraConfig = ''
       <Directory "${documentRoot}">
         AllowOverride AuthConfig FileInfo Indexes Limit AuthConfig Options=ExecCGI,Includes,IncludesNoExec,Indexes,MultiViews,SymlinksIfOwnerMatch
-        Options Indexes SymLinksIfOwnerMatch Includes ExecCGI
         Require all granted
       </Directory>
 
-      Options ExecCGI Includes Indexes SymLinksIfOwnerMatch
-      <FilesMatch \.php3?$>
+      <FilesMatch \.php\d*$>
         SetHandler "proxy:unix:/run/phpfpm/${user.uid}.sock|fcgi://localhost/"
       </FilesMatch>
+
+      SuExecUserGroup ${user.uid} ${user.gid}
     '';
   }) users;
 in [
   (vhost "abovethefold.es" "${webtree}/r/receive/abovethefold")
   (vhost "admins.${tld}" "${webtree}/vhosts/admins.redbrick.dcu.ie")
   (vhost "alanwalsh.${tld}" "${webtree}/s/sonic/cv")
-  (vhost "assassins.redrick.dcu.ie" "${webtree}/a/art_wolf/assassins")
+  (vhost "assassins.${tld}" "${webtree}/a/art_wolf/assassins")
   (vhost "astro.${tld}" "${webtree}/k/k100/astro")
   (vhost "birthday.${tld}" "${webtree}/s/space/Redbrick-Turns-20/resources/public")
   (vhost "blog.lessthanthree.be" "${webtree}/o/ornat/blog")
@@ -129,7 +127,14 @@ in [
   (vhost "vmweb.${tld}" "${webtree}/w/werdz")
   (vhost "wanderers.${tld}" "${webtree}/w/wander/")
   (vhost "wiki.colmreilly.com" "${webtree}/n/nettles/wiki/")
-  (vhost "wiki.${tld}" "${webtree}/w/wiki")
+  ((vhost "wiki.${tld}" "${webtree}/w/wiki") // {
+    extraConfig = ''
+      SuExecUserGroup wiki redbrick
+      <FilesMatch \.php\d*$>
+        SetHandler "proxy:unix:/run/phpfpm/wiki.sock|fcgi://localhost/"
+      </FilesMatch>
+    '';
+  })
   (vhost "ejmitchell.com" "${home}/member/d/deadlock/ejmitchellcom")
   (vhost "iahpc.ie" "${home}/guest/iahpc/public_html")
   (vhost "luxgaa.lu" "${webtree}/s/shivo/LuxGAA")
