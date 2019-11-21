@@ -130,9 +130,14 @@ in [
   ((vhost "wiki.${tld}" "${webtree}/w/wiki") // {
     extraConfig = ''
       SuExecUserGroup wiki redbrick
+      ProxyTimeout 600
       <FilesMatch \.php\d*$>
         SetHandler "proxy:unix:/run/phpfpm/wiki.sock|fcgi://localhost/"
       </FilesMatch>
+      <Directory "${webtree}/w/wiki">
+        AllowOverride AuthConfig FileInfo Indexes Limit AuthConfig Options=ExecCGI,Includes,IncludesNoExec,Indexes,MultiViews,SymlinksIfOwnerMatch NonFatal=Unknown
+        Require all granted
+      </Directory>
     '';
   })
   (vhost "ejmitchell.com" "${home}/member/d/deadlock/ejmitchellcom")
