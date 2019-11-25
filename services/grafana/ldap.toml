@@ -1,0 +1,20 @@
+[[servers]]
+  host = "ldap.internal"
+  port = 389
+  search_filter = "(uid=%s)"
+  Search_base_dns = ["ou=accounts,o=redbrick"]
+[servers.attributes]
+  name = "cn"
+  username = "uid"
+  member_of = "UserType"
+  email =  "mail"
+[[servers.group_mappings]]
+  group_dn = "cn=root,ou=groups,o=redbrick"
+  org_role = "Admin"
+  grafana_admin = true # Available in Grafana v5.3 and above
+[[servers.group_mappings]]
+  group_dn = "cn=helpdesk,ou=groups,o=redbrick"
+  org_role = "Editor"
+[[servers.group_mappings]]
+  group_dn = "*"
+  org_role = "Viewer"
