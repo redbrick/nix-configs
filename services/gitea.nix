@@ -44,7 +44,7 @@ in {
       TEMP_PATH = ${stateDir}/uploads
 
       [server]
-      SSH_DOMAIN       = git.redbrick.dcu.ie
+      SSH_DOMAIN       = git.${common.tld}/
       DISABLE_SSH      = false
       SSH_PORT         = 10022
       LFS_START_SERVER = false

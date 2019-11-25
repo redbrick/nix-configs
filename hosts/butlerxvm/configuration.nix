@@ -3,6 +3,8 @@
     ./hardware-configuration.nix
     ../../common/sysconfig.nix
     ../../services/ssh.nix
+    ../../services/grafana
+    ../../services/loki.nix
   ];
 
   # This value determines the NixOS release with which your system is to be
