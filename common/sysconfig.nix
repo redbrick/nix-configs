@@ -50,7 +50,7 @@ in {
   boot.supportedFilesystems = [ "zfs" ];
   boot.zfs = {
     enableUnstable = true;
-    forceImportRoot = false;
+    forceImportRoot = true;
     forceImportAll = false;
   };
   services.zfs.autoScrub.enable = true;

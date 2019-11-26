@@ -9,6 +9,7 @@
     ];
 
   boot.initrd.availableKernelModules = [ "uhci_hcd" "ehci_pci" "ahci" "virtio_pci" "virtio_blk" ];
+  boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ ];
   boot.extraModulePackages = [ ];
 
@@ -23,12 +24,12 @@
     };
 
   fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/c3d356e1-c23c-4492-9093-6c799dd8c3fa";
+    { device = "/dev/disk/by-uuid/fb717ed4-eea8-474b-b211-c44883a2005b";
       fsType = "ext4";
     };
 
   swapDevices =
-    [ { device = "/dev/disk/by-uuid/6df4f83d-2cf4-4342-b420-2d6df557f9e2"; }
+    [ { device = "/dev/disk/by-uuid/ed6cb80b-5509-4d63-b6fd-d56313699380"; }
     ];
 
   nix.maxJobs = lib.mkDefault 4;
