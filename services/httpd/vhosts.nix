@@ -72,7 +72,19 @@ in [
   (vhost "ca3wiki.${tld}" "${webtree}/s/sonic/wikica3")
   (vhost "ca4wiki.${tld}" "${webtree}/s/sonic/ca4wiki")
   (vhost "ciankehoe.ie" "${webtree}/c/cianky/ciankehoe.ie/public/")
-  (vhost "cmtwiki.${tld}" "${webtree}/redbrick/htdocs/cmt/wiki")
+  ((vhost "cmtwiki.${tld}" "${webtree}/redbrick/extras/cmt/wiki") // {
+    extraConfig = ''
+      SuExecUserGroup wiki redbrick
+      ProxyTimeout 600
+      <FilesMatch \.php\d*$>
+        SetHandler "proxy:unix:/run/phpfpm/wiki.sock|fcgi://localhost/"
+      </FilesMatch>
+      <Directory "${webtree}/redbrick/extras/cmt/wiki">
+        AllowOverride AuthConfig FileInfo Indexes Limit AuthConfig Options=ExecCGI,Includes,IncludesNoExec,Indexes,MultiViews,SymlinksIfOwnerMatch NonFatal=Unknown
+        Require all granted
+      </Directory>
+    '';
+  })
   (vhost "colors.${tld}" "${webtree}/vhosts/colors.redbrick.dcu.ie")
   (vhost "committee.${tld}" "${webtree}/c/chair/blog")
   (vhost "dcudrama.ie" "${webtree}/d/drama")
