@@ -24,11 +24,12 @@ let
     '';
   };
 
-  redbrickVhost = {
-    inherit adminAddr;
+  redbrickVhost = let
+    documentRoot = "${common.webtreeDir}/redbrick/htdocs";
+  in {
+    inherit adminAddr documentRoot;
     hostName = common.tld;
     serverAliases = [ "www.${common.tld}" ];
-    documentRoot = "${common.webtreeDir}/redbrick/htdocs";
     listen = [{ port = 443; }];
     enableSSL = true;
     extraConfig = ''
@@ -38,7 +39,7 @@ let
       Alias /includes/ "${common.webtreeDir}/redbrick/extras/includes/"
       Alias /robots.txt "${common.webtreeDir}/redbrick/extras/robots.txt"
 
-      ErrorDocument 400 https://www.redbrick.dcu.ie/404.html
+      ErrorDocument 400 /404.html
       ErrorDocument 404 /404.html
       ErrorDocument 500 /500.html
       ErrorDocument 502 /500.html
@@ -47,6 +48,16 @@ let
 
       # Redirect rb.dcu.ie/~user => user.rb.dcu.ie
       RedirectMatch 301 "^/~(.*)(/(.*))?$" "https://$1.${common.tld}/$2"
+
+      <Directory ${documentRoot}>
+        RewriteEngine on
+        RewriteBase /
+        RewriteRule ^index\.html$ - [L]
+        RewriteCond %{REQUEST_FILENAME} !-f
+        RewriteCond %{REQUEST_FILENAME} !-d
+        RewriteCond %{REQUEST_FILENAME} !-l
+        RewriteRule . /index.html [L]
+      </Directory>
     '';
   };
 in {
@@ -79,7 +90,7 @@ in {
   services.httpd = {
     inherit adminAddr;
     enable = true;
-    extraModules = [ "suexec" "proxy" "proxy_fcgi" ];
+    extraModules = [ "suexec" "proxy" "proxy_fcgi" "ldap" "authnz_ldap" ];
     multiProcessingModule = "event";
     maxClients = 250;
     sslServerKey = "${common.certsDir}/${common.tld}/key.pem";
