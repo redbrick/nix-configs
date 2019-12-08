@@ -165,7 +165,7 @@ in [
   (vhostProxy "radio.${tld}" "http://radio.redbrick.dcu.ie:8000")
   (vhostProxy "riainccc.${tld}" "http://http://136.206.15.25:3000")
   (vhostProxy "tomcat.dregin.${tld}" "http://136.206.15.14:20002")
-  (vhostProxy "webchat.${tld}" "http://136.206.15.74:9090")
+  (vhostProxy "webchat.${tld}" "http://127.0.0.1:16667")
   (vhostProxy "werdztomcat.${tld}" "http://136.206.15.14:20001")
   (vhostRedirect "admin.${tld}" "https://admins.redbrick.dcu.ie")
   (vhostRedirect "dconcannon.${tld}" "https://www.redbrick.dcu.ie/~shimoda")
