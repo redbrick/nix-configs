@@ -33,21 +33,21 @@ let
     listen = [{ port = 443; }];
     enableSSL = true;
     extraConfig = ''
-      Alias /auth/ "${common.webtreeDir}/redbrick/extras/auth/"
       Alias /cgi-bin/ "${common.webtreeDir}/redbrick/extras/cgi-bin/"
-      Alias /cmt/ "${common.webtreeDir}/redbrick/extras/cmt/"
-      Alias /includes/ "${common.webtreeDir}/redbrick/extras/includes/"
       Alias /robots.txt "${common.webtreeDir}/redbrick/extras/robots.txt"
 
-      ErrorDocument 400 /404.html
-      ErrorDocument 404 /404.html
-      ErrorDocument 500 /500.html
-      ErrorDocument 502 /500.html
-      ErrorDocument 503 /500.html
-      ErrorDocument 504 /500.html
+      ErrorDocument 400 /404
+      ErrorDocument 404 /404
+      ErrorDocument 500 /404
+      ErrorDocument 502 /404
+      ErrorDocument 503 /404
+      ErrorDocument 504 /404
 
       # Redirect rb.dcu.ie/~user => user.rb.dcu.ie
       RedirectMatch 301 "^/~(.*)(/(.*))?$" "https://$1.${common.tld}/$2"
+
+      # Redirect /cmt to cmtwiki.rb
+      RedirectMatch 301 "^/cmt/wiki(/(.*))?$" "https://cmtwiki.${common.tld}/$1"
 
       <Directory ${documentRoot}>
         RewriteEngine on
