@@ -150,7 +150,6 @@ let
 
   '';
 
-  # TODO stop new users being created, fix session stuff
   vhostWiki = config: cfgPath: (vhost { inherit documentRoot user group; hostName = config.domain; serverAliases = []; }) // {
     extraConfig = ''
       ProxyTimeout 600

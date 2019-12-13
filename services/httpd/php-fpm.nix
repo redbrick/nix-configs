@@ -18,7 +18,7 @@ let
       error_log = /proc/self/fd/1
       daemonize = false
     '' ] ++ (map (user: ''
-      [${replaceStrings ["global" "sharedfpm"] ["global_user" "sharedfpm_user"] user.uid}]
+      [${replaceStrings ["global" "wwwrun"] ["global_user" "wwwrun_user"] user.uid}]
       listen = /run/phpfpm/${user.uid}.sock
       chdir = ${common.userWebtree user.uid}
       user = ${user.uid}
@@ -58,7 +58,7 @@ in {
     (key: userGroup: nameValuePair ("phpfpm-rbusers-${key}") (service key userGroup))
     (groupBy (user: builtins.substring 0 1 user.uid) allUsers);
 
-  services.phpfpm.pools.sharedfpm = with builtins; {
+  services.phpfpm.pools.wwwrun = with builtins; {
     user = "wwwrun";
     group = "wwwrun";
     settings = {
