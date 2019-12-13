@@ -13,297 +13,283 @@ let
     serverAliases = [];
   }) users;
 in [
-  vhost {
+  (vhost {
     hostName = "abovethefold.es";
     documentRoot = "${webtree}/r/receive/abovethefold";
-    user = "recieve";
+    user = "receive";
     group = "staff";
-  };
-  vhost {
-    hostname = "blog.${tld}";
+  })
+  (vhost {
+    hostName = "blog.${tld}";
     documentRoot = "${webtree}/vhosts/blog.redbrick.dcu.ie";
     user = "wwwrun";
     group = "wwwrun";
     serverAliases = [];
-  };
-  vhost {
-    hostname = "alanwalsh.${tld}";
+  })
+  (vhost {
+    hostName = "alanwalsh.${tld}";
     documentRoot = "${webtree}/s/sonic/cv";
     user = "sonic";
     group = "member";
     serverAliases = [];
-  };
-  vhost {
-    hostname = "assassins.${tld}";
+  })
+  (vhost {
+    hostName = "assassins.${tld}";
     documentRoot = "${webtree}/a/art_wolf/assassins";
     user = "art_wolf";
     group = "associat";
     serverAliases = [];
-  };
-  vhost {
-    hostname = "astro.${tld}";
+  })
+  (vhost {
+    hostName = "astro.${tld}";
     documentRoot = "${webtree}/k/k100/astro";
     user = "k100";
     group = "associat";
     serverAliases = [];
-  };
-  vhost {
-    hostname = "birthday.${tld}";
+  })
+  (vhost {
+    hostName = "birthday.${tld}";
     documentRoot = "${webtree}/s/space/Redbrick-Turns-20/resources/public";
     user = "space";
     group = "member";
     serverAliases = [];
-  };
-  vhost {
-    hostname = "blog.lessthanthree.be";
+  })
+  (vhost {
+    hostName = "blog.lessthanthree.be";
     documentRoot = "${webtree}/o/ornat/blog";
     user = "ornat";
     group = "member";
-  };
-  vhost {
-    hostname = "bricket.${tld}";
+  })
+  (vhost {
+    hostName = "bricket.${tld}";
     documentRoot = "${webtree}/w/werdz/bricket";
     user = "werdz";
     group = "member";
     serverAliases = [];
-  };
-  vhost {
-    hostname = "brickjet.${tld}";
-    docuemntRoot = "${webtree}/j/johan/brickjet";
+  })
+  (vhost {
+    hostName = "brickjet.${tld}";
+    documentRoot = "${webtree}/j/johan/brickjet";
     user = "johan";
     group = "member";
     serverAliases = [];
-  };
-  vhost {
-    hostname = "bugzilla.${tld}";
-    docuemntRoot = "${webtree}/vhosts/bugzilla.redbrick.dcu.ie";
+  })
+  (vhost {
+    hostName = "bugzilla.${tld}";
+    documentRoot = "${webtree}/vhosts/bugzilla.redbrick.dcu.ie";
     user = "bugs";
     group = "redbrick";
     serverAliases = [];
-  };
-  vhost {
-    hostname = "butterflyexplosion.com";
-    docuemntRoot = "${webtree}/c/carr";
+  })
+  (vhost {
+    hostName = "butterflyexplosion.com";
+    documentRoot = "${webtree}/c/carr";
     user = "carr";
     group = "associat";
-  };
-  vhost {
-    hostname = "ca2wiki.${tld}";
-    docuemntRoot = "${webtree}/s/sonic/wiki";
+  })
+  (vhost {
+    hostName = "ca2wiki.${tld}";
+    documentRoot = "${webtree}/s/sonic/wiki";
     user = "sonic";
     group = "member";
     serverAliases = [];
-  };
-  vhost {
-    hostname = "ca3wiki.${tld}";
-    docuemntRoot = "${webtree}/s/sonic/wikica3";
+  })
+  (vhost {
+    hostName = "ca3wiki.${tld}";
+    documentRoot = "${webtree}/s/sonic/wikica3";
     user = "sonic";
     group = "member";
     serverAliases = [];
-  };
-  vhost {
-    hostname = "ca4wiki.${tld}";
-    docuemntRoot = "${webtree}/s/sonic/ca4wiki";
+  })
+  (vhost {
+    hostName = "ca4wiki.${tld}";
+    documentRoot = "${webtree}/s/sonic/ca4wiki";
     user = "sonic";
     group = "member";
     serverAliases = [];
-  };
-  vhost {
-    hostname = "ciankehoe.ie";
-    docuemntRoot = "${webtree}/c/cianky/ciankehoe.ie/public";
+  })
+  (vhost {
+    hostName = "ciankehoe.ie";
+    documentRoot = "${webtree}/c/cianky/ciankehoe.ie/public";
     user = "cianky";
     group = "member";
-  };
-  vhost {
-    hostname = "colors.${tld}";
-    docuemntRoot = "${webtree}/vhosts/colors.redbrick.dcu.ie";
-    user = "www-data";
-    group = "www-data";
+  })
+  (vhost {
+    hostName = "colors.${tld}";
+    documentRoot = "${webtree}/vhosts/colors.redbrick.dcu.ie";
+    user = "wwwrun";
+    group = "wwwrun";
     serverAliases = [];
-  };
-  vhost {
-    hostname = "committee.${tld}";
-    docuemntRoot = "${webtree}/c/chair/blog";
+  })
+  (vhost {
+    hostName = "committee.${tld}";
+    documentRoot = "${webtree}/c/chair/blog";
     user = "chair";
     group = "committe";
     serverAliases = [];
-  };
-  vhost {
-    hostname = "dcudrama.ie";
-    docuemntRoot = "${webtree}/d/drama";
+  })
+  (vhost {
+    hostName = "dcudrama.ie";
+    documentRoot = "${webtree}/d/drama";
     user = "drama";
     group = "society";
-  };
-  vhost {
-    hostname = "dibs.${tld}";
-    docuemntRoot = "${webtree}/d/dever/dibs";
+  })
+  (vhost {
+    hostName = "dibs.${tld}";
+    documentRoot = "${webtree}/d/dever/dibs";
     user = "dever";
     group = "member";
     serverAliases = [];
-  };
-  vhost {
-    hostname = "djbdns.now.ie";
-    docuemntRoot = "${webtree}/l/lecter/djbdns";
+  })
+  (vhost {
+    hostName = "djbdns.now.ie";
+    documentRoot = "${webtree}/l/lecter/djbdns";
     user = "lecter";
     group = "associat";
-  };
-  vhost {
-    hostname = "forbidden.${tld}";
-    docuemntRoot = "${webtree}/vhosts/forbidden.redbrick.dcu.ie";
+  })
+  (vhost {
+    hostName = "forbidden.${tld}";
+    documentRoot = "${webtree}/vhosts/forbidden.redbrick.dcu.ie";
     user = "stolnart";
     group = "associat";
     serverAliases = [];
-  };
-  vhost {
-    hostname = "forgottofollow.${tld}";
-    docuemntRoot = "${webtree}/m/mick";
+  })
+  (vhost {
+    hostName = "forgottofollow.${tld}";
+    documentRoot = "${webtree}/m/mick";
     user = "mick";
     group = "associat";
     serverAliases = [];
-  };
-  vhost {
-    hostname = "freedom.${tld}";
-    docuemntRoot = "${webtree}/b/bunbun";
+  })
+  (vhost {
+    hostName = "freedom.${tld}";
+    documentRoot = "${webtree}/b/bunbun";
     user = "bunbun";
     group = "member";
     serverAliases = [];
-  };
-  vhost {
-    hostname = "gallery.${tld}";
-    docuemntRoot = "${webtree}/g/gallery";
-    user = "gallery";
-    group = "projects";
-    serverAliases = [];
-  };
-  vhost {
-    hostname = "grahambartley.com";
-    docuemntRoot = "${webtree}/d/dedoctor";
+  })
+  (vhost {
+    hostName = "grahambartley.com";
+    documentRoot = "${webtree}/d/dedoctor";
     user = "dedoctor";
     group = "member";
-  };
-  vhost {
-    hostname = "h8.work";
-    docuemntRoot = "${webtree}/a/ainran/domains/h8.work";
+  })
+  (vhost {
+    hostName = "h8.work";
+    documentRoot = "${webtree}/a/ainran/domains/h8.work";
     user = "ainran";
-    group = "memeber";
-  };
-  vhost {
-    hostname = "hack.${tld}";
-    docuemntRoot = "${webtree}/n/newbrick";
+    group = "member";
+  })
+  (vhost {
+    hostName = "hack.${tld}";
+    documentRoot = "${webtree}/n/newbrick";
     user = "newbrick";
     group = "redbrick";
     serverAliases = [];
-  };
-  vhost {
-    hostname = "hackaton.${tld}";
-    docuemntRoot = "${webtree}/n/newbrick";
+  })
+  (vhost {
+    hostName = "hackaton.${tld}";
+    documentRoot = "${webtree}/n/newbrick";
     user = "newbrick";
     group = "redbrick";
     serverAliases = [];
-  };
-  vhost {
-    hostname = "halenger.com";
-    docuemntRoot = "${home}/associat/h/halenger/domains/halenger.com";
+  })
+  (vhost {
+    hostName = "halenger.com";
+    documentRoot = "${home}/associat/h/halenger/domains/halenger.com";
     user = "halenger";
     group = "associat";
-  };
-  vhost {
-    hostname = "interlan.dcu.ie";
-    docuemntRoot = "${webtree}/vhosts/www.interlan.dcu.ie";
+  })
+  (vhost {
+    hostName = "interlan.dcu.ie";
+    documentRoot = "${webtree}/vhosts/www.interlan.dcu.ie";
     user = "gamessoc";
     group = "society";
-  };
-  vhost {
-    hostname = "lessthanthree.be";
-    docuemntRoot = "${webtree}/o/ornat";
+  })
+  (vhost {
+    hostName = "lessthanthree.be";
+    documentRoot = "${webtree}/o/ornat";
     user = "ornat";
     group = "member";
-  };
-  vhost {
-    hostname = "mak.${tld}";
-    docuemntRoot = "${webtree}/m/mak/mak";
+  })
+  (vhost {
+    hostName = "mak.${tld}";
+    documentRoot = "${webtree}/m/mak/mak";
     user = "mak";
     group = "associat";
     serverAliases = [];
-  };
-  vhost {
-    hostname = "mcmahon.${tld}";
-    docuemntRoot = "${webtree}/m/mcmahon/wordpress";
+  })
+  (vhost {
+    hostName = "mcmahon.${tld}";
+    documentRoot = "${webtree}/m/mcmahon/wordpress";
     user = "mcmahon";
     group = "member";
     serverAliases = [];
-  };
-  vhost {
-    hostname = "mlane.org";
-    docuemntRoot = "${webtree}/a/ainran/mlane";
+  })
+  (vhost {
+    hostName = "mlane.org";
+    documentRoot = "${webtree}/a/ainran/mlane";
     user = "ainran";
     group = "associat";
-  };
-  vhost {
-    hostname = "nemo.${tld}";
-    docuemntRoot = "${webtree}/n/nemo/wordpress";
+  })
+  (vhost {
+    hostName = "nemo.${tld}";
+    documentRoot = "${webtree}/n/nemo/wordpress";
     user = "nemo";
     group = "associat";
     serverAliases = [];
-  };
-  vhost {
-    hostname = "obrienronan.com";
-    docuemntRoot = "${webtree}/vhosts/www.obrienronan.com";
+  })
+  (vhost {
+    hostName = "obrienronan.com";
+    documentRoot = "${webtree}/vhosts/www.obrienronan.com";
     user = "mellow";
     group = "associat";
     serverAliases = ["www.obrienronan.com" "citrix-itm.obrienronan.com"];
-  };
-  vhost {
-    hostname = "packages.${tld}";
-    docuemntRoot = "${webtree}/r/rbpkg/apt";
+  })
+  (vhost {
+    hostName = "packages.${tld}";
+    documentRoot = "${webtree}/r/rbpkg/apt";
     user = "rbpkg";
     group = "redbrick";
     serverAliases = [];
-  };
-  vhost {
-    hostname = "paintball.${tld}";
-    docuemntRoot = "${webtree}/p/paintbal";
+  })
+  (vhost {
+    hostName = "paintball.${tld}";
+    documentRoot = "${webtree}/p/paintbal";
     user = "paintbal";
     group = "club";
     serverAliases = [];
-  };
-  vhost {
-    hostname = "performingarts.${tld}";
-    docuemntRoot = "${webtree}/p/perfarts";
+  })
+  (vhost {
+    hostName = "performingarts.${tld}";
+    documentRoot = "${webtree}/p/perfarts";
     user = "perfarts";
     group = "projects";
     serverAliases = [];
-  };
-  vhost {
-    hostname = "pkmn.${tld}";
-    docuemntRoot = "${webtree}/k/koffee/pkmn";
-    user = "koffee";
-    group = "associat";
-    serverAliases = [];
-  };
-  vhost {
-    hostname = "pleasetalk.${tld}";
-    docuemntRoot = "${webtree}/p/plstalk";
+  })
+  (vhost {
+    hostName = "pleasetalk.${tld}";
+    documentRoot = "${webtree}/p/plstalk";
     user = "plstalk";
     group = "dcu";
     serverAliases = [];
-  };
-  vhost {
-    hostname = "profiles.${tld}";
-    docuemntRoot = "${webtree}/d/d_fens/profiles";
+  })
+  (vhost {
+    hostName = "profiles.${tld}";
+    documentRoot = "${webtree}/d/d_fens/profiles";
     user = "d_fens";
     group = "associat";
     serverAliases = [];
-  };
-  vhost {
-    hostname = "richardwalsh.ie";
-    docuemntRoot = "${webtree}/k/koffee/";
+  })
+  (vhost {
+    hostName = "richardwalsh.ie";
+    documentRoot = "${webtree}/k/koffee/";
     user = "koffee";
     group = "associat";
-  };
-  vhost {
-    hostname = "romana.now.ie";
-    docuemntRoot = "${home}/associat/l/lecter/public_html";
+  })
+  (vhost {
+    hostName = "romana.now.ie";
+    documentRoot = "${home}/associat/l/lecter/public_html";
     user = "lecter";
     group = "associat";
     serverAliases = [
@@ -314,184 +300,184 @@ in [
       "romana.ipv4.now.ie"
       "romana.ipv6.now.ie"
     ];
-  };
-  vhost {
-    hostname = "room.${tld}";
-    docuemntRoot = "${webtree}/e/edu/n109a";
+  })
+  (vhost {
+    hostName = "room.${tld}";
+    documentRoot = "${webtree}/e/edu/n109a";
     user = "edu";
     group = "redbrick";
     serverAliases = ["n109a.${tld}"];
-  };
-  vhost {
-    hostname = "ryanmcdyer.com";
-    docuemntRoot = "${webtree}/r/ryanmcd";
+  })
+  (vhost {
+    hostName = "ryanmcdyer.com";
+    documentRoot = "${webtree}/r/ryanmcd";
     user = "ryanmcd";
     group = "member";
-  };
-  vhost {
-    hostname = "sadsoc.${tld}";
-    docuemntRoot = "${webtree}/a/art_wolf/sadsoc";
+  })
+  (vhost {
+    hostName = "sadsoc.${tld}";
+    documentRoot = "${webtree}/a/art_wolf/sadsoc";
     user = "art_wolf";
     group = "associat";
     serverAliases = [];
-  };
-  vhost {
-    hostname = "security.${tld}";
-    docuemntRoot = "${webtree}/d/d_fens/security";
+  })
+  (vhost {
+    hostName = "security.${tld}";
+    documentRoot = "${webtree}/d/d_fens/security";
     user = "d_fens";
     group = "associat";
     serverAliases = [];
-  };
-  vhost {
-    hostname = "shaunneary.com";
-    docuemntRoot = "${webtree}/s/shaun/koken";
+  })
+  (vhost {
+    hostName = "shaunneary.com";
+    documentRoot = "${webtree}/s/shaun/koken";
     user = "shaun";
     group = "member";
-  };
-  vhost {
-    hostname = "signup.${tld}";
-    docuemntRoot = "${webtree}/e/events/csday";
+  })
+  (vhost {
+    hostName = "signup.${tld}";
+    documentRoot = "${webtree}/e/events/csday";
     user = "events";
     group = "redbrick";
     serverAliases = [];
-  };
-  vhost {
-    hostname = "solarsystemscanlan.com";
-    docuemntRoot = "${webtree}/s/singer/solarsystemscanlan.com/";
+  })
+  (vhost {
+    hostName = "solarsystemscanlan.com";
+    documentRoot = "${webtree}/s/singer/solarsystemscanlan.com/";
     user = "singer";
     group = "associat";
-  };
-  vhost {
-    hostname = "songsfromtheparlour.com";
-    docuemntRoot = "${webtree}/vhosts/www.songsfromtheparlour.com";
+  })
+  (vhost {
+    hostName = "songsfromtheparlour.com";
+    documentRoot = "${webtree}/vhosts/www.songsfromtheparlour.com";
     user = "parlour";
     group = "guest";
-  };
-  vhost {
-    hostname = "speakeasyireland.ie";
-    docuemntRoot = "${webtree}/s/spkeasy";
+  })
+  (vhost {
+    hostName = "speakeasyireland.ie";
+    documentRoot = "${webtree}/s/spkeasy";
     user = "spkeasy";
     group = "society";
-  };
-  vhost {
-    hostname = "surfnsail.${tld}";
-    docuemntRoot = "${webtree}/s/sailing";
+  })
+  (vhost {
+    hostName = "surfnsail.${tld}";
+    documentRoot = "${webtree}/s/sailing";
     user = "sailing";
     group = "club";
     serverAliases = [];
-  };
-  vhost {
-    hostname = "techweek.dcu.ie";
-    docuemntRoot = "${webtree}/t/techwk/dist";
+  })
+  (vhost {
+    hostName = "techweek.dcu.ie";
+    documentRoot = "${webtree}/t/techwk/dist";
     user = "techwk";
     group = "redbrick";
-  };
-  vhost {
-    hostname = "thecollegeview.com";
-    docuemntRoot = "${webtree}/p/pubsoc";
+  })
+  (vhost {
+    hostName = "thecollegeview.com";
+    documentRoot = "${webtree}/p/pubsoc";
     user = "pubsoc";
     group = "society";
-  };
-  vhost {
-    hostname = "theinternets.be";
-    docuemntRoot = "${webtree}/r/receive/internets";
-    user = "recieve";
+  })
+  (vhost {
+    hostName = "theinternets.be";
+    documentRoot = "${webtree}/r/receive/internets";
+    user = "receive";
     group = "staff";
-  };
-  vhost {
-    hostname = "blog.theinternets.be";
-    docuemntRoot = "${webtree}/r/receive/blog";
-    user = "recieve";
+  })
+  (vhost {
+    hostName = "blog.theinternets.be";
+    documentRoot = "${webtree}/r/receive/blog";
+    user = "receive";
     group = "staff";
-  };
-  vhost {
-    hostname = "receive.theinternets.be";
-    docuemntRoot = "${webtree}/r/receive";
-    user = "recieve";
+  })
+  (vhost {
+    hostName = "receive.theinternets.be";
+    documentRoot = "${webtree}/r/receive";
+    user = "receive";
     group = "staff";
-  };
-  vhost {
-    hostname = "someoneiswrong.theinternets.be";
-    docuemntRoot = "${webtree}/r/receive/wrong";
-    user = "recieve";
+  })
+  (vhost {
+    hostName = "someoneiswrong.theinternets.be";
+    documentRoot = "${webtree}/r/receive/wrong";
+    user = "receive";
     group = "staff";
-  };
-  vhost {
-    hostname = "thelookdcu.com";
-    docuemntRoot = "${webtree}/t/thelook/";
+  })
+  (vhost {
+    hostName = "thelookdcu.com";
+    documentRoot = "${webtree}/t/thelook/";
     user = "thelook";
     group = "society";
-  };
-  vhost {
-    hostname = "theparachichi.com";
-    docuemntRoot = "${webtree}/v/vmuia";
+  })
+  (vhost {
+    hostName = "theparachichi.com";
+    documentRoot = "${webtree}/v/vmuia";
     user = "vmuia";
     group = "associat";
-  };
-  vhost {
-    hostname = "travel.colmreilly.com";
-    docuemntRoot = "${webtree}/n/nettles/travel/";
+  })
+  (vhost {
+    hostName = "travel.colmreilly.com";
+    documentRoot = "${webtree}/n/nettles/travel/";
     user = "nettles";
     group = "associat";
-  };
-  vhost {
-    hostname = "wanderers.${tld}";
-    docuemntRoot = "${webtree}/w/wander/";
+  })
+  (vhost {
+    hostName = "wanderers.${tld}";
+    documentRoot = "${webtree}/w/wander/";
     user = "wander";
     group = "projects";
     serverAliases = [];
-  };
-  vhost {
-    hostname = "wiki.colmreilly.com";
-    docuemntRoot = "${webtree}/n/nettles/wiki/";
+  })
+  (vhost {
+    hostName = "wiki.colmreilly.com";
+    documentRoot = "${webtree}/n/nettles/wiki/";
     user = "nettles";
     group = "associat";
-  };
-  vhost {
-    hostname = "ejmitchell.com";
-    docuemntRoot = "${home}/member/d/deadlock/ejmitchellcom";
+  })
+  (vhost {
+    hostName = "ejmitchell.com";
+    documentRoot = "${home}/member/d/deadlock/ejmitchellcom";
     user = "deadlock";
     group = "member";
-  };
-  vhost {
-    hostname = "iahpc.ie";
-    docuemntRoot = "${home}/guest/iahpc/public_html";
+  })
+  (vhost {
+    hostName = "iahpc.ie";
+    documentRoot = "${home}/guest/iahpc/public_html";
     user = "iahpc";
     group = "guest";
-  };
-  vhost {
-    hostname = "luxgaa.lu";
-    docuemntRoot = "${webtree}/s/shivo/LuxGAA";
+  })
+  (vhost {
+    hostName = "luxgaa.lu";
+    documentRoot = "${webtree}/s/shivo/LuxGAA";
     user = "shivo";
     group = "associat";
-  };
-  vhost {
-    hostname = "unkle77.com";
-    docuemntRoot = "${webtree}/s/shivo/unkle77/wordpress/";
+  })
+  (vhost {
+    hostName = "unkle77.com";
+    documentRoot = "${webtree}/s/shivo/unkle77/wordpress/";
     user = "shivo";
     group = "associat";
-  };
-  vhost {
-    hostname = "x-files.${tld}";
-    docuemntRoot = "${webtree}/f/fox_chic";
+  })
+  (vhost {
+    hostName = "x-files.${tld}";
+    documentRoot = "${webtree}/f/fox_chic";
     user = "fox_chic";
     group = "associat";
     serverAliases = [];
-  };
-  vhost {
-    hostname = "yfg.${tld}";
-    docuemntRoot = "${webtree}/f/finegael";
+  })
+  (vhost {
+    hostName = "yfg.${tld}";
+    documentRoot = "${webtree}/f/finegael";
     user = "finegael";
     group = "associat";
     serverAliases = [];
-  };
-  vhost {
-    hostname = "youth2000.${tld}";
-    docuemntRoot = "${webtree}/y/youth2k";
+  })
+  (vhost {
+    hostName = "youth2000.${tld}";
+    documentRoot = "${webtree}/y/youth2k";
     user = "gamessoc";
     group = "society";
     serverAliases = [];
-  };
+  })
   (vhostProxy "dcufm.${tld}" "http://136.206.16.136")
   (vhostProxy "jakarta.${tld}" "http://136.206.15.59:8080")
   (vhostProxy "macspayn.${tld}" "http://136.206.15.25:3007")

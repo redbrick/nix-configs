@@ -8,20 +8,23 @@ let
 in {
   inherit common webtree home tld adminAddr;
 
-  vhost = {user, group, hostName, documentRoot, serverAliases ? [ "www.${hostName}" ]}: {
-    inherit hostName documentRoot adminAddr serverAliases;
+  vhost = {user, group, hostName, documentRoot, serverAliases ? [ "www.${hostName}" ], extraConfig ? ""}: {
+    inherit hostName documentRoot serverAliases;
+    adminAddr = "${if user == "wwwrun" then "webmaster" else user}@${tld}";
     enableSSL = true;
     extraConfig = ''
       <Directory "${documentRoot}">
-        AllowOverride AuthConfig FileInfo Indexes Limit AuthConfig Options=ExecCGI,Includes,IncludesNoExec,Indexes,MultiViews,SymlinksIfOwnerMatch
+        <FilesMatch \.php\d*$>
+          SetHandler "proxy:unix:/run/phpfpm/${user}.sock|fcgi://localhost/"
+        </FilesMatch>
+
+        AllowOverride AuthConfig FileInfo Indexes Limit AuthConfig Options=ExecCGI,Includes,IncludesNoExec,Indexes,MultiViews,SymlinksIfOwnerMatch NonFatal=Unknown
         Require all granted
       </Directory>
 
-      <FilesMatch \.php\d*$>
-        SetHandler "proxy:unix:/run/phpfpm/${user}.sock|fcgi://localhost/"
-      </FilesMatch>
-
       SuExecUserGroup ${user} ${group}
+
+      ${extraConfig}
     '';
   };
 
