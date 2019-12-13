@@ -5,24 +5,12 @@ let
 
   # This is appended at the bottom
   # to ensure that custom vhosts take preference
-  userVhosts = builtins.map (user: let
-    documentRoot = common.userWebtree user.uid;
-  in {
-    inherit documentRoot adminAddr;
+  userVhosts = builtins.map (user: vhost {
     hostName = "${user.uid}.${tld}";
-    enableSSL = true;
-    extraConfig = ''
-      <Directory "${documentRoot}">
-        AllowOverride AuthConfig FileInfo Indexes Limit AuthConfig Options=ExecCGI,Includes,IncludesNoExec,Indexes,MultiViews,SymlinksIfOwnerMatch
-        Require all granted
-      </Directory>
-
-      <FilesMatch \.php\d*$>
-        SetHandler "proxy:unix:/run/phpfpm/${user.uid}.sock|fcgi://localhost/"
-      </FilesMatch>
-
-      SuExecUserGroup ${user.uid} ${user.gid}
-    '';
+    documentRoot = common.userWebtree user.uid;
+    user = user.uid;
+    group = user.gid;
+    serverAliases = [];
   }) users;
 in [
   (vhost "abovethefold.es" "${webtree}/r/receive/abovethefold")

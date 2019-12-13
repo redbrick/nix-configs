@@ -8,10 +8,21 @@ let
 in {
   inherit common webtree home tld adminAddr;
 
-  vhost = hostName: documentRoot: {
-    inherit hostName documentRoot adminAddr;
+  vhost = {user, group, hostName, documentRoot, serverAliases ? [ "www.${hostName}" ]}: {
+    inherit hostName documentRoot adminAddr serverAliases;
     enableSSL = true;
-    serverAliases = [ "www.${hostName}" ];
+    extraConfig = ''
+      <Directory "${documentRoot}">
+        AllowOverride AuthConfig FileInfo Indexes Limit AuthConfig Options=ExecCGI,Includes,IncludesNoExec,Indexes,MultiViews,SymlinksIfOwnerMatch
+        Require all granted
+      </Directory>
+
+      <FilesMatch \.php\d*$>
+        SetHandler "proxy:unix:/run/phpfpm/${user}.sock|fcgi://localhost/"
+      </FilesMatch>
+
+      SuExecUserGroup ${user} ${group}
+    '';
   };
 
   vhostRedirect = hostName: globalRedirect: {
