@@ -151,20 +151,10 @@ let
   '';
 
   # TODO stop new users being created, fix session stuff
-  vhostWiki = config: cfgPath: (vhost config.domain documentRoot) // {
+  vhostWiki = config: cfgPath: (vhost { inherit documentRoot user group; hostName = config.domain; serverAliases = []; }) // {
     extraConfig = ''
-      SuExecUserGroup ${user} ${group}
       ProxyTimeout 600
       SetEnv MEDIAWIKI_CONFIG "${cfgPath}"
-
-      <Directory "${documentRoot}">
-        <FilesMatch \.php\d*$>
-          SetHandler "proxy:unix:/run/phpfpm/${user}.sock|fcgi://localhost/"
-        </FilesMatch>
-
-        AllowOverride AuthConfig FileInfo Indexes Limit AuthConfig Options=ExecCGI,Includes,IncludesNoExec,Indexes,MultiViews,SymlinksIfOwnerMatch NonFatal=Unknown
-        Require all granted
-      </Directory>
 
       Alias "/Wiki.png" "${config.stateDir}/Wiki.png"
       Alias "/images" "${config.stateDir}/images"
