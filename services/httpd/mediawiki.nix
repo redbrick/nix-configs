@@ -150,18 +150,16 @@ let
 
   '';
 
-  vhostWiki = config: cfgPath: (vhost { inherit documentRoot user group; hostName = config.domain; serverAliases = []; }) // {
-    extraConfig = ''
-      ProxyTimeout 600
-      SetEnv MEDIAWIKI_CONFIG "${cfgPath}"
+  vhostWiki = config: cfgPath: (vhost { inherit documentRoot user group; hostName = config.domain; serverAliases = []; extraConfig = ''
+    ProxyTimeout 600
+    SetEnv MEDIAWIKI_CONFIG "${cfgPath}"
 
-      Alias "/Wiki.png" "${config.stateDir}/Wiki.png"
-      Alias "/images" "${config.stateDir}/images"
-      <Directory "${config.stateDir}">
-        Require all granted
-      </Directory>
-    '';
-  };
+    Alias "/Wiki.png" "${config.stateDir}/Wiki.png"
+    Alias "/images" "${config.stateDir}/images"
+    <Directory "${config.stateDir}">
+      Require all granted
+    </Directory>
+  '';});
 
   # Adapted from the nixpkgs repo mediawiki implementation
   # Skips initial setup, this will never be done at RB. Feel free to port it if you think it will.
