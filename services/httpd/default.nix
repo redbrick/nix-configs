@@ -63,6 +63,7 @@ let
 in {
   imports = [
     ./php-fpm.nix
+    ./mediawiki.nix
   ];
 
   # Enable suexec support

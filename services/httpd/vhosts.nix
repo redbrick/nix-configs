@@ -1,39 +1,7 @@
 { config, ... }:
+with (import ./shared.nix);
 let
-  common = import ../../common/variables.nix;
   users = import ./users.nix;
-
-  webtree = common.webtreeDir;
-  home = common.homesDir;
-  tld = common.tld;
-  adminAddr = "webmaster@${tld}";
-
-  vhost = hostName: documentRoot: {
-    inherit hostName documentRoot adminAddr;
-    enableSSL = true;
-    serverAliases = [ "www.${hostName}" ];
-  };
-
-  vhostRedirect = hostName: globalRedirect: {
-    inherit hostName globalRedirect adminAddr;
-    enableSSL = true;
-    serverAliases = [ "www.${hostName}" ];
-  };
-
-  vhostProxy = hostName: proxyAddress: {
-    inherit hostName adminAddr;
-    enableSSL = true;
-    serverAliases = [ "www.${hostName}" ];
-    extraConfig = ''
-      <Proxy *>
-        Order deny,allow
-        Allow from all
-      </Proxy>
-
-      ProxyPass / ${proxyAddress}/
-      ProxyPassReverse / ${proxyAddress}/
-    '';
-  };
 
   # This is appended at the bottom
   # to ensure that custom vhosts take preference
@@ -72,19 +40,6 @@ in [
   (vhost "ca3wiki.${tld}" "${webtree}/s/sonic/wikica3")
   (vhost "ca4wiki.${tld}" "${webtree}/s/sonic/ca4wiki")
   (vhost "ciankehoe.ie" "${webtree}/c/cianky/ciankehoe.ie/public/")
-  ((vhost "cmtwiki.${tld}" "${webtree}/redbrick/extras/cmt/wiki") // {
-    extraConfig = ''
-      SuExecUserGroup wiki redbrick
-      ProxyTimeout 600
-      <FilesMatch \.php\d*$>
-        SetHandler "proxy:unix:/run/phpfpm/wiki.sock|fcgi://localhost/"
-      </FilesMatch>
-      <Directory "${webtree}/redbrick/extras/cmt/wiki">
-        AllowOverride AuthConfig FileInfo Indexes Limit AuthConfig Options=ExecCGI,Includes,IncludesNoExec,Indexes,MultiViews,SymlinksIfOwnerMatch NonFatal=Unknown
-        Require all granted
-      </Directory>
-    '';
-  })
   (vhost "colors.${tld}" "${webtree}/vhosts/colors.redbrick.dcu.ie")
   (vhost "committee.${tld}" "${webtree}/c/chair/blog")
   (vhost "dcudrama.ie" "${webtree}/d/drama")
@@ -139,19 +94,6 @@ in [
   (vhost "vmweb.${tld}" "${webtree}/w/werdz")
   (vhost "wanderers.${tld}" "${webtree}/w/wander/")
   (vhost "wiki.colmreilly.com" "${webtree}/n/nettles/wiki/")
-  ((vhost "wiki.${tld}" "${webtree}/w/wiki") // {
-    extraConfig = ''
-      SuExecUserGroup wiki redbrick
-      ProxyTimeout 600
-      <FilesMatch \.php\d*$>
-        SetHandler "proxy:unix:/run/phpfpm/wiki.sock|fcgi://localhost/"
-      </FilesMatch>
-      <Directory "${webtree}/w/wiki">
-        AllowOverride AuthConfig FileInfo Indexes Limit AuthConfig Options=ExecCGI,Includes,IncludesNoExec,Indexes,MultiViews,SymlinksIfOwnerMatch NonFatal=Unknown
-        Require all granted
-      </Directory>
-    '';
-  })
   (vhost "ejmitchell.com" "${home}/member/d/deadlock/ejmitchellcom")
   (vhost "iahpc.ie" "${home}/guest/iahpc/public_html")
   (vhost "luxgaa.lu" "${webtree}/s/shivo/LuxGAA")
