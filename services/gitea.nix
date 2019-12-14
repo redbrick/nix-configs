@@ -1,3 +1,4 @@
+{ lib, ... }:
 let
   common = import ../common/variables.nix;
   secrets = import /var/secrets/gitea.nix;
@@ -13,6 +14,10 @@ in {
     shell = "/dev/null";
     home = "/dev/null";
   };
+
+  systemd.services.gitea.serviceConfig.SystemCallFilter =
+    lib.mkForce "~@clock @cpu-emulation @debug @keyring @memlock @module @mount @obsolete @raw-io @reboot @resources @setuid @swap";
+  systemd.services.gitea.serviceConfig.ReadWritePaths = lib.mkForce "${stateDir} ${repositoryRoot} /var/secrets";
 
   services.gitea = {
     inherit stateDir repositoryRoot;
