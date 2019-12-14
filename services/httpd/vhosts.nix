@@ -389,18 +389,21 @@ in [
     documentRoot = "${webtree}/r/receive/blog";
     user = "receive";
     group = "staff";
+    serverAliases = [];
   })
   (vhost {
     hostName = "receive.theinternets.be";
     documentRoot = "${webtree}/r/receive";
     user = "receive";
     group = "staff";
+    serverAliases = [];
   })
   (vhost {
     hostName = "someoneiswrong.theinternets.be";
     documentRoot = "${webtree}/r/receive/wrong";
     user = "receive";
     group = "staff";
+    serverAliases = [];
   })
   (vhost {
     hostName = "thelookdcu.com";
@@ -419,6 +422,7 @@ in [
     documentRoot = "${webtree}/n/nettles/travel/";
     user = "nettles";
     group = "associat";
+    serverAliases = [];
   })
   (vhost {
     hostName = "wanderers.${tld}";
@@ -432,6 +436,7 @@ in [
     documentRoot = "${webtree}/n/nettles/wiki/";
     user = "nettles";
     group = "associat";
+    serverAliases = [];
   })
   (vhost {
     hostName = "ejmitchell.com";
