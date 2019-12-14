@@ -1,7 +1,7 @@
 $ORIGIN redbricktest.ml.
 $TTL 300
 @       IN      SOA     ns1.redbricktest.ml.     admins.redbricktest.ml. (
-                        2019060504      ; Serial
+                        2019060505      ; Serial
                         1M              ; Slave refresh interval
                         5M              ; Query retry interval
                         1H              ; Expiry

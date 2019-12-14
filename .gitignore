@@ -1,2 +1,5 @@
+.vscode
 *.code-*
 /configuration.nix
+/nixpkgs
+users.nix

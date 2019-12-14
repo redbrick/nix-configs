@@ -4,10 +4,12 @@
     ./hardware-configuration.nix
     ../../common/sysconfig.nix
     ../../services/ssh.nix
-    ../../services/httpd.nix
+    ../../services/httpd
     ../../services/dns
     ../../services/postfix
     ../../services/dovecot
+    ../../services/certs
+    ../../services/thelounge.nix
   ];
 
   # This value determines the NixOS release with which your system is to be

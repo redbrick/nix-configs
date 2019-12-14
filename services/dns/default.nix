@@ -1,26 +1,47 @@
+# Requires tsig-keygen dnsupdate.${common.tld} > /var/secrets/dnskeys.conf
+# chown named:root chmod 400
 { lib, ... }:
-{
+let
+  common = import ../../common/variables.nix;
+
+  keysPath = "/var/secrets/dnskeys.conf";
+  keyName = "dnsupdate.${common.tld}.";
+  zonePath = "/var/db/bind";
+in {
+  # Enable eddsa support
+  nixpkgs.overlays = [
+    (self: super: {
+      bind = super.bind.overrideAttrs (oldAttrs: {
+        configureFlags = lib.remove "--without-eddsa" oldAttrs.configureFlags;
+      });
+    })
+  ];
+
   services.bind = {
     enable = true;
 
     cacheNetworks = [
       "127.0.0.0/24"
-      "192.168.0.0/24"
-      "192.168.1.0/24"
+      "192.168.0.0/23"
       "136.206.15.0/24"
       "136.206.16.0/24"
     ];
+
+    extraConfig = ''
+      include "${keysPath}";
+    '';
 
     zones = [
       {
         # Not using common.tld here becaue we actually want to configure
         # a specific domain
-        file = ./redbricktest.ml;
+        file = "${zonePath}/redbricktest.ml";
         master = true;
         name = "redbricktest.ml";
+        extraConfig = "allow-update { key ${keyName}; };";
       }
       {
-        file = ./redbricktest.ml.rr;
+        file = "${zonePath}/redbricktest.ml.rr";
         master = true;
         name = "15.206.136.in-addr.arpa";
       }
