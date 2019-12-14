@@ -22,6 +22,11 @@
       fsType = "zfs";
     };
 
+  fileSystems."/storage" =
+    { device = "icarus.internal:/zbackup";
+      fsType = "nfs";
+    };
+
   # zfs create -o dedup=off -o mountpoint=legacy -o recordsize=4K  zroot/postgres
   fileSystems."/zroot/postgres" =
     { device = "zroot/postgres";

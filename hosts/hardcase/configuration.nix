@@ -8,7 +8,12 @@ in {
     ../../services/ssh.nix
     ../../services/postgres.nix
     ../../services/gitea.nix
+    ../../services/thelounge.nix
+    ../../services/certs
+    ../../services/httpd
   ];
+
+  security.acme.production = false;
 
   # This value determines the NixOS release with which your system is to be
   # compatible, in order to avoid breaking some software such as database
