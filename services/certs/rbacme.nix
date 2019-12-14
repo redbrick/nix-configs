@@ -155,7 +155,7 @@ in {
                 renewHook = pkgs.writeScript "lego-renew-hook" ''
                   touch ${cpath}/renewed
                 '';
-                globalOpts = optionals (!cfg.production) ["--server" "https://acme-staging-v02.api.letsencrypt.org/directory"]
+                globalOpts = optionals (cfg.server != null) ["--server" cfg.server]
                           ++ concatLists (mapAttrsToList (name: root: [ "--domains" name ]) data.extraDomains)
                           ++ [ "--domains" data.domain "--email" data.email "--accept-tos" ]
                           ++ (if data.dnsProvider != null then [ "--dns" data.dnsProvider ] else [ "--http.webroot" data.webroot ])
