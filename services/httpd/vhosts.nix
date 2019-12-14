@@ -478,6 +478,12 @@ in [
     group = "society";
     serverAliases = [];
   })
+  (vhost {
+    hostname = "webmail.${tld}";
+    documentRoot = "${webtree}/vhosts/rainloop";
+    user = "wwwrun";
+    group = "wwwrun";
+  })
   (vhostProxy "dcufm.${tld}" "http://136.206.16.136")
   (vhostProxy "jakarta.${tld}" "http://136.206.15.59:8080")
   (vhostProxy "macspayn.${tld}" "http://136.206.15.25:3007")
