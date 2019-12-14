@@ -495,6 +495,8 @@ in [
   (vhostProxy "werdztomcat.${tld}" "http://136.206.15.14:20001")
   (vhostRedirect "admin.${tld}" "https://blog.redbrick.dcu.ie")
   (vhostRedirect "admins.${tld}" "https://blog.redbrick.dcu.ie")
+  (vhostRedirect "ajaxterm.${tld}" "https://term.redbrick.dcu.ie")
+  (vhostRedirect "anyterm.${tld}" "https://term.redbrick.dcu.ie")
   (vhostRedirect "dconcannon.${tld}" "https://www.redbrick.dcu.ie/~shimoda")
   (vhostRedirect "dermot.${tld}" "https://www.redbrick.dcu.ie/~homer")
   (vhostRedirect "devnull.${tld}" "https://www.redbrick.dcu.ie/~colmmacc")
