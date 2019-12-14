@@ -13,8 +13,6 @@ in {
     ../../services/httpd
   ];
 
-  security.acme.server = "https://acme-staging-v02.api.letsencrypt.org/directory";
-
   # This value determines the NixOS release with which your system is to be
   # compatible, in order to avoid breaking some software such as database
   # servers. You should change this only after NixOS release notes say you
