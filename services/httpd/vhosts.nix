@@ -479,7 +479,7 @@ in [
     serverAliases = [];
   })
   (vhost {
-    hostname = "webmail.${tld}";
+    hostName = "webmail.${tld}";
     documentRoot = "${webtree}/vhosts/rainloop";
     user = "wwwrun";
     group = "wwwrun";
