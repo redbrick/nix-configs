@@ -21,3 +21,17 @@ nixos-rebuild switch
 cd services/httpd
 ldapsearch -b o=redbrick -h ldap.internal -xLLL objectClass=posixAccount uid homeDirectory gidNumber | python3 ldap2nix.py /storage/webtree/ > users.nix
 ```
+
+Then generate the preliminary certs for every domain so that httpd can start:
+```bash
+# List all acme-selfsigned-* services and put them in a txt file. Do this with `systemctl status acme-selfsigned-<tab>`
+cat selfsigned-svcs.txt | xargs systemctl start
+```
+
+Now apache will start. Generate the real certs for each domain, one at a time as to not get rate limited
+
+```bash
+cd /var/lib/acme
+for cert in *; do journalctl -fu acme-$cert.service & systemctl start acme-$cert.service && kill $!; done
+systemctl reload httpd
+```

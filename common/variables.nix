@@ -2,11 +2,17 @@ rec {
   tld = "redbricktest.ml";
 
   certsDir = "/var/lib/acme";
-  webrootDir = "/var/lib/acme/.webroot";
+  webtreeCertsDir = "${certsDir}/.webroot";
   webtreeDir = "/storage/webtree";
   homesDir = "/storage/home";
 
   userWebtree = uid: "${webtreeDir}/${builtins.substring 0 1 uid}/${uid}";
+  splitDomain = domain: builtins.filter (x: x != []) (builtins.split "\\." domain);
+  domainTld = domain: with builtins; let
+    splitName = splitDomain domain;
+    len = length splitName;
+  in
+    "${(elemAt splitName (len - 2))}.${(elemAt splitName (len - 1))}";
 
   dovecotHost = "192.168.0.135";
   dovecotSaslPort = 3659;

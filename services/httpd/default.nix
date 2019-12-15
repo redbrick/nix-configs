@@ -6,20 +6,18 @@ let
 
   # Define a base vhost for all TLDs. This will serve only ACME on port 80
   # Everything else is promoted to HTTPS
-  acmeVhost = domain: {
+  acmeVhost = {
     inherit adminAddr;
-    hostName = domain;
-    serverAliases = [ "*.${domain}" ];
+    hostName = common.tld;
+    serverAliases = ["*"];
     listen = [{ port = 80; }];
-    servedDirs = [{
-      urlPath = "/.well-known/acme-challenge";
-      dir = "${common.webrootDir}/.well-known/acme-challenge";
-    }];
+    documentRoot = common.webtreeCertsDir;
 
     extraConfig = ''
       RewriteEngine On
       RewriteCond %{HTTPS} off
-      RewriteCond %{REQUEST_URI} !^/\.well-known/.*$ [NC]
+      RewriteCond %{REQUEST_URI} !^/\.well-known/ [NC]
+      RewriteCond %{REQUEST_URI} !^/server-status [NC]
       RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI} [R=301]
     '';
   };
@@ -120,9 +118,32 @@ in {
     '';
 
     virtualHosts = [
-      (acmeVhost common.tld)
+      acmeVhost
       redbrickVhost
     ] ++ vhosts;
+  };
+
+  # Once a week, reload httpd to refresh the certificates
+  systemd.services.httpd-reload = {
+    description = "Reload HTTPD + load new certs";
+    requires = [ "httpd.service" ];
+    serviceConfig = {
+      Type = "oneshot";
+      SuccessExitStatus = [ "0" "1" ];
+      PermissionsStartOnly = true;
+    };
+    script = "systemctl reload httpd";
+  };
+
+  systemd.timers.httpd-reload = {
+    description = "Reload HTTPD at 5am every Saturday to update certs";
+    wantedBy = [ "timers.target" ];
+    timerConfig = {
+      OnCalendar = "Sat *-*-* 05:00:00";
+      Unit = "httpd-reload.service";
+      Persistent = "yes";
+      AccuracySec = "5m";
+    };
   };
 
   networking.firewall.allowedTCPPorts = [ 80 443 ];

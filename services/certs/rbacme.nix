@@ -138,6 +138,14 @@ in {
       '';
       example = options.security.acme.certs.example;
     };
+    legoStateDir = mkOption {
+      default = "/var/lib/acme/.lego";
+      type = types.str;
+      description = ''
+        Directory to save data whilst LEGo is generating certs. This allos
+        credentials to be shared across certs.
+      '';
+    };
   };
 
   ###### implementation
@@ -158,7 +166,7 @@ in {
                 globalOpts = optionals (cfg.server != null) ["--server" cfg.server]
                           ++ concatLists (mapAttrsToList (name: root: [ "--domains" name ]) data.extraDomains)
                           ++ [ "--domains" data.domain "--email" data.email "--accept-tos" ]
-                          ++ (if data.dnsProvider != null then [ "--dns" data.dnsProvider ] else [ "--http.webroot" data.webroot ])
+                          ++ (if data.dnsProvider != null then [ "--dns" data.dnsProvider ] else [ "--http" "--http.webroot" data.webroot ])
                           ++ data.extraFlags;
                 renewOpts = [ "renew" "--renew-hook" renewHook "--days" (toString cfg.validMin) ];
                 acmeService = {
@@ -172,7 +180,7 @@ in {
                     User = data.user;
                     Group = data.group;
                     PrivateTmp = true;
-                    EnvironmentFile = data.credentialsFile;
+                    EnvironmentFile = if data.dnsProvider != null then data.credentialsFile else null;
                   };
                   path = with pkgs; [ lego systemd ];
                   preStart = ''
@@ -190,6 +198,13 @@ in {
                     ''}
                     if [ -e ${cpath}/renewed ]; then
                         rm ${cpath}/renewed
+                    fi
+                    mkdir -p '${cfg.legoStateDir}'
+                    if [ -d '${cpath}/.lego' ]; then
+                        rm -rf '${cpath}/.lego'
+                    fi
+                    if [ ! -e '${cpath}/.lego' ]; then
+                      ln -s '${cfg.legoStateDir}' '${cpath}/.lego'
                     fi
                   '';
                   script = ''

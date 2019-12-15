@@ -144,10 +144,6 @@ let
 
       $wgDefaultSkin = 'vector';
       $LDAPProviderDomainConfigs = "${ldapProviderConfig}";
-
-      # TODO remove this
-      $wgDebugLogFile = "/tmp/mediawiki.log";
-
   '';
 
   vhostWiki = config: cfgPath: (vhost { inherit documentRoot user group; hostName = config.domain; serverAliases = []; extraConfig = ''
