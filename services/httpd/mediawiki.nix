@@ -151,8 +151,9 @@ let
     SetEnv MEDIAWIKI_CONFIG "${cfgPath}"
 
     RewriteEngine on
-    RewriteRule ^rss /index.php/Special:RecentChanges&feed=rss [L,QSA]
-    RewriteRule ^/*$ /index.php/Main_Page [L]
+    RewriteRule ^rss /index.php/Special:RecentChanges?feed=rss [L,QSA]
+    RewriteRule ^/?mw/?(.*)$ /index.php/$1 [L,QSA,R=301]
+    RewriteRule ^/*$ /index.php/Main_Page [L,QSA]
 
     Alias "/Wiki.png" "${config.stateDir}/Wiki.png"
     Alias "/images" "${config.stateDir}/images"
