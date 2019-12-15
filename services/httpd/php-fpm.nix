@@ -58,10 +58,14 @@ in {
     (key: userGroup: nameValuePair ("phpfpm-rbusers-${key}") (service key userGroup))
     (groupBy (user: builtins.substring 0 1 user.uid) allUsers);
 
-  services.phpfpm.pools.wwwrun = with builtins; {
+  services.phpfpm.pools.wwwrun = with builtins; let
     user = "wwwrun";
-    group = "wwwrun";
+  in {
+    user = user;
+    group = user;
     settings = {
+      "listen.owner" = user;
+      "listen.group" = user;
       "pm" = "dynamic";
       "pm.start_servers" = 5;
       "pm.max_children" = 75;
