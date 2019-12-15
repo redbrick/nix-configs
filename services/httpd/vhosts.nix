@@ -59,6 +59,7 @@ in [
     documentRoot = "${webtree}/o/ornat/blog";
     user = "ornat";
     group = "member";
+    serverAliases = [];
   })
   (vhost {
     hostName = "bricket.${tld}";
@@ -113,6 +114,7 @@ in [
     documentRoot = "${webtree}/c/cianky/ciankehoe.ie/public";
     user = "cianky";
     group = "member";
+    serverAliases = [];
   })
   (vhost {
     hostName = "colors.${tld}";
@@ -146,6 +148,7 @@ in [
     documentRoot = "${webtree}/l/lecter/djbdns";
     user = "lecter";
     group = "associat";
+    serverAliases = [];
   })
   (vhost {
     hostName = "forbidden.${tld}";
@@ -244,7 +247,6 @@ in [
     documentRoot = "${webtree}/vhosts/www.obrienronan.com";
     user = "mellow";
     group = "associat";
-    serverAliases = ["www.obrienronan.com" "citrix-itm.obrienronan.com"];
   })
   (vhost {
     hostName = "packages.${tld}";
@@ -295,10 +297,7 @@ in [
     serverAliases = [
       "big.wavingscreamingqueen.com"
       "dude.coolandgroovy.org"
-      "eurovision.bing-bang-a-bang.com"
       "honk.for.faggots-on-strike.com"
-      "romana.ipv4.now.ie"
-      "romana.ipv6.now.ie"
     ];
   })
   (vhost {
@@ -333,6 +332,7 @@ in [
     documentRoot = "${webtree}/s/shaun/koken";
     user = "shaun";
     group = "member";
+    serverAliases = [];
   })
   (vhost {
     hostName = "signup.${tld}";
@@ -358,6 +358,7 @@ in [
     documentRoot = "${webtree}/s/spkeasy";
     user = "spkeasy";
     group = "society";
+    serverAliases = [];
   })
   (vhost {
     hostName = "surfnsail.${tld}";
@@ -412,12 +413,6 @@ in [
     group = "society";
   })
   (vhost {
-    hostName = "theparachichi.com";
-    documentRoot = "${webtree}/v/vmuia";
-    user = "vmuia";
-    group = "associat";
-  })
-  (vhost {
     hostName = "travel.colmreilly.com";
     documentRoot = "${webtree}/n/nettles/travel/";
     user = "nettles";
@@ -445,16 +440,20 @@ in [
     group = "member";
   })
   (vhost {
-    hostName = "iahpc.ie";
+    hostName = "www.iahpc.ie";
     documentRoot = "${home}/guest/iahpc/public_html";
     user = "iahpc";
     group = "guest";
+    serverAliases = [];
+    wwwCert = true;
   })
   (vhost {
-    hostName = "luxgaa.lu";
+    hostName = "www.luxgaa.lu";
     documentRoot = "${webtree}/s/shivo/LuxGAA";
     user = "shivo";
     group = "associat";
+    serverAliases = [];
+    wwwCert = true;
   })
   (vhost {
     hostName = "unkle77.com";
