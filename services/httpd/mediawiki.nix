@@ -50,7 +50,7 @@ let
   });
   documentRoot = "${pkg}/share/mediawiki";
 
-  mkConfig = {domain, title, dbName, dbPrefix, cacheDir, stateDir, scriptPath ? ""}: pkgs.writeText "LocalSettings.${domain}.php" ''
+  mkConfig = {domain, title, dbName, dbPrefix, cacheDir, stateDir, scriptPath ? "", needLogin ? false}: pkgs.writeText "LocalSettings.${domain}.php" ''
     <?php
       ## Protect against web entry
       if ( !defined( 'MEDIAWIKI' ) ) {
@@ -131,7 +131,7 @@ let
       $wgGroupPermissions['*']['readrbonly'] = false;
       $wgNamespaceProtection[ 100 ] = array( 'readrbonly' );
       $wgGroupPermissions['*']['createaccount']   = false;
-      $wgGroupPermissions['*']['read']            = true;
+      $wgGroupPermissions['*']['read']            = ${if needLogin then "false" else "true"};
       $wgGroupPermissions['*']['edit']            = false;
 
       # When you make changes to this configuration file, this will make
@@ -149,6 +149,10 @@ let
   vhostWiki = config: cfgPath: (vhost { inherit documentRoot user group; hostName = config.domain; serverAliases = []; extraConfig = ''
     ProxyTimeout 600
     SetEnv MEDIAWIKI_CONFIG "${cfgPath}"
+
+    RewriteEngine on
+    RewriteRule ^rss /index.php/Special:RecentChanges&feed=rss [L,QSA]
+    RewriteRule ^/*$ /index.php/Main_Page [L]
 
     Alias "/Wiki.png" "${config.stateDir}/Wiki.png"
     Alias "/images" "${config.stateDir}/images"
@@ -191,11 +195,10 @@ let
     dbPrefix = "wiki_";
     cacheDir = "/var/tmp/cmtwiki";
     stateDir = "${webtree}/redbrick/extras/cmt/wiki";
+    needLogin = true;
   };
   cmtWikiCfgPath = mkConfig cmtWikiConfig;
 in {
-  # TODO merge htaccess into vhost
-  # TODO Add wiki user to cmtwiki db and Test!
   systemd.tmpfiles.rules = [
     "d '/var/tmp/wiki' 0750 ${user} ${group} - -"
     "d '/var/tmp/cmtwiki' 0750 ${user} ${group} - -"
