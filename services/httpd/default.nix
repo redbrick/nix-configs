@@ -27,19 +27,11 @@ let
   in {
     inherit adminAddr documentRoot;
     hostName = common.tld;
-    serverAliases = [ "www.${common.tld}" ];
     listen = [{ port = 443; }];
     enableSSL = true;
     extraConfig = ''
       Alias /cgi-bin/ "${common.webtreeDir}/redbrick/extras/cgi-bin/"
       Alias /robots.txt "${common.webtreeDir}/redbrick/extras/robots.txt"
-
-      ErrorDocument 400 /404
-      ErrorDocument 404 /404
-      ErrorDocument 500 /404
-      ErrorDocument 502 /404
-      ErrorDocument 503 /404
-      ErrorDocument 504 /404
 
       # Redirect rb.dcu.ie/~user => user.rb.dcu.ie
       RedirectMatch 301 "^/~(.*)(/(.*))?$" "https://$1.${common.tld}/$2"
@@ -110,6 +102,9 @@ in {
       ErrorDocument 503 /rb_custom_error/500.html
       ErrorDocument 504 /rb_custom_error/500.html
 
+      <Directory "${common.webtreeDir}/redbrick/rb_custom_error/">
+        Require all granted
+      </Directory>
 
       AddHandler cgi-script .cgi
       AddHandler cgi-script .py

@@ -333,6 +333,10 @@ in [
     user = "shaun";
     group = "member";
     serverAliases = [];
+    extraConfig = ''
+      # TODO shout at shaun
+      RedirectMatch 301 "^/~shaun/koken(/(.*))?$" "/$1"
+    '';
   })
   (vhost {
     hostName = "signup.${tld}";
@@ -497,6 +501,7 @@ in [
   (vhostProxy "tomcat.dregin.${tld}" "http://136.206.15.14:20002")
   (vhostProxy "webchat.${tld}" "http://127.0.0.1:16667")
   (vhostProxy "werdztomcat.${tld}" "http://136.206.15.14:20001")
+  (vhostRedirect "www.${tld}" "https://${tld}")
   (vhostRedirect "admin.${tld}" "https://blog.redbrick.dcu.ie")
   (vhostRedirect "admins.${tld}" "https://blog.redbrick.dcu.ie")
   (vhostRedirect "ajaxterm.${tld}" "https://term.redbrick.dcu.ie")
