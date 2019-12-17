@@ -100,7 +100,7 @@ in {
       ProxyVia Off
       ProxyPreserveHost On
 
-      Alias /rb_custom_error/ "${common.webtree}/redbrick/rb_custom_error/"
+      Alias /rb_custom_error/ "${common.webtreeDir}/redbrick/rb_custom_error/"
       ErrorDocument 400 /rb_custom_error/404.html
       ErrorDocument 401 /rb_custom_error/401.html
       ErrorDocument 403 /rb_custom_error/403.html
