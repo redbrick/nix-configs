@@ -49,12 +49,12 @@ let
 
       <Directory ${documentRoot}>
         RewriteEngine on
-        RewriteBase /
-        RewriteRule ^index\.html$ - [L]
-        RewriteCond %{REQUEST_FILENAME} !-f
-        RewriteCond %{REQUEST_FILENAME} !-d
-        RewriteCond %{REQUEST_FILENAME} !-l
-        RewriteRule . /index.html [L]
+        # Don't rewrite files or directories
+        RewriteCond %{REQUEST_FILENAME} -f [OR]
+        RewriteCond %{REQUEST_FILENAME} -d
+        RewriteRule ^ - [L]
+        # Rewrite everything else to index.html to allow html5 state links
+        RewriteRule ^ index.html [L]
       </Directory>
     '';
   };
