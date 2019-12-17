@@ -100,6 +100,17 @@ in {
       ProxyVia Off
       ProxyPreserveHost On
 
+      Alias /rb_custom_error/ "${common.webtree}/redbrick/rb_custom_error/"
+      ErrorDocument 400 /rb_custom_error/404.html
+      ErrorDocument 401 /rb_custom_error/401.html
+      ErrorDocument 403 /rb_custom_error/403.html
+      ErrorDocument 404 /rb_custom_error/404.html
+      ErrorDocument 500 /rb_custom_error/500.html
+      ErrorDocument 502 /rb_custom_error/500.html
+      ErrorDocument 503 /rb_custom_error/500.html
+      ErrorDocument 504 /rb_custom_error/500.html
+
+
       AddHandler cgi-script .cgi
       AddHandler cgi-script .py
       AddHandler cgi-script .sh
