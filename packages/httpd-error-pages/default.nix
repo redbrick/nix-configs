@@ -8,22 +8,39 @@ let
 
   pages = builtins.map mkPage [
     {
-      title = "";
-      subtitle = "";
-      message = "";
+      title = "Error 401";
+      subtitle = "Authorization Required";
+      message = ''
+        Your authorization could not be verified.
+        Please check your username and password and try again.
+      '';
+      method = 401;
+    }
+    {
+      title = "Error 403";
+      subtitle = "Access Forbidden";
+      message = ''
+        You don't have permission to access the requested object.
+        It is either read-protected or not readable by the server.
+      '';
+      method = 403;
+    }
+    {
+      title = "Error 404";
+      subtitle = "Requested URL Not Found";
+      message = ''
+        If you entered the URL manually please check your spelling and try again.
+      '';
       method = 404;
     }
     {
-      title = "";
-      subtitle = "";
-      message = "";
-      method = 404;
-    }
-    {
-      title = "";
-      subtitle = "";
-      message = "";
-      method = 404;
+      title = "Error 500";
+      subtitle = "Internal Server Error";
+      message = ''
+        Something went wrong while processing your request.
+        Please try again.
+      '';
+      method = 500;
     }
   ];
 
