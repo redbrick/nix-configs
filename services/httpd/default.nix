@@ -2,7 +2,7 @@
 let
   common = import ../../common/variables.nix;
   vhosts = import ./vhosts.nix { inherit config; };
-  errorPages = import ../../packages/httpd-error-pages { inherit pkgs };
+  errorPages = import ../../packages/httpd-error-pages { inherit pkgs; };
   adminAddr = "webmaster@${common.tld}";
 
   # Define a base vhost for all TLDs. This will serve only ACME on port 80
