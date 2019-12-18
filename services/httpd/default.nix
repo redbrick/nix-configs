@@ -35,10 +35,10 @@ let
       Alias /robots.txt "${common.webtreeDir}/redbrick/extras/robots.txt"
 
       # Redirect rb.dcu.ie/~user => user.rb.dcu.ie
-      RedirectMatch 301 "^/~(.*)(/(.*))?$" "https://$1.${common.tld}/$2"
+      RedirectMatch 301 "^/~([^/]*)(.*)$" "https://$1.${common.tld}/$2"
 
       # Redirect /cmt to cmtwiki.rb
-      RedirectMatch 301 "^/cmt/wiki(/(.*))?$" "https://cmtwiki.${common.tld}/$1"
+      RedirectMatch 301 "^/cmt/wiki/?(.*)$" "https://cmtwiki.${common.tld}/$1"
 
       <Directory ${documentRoot}>
         RewriteEngine on
@@ -93,7 +93,7 @@ in {
       ProxyVia Off
       ProxyPreserveHost On
 
-      Alias /rb_custom_error/ "${errorPages}"
+      Alias /rb_custom_error/ ${errorPages}
       ErrorDocument 400 /rb_custom_error/404.html
       ErrorDocument 401 /rb_custom_error/401.html
       ErrorDocument 403 /rb_custom_error/403.html
@@ -103,7 +103,7 @@ in {
       ErrorDocument 503 /rb_custom_error/500.html
       ErrorDocument 504 /rb_custom_error/500.html
 
-      <Directory "${errorPages}">
+      <Directory ${errorPages}>
         Require all granted
       </Directory>
 
