@@ -55,6 +55,7 @@ in {
   imports = [
     ./php-fpm.nix
     ./mediawiki.nix
+    ./privatebin.nix
   ];
 
   # Enable suexec support
