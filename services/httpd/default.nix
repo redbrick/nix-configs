@@ -2,6 +2,7 @@
 let
   common = import ../../common/variables.nix;
   vhosts = import ./vhosts.nix { inherit config; };
+  errorPages = import ../../packages/httpd-error-pages { inherit pkgs };
   adminAddr = "webmaster@${common.tld}";
 
   # Define a base vhost for all TLDs. This will serve only ACME on port 80
@@ -92,7 +93,7 @@ in {
       ProxyVia Off
       ProxyPreserveHost On
 
-      Alias /rb_custom_error/ "${common.webtreeDir}/redbrick/rb_custom_error/"
+      Alias /rb_custom_error/ "${errorPages}"
       ErrorDocument 400 /rb_custom_error/404.html
       ErrorDocument 401 /rb_custom_error/401.html
       ErrorDocument 403 /rb_custom_error/403.html
@@ -102,7 +103,7 @@ in {
       ErrorDocument 503 /rb_custom_error/500.html
       ErrorDocument 504 /rb_custom_error/500.html
 
-      <Directory "${common.webtreeDir}/redbrick/rb_custom_error/">
+      <Directory "${errorPages}">
         Require all granted
       </Directory>
 
