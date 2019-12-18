@@ -6,7 +6,7 @@ let
     (builtins.toString method)
     (template {inherit title subtitle message;});
 
-  pages = builtins.map mkPage [
+  pages = [
     {
       title = "Error 401";
       subtitle = "Authorization Required";
@@ -44,13 +44,14 @@ let
     }
   ];
 
-  pageCopyCmds = (builtins.concatStringsSep "\n" (builtins.map (err_page: "cp ${err_page} $out/") pages));
+  pageCopyCmds = (builtins.concatStringsSep "\n" (builtins.map (page: "cp ${mkPage page} $out/${builtins.toString page.method}.html") pages));
 in mkDerivation {
   name = "httpd-error-pages";
   src = ./includes;
   installPhase = ''
     mkdir -p $out
-    cp -ar $src/ $out
+    cp -ar $src/ $out/includes
     ${pageCopyCmds}
+    chmod -R 755 $out
   '';
 }

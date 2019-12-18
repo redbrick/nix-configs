@@ -43,6 +43,7 @@ in {
     inherit hostName adminAddr;
     globalRedirect = "${globalRedirect}/";
     enableSSL = true;
+    serverAliases = [];
   };
 
   vhostProxy = hostName: proxyAddress: {
