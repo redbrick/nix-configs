@@ -40,9 +40,9 @@ in {
   } // sslConfig;
 
   vhostRedirect = hostName: globalRedirect: {
-    inherit hostName globalRedirect adminAddr;
+    inherit hostName adminAddr;
+    globalRedirect = "${globalRedirect}/";
     enableSSL = true;
-    serverAliases = [ "www.${hostName}" ];
   };
 
   vhostProxy = hostName: proxyAddress: {
