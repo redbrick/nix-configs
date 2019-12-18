@@ -93,7 +93,7 @@ in {
       ProxyVia Off
       ProxyPreserveHost On
 
-      Alias /rb_custom_error/ ${errorPages}
+      Alias /rb_custom_error/ "${errorPages}/"
       ErrorDocument 400 /rb_custom_error/404.html
       ErrorDocument 401 /rb_custom_error/401.html
       ErrorDocument 403 /rb_custom_error/403.html
@@ -103,7 +103,9 @@ in {
       ErrorDocument 503 /rb_custom_error/500.html
       ErrorDocument 504 /rb_custom_error/500.html
 
-      <Directory ${errorPages}>
+      <Directory "${errorPages}/" >
+        Options Indexes FollowSymLinks
+        AllowOverride None
         Require all granted
       </Directory>
 
