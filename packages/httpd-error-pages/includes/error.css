@@ -1,0 +1,45 @@
+body {
+  background: #f2ece8 url('bg.jpg') repeat;
+  text-align: center;
+}
+
+h1,
+h2 {
+  color: #a30000;
+  font-family: arial, sans-serif;
+  font-size: 28px;
+  margin: 16px 16px 6px 16px;
+}
+h2 {
+  font-size: 22px;
+}
+p {
+  font-family: arial, sans-serif;
+  font-size: 13px;
+  color: #333;
+  margin: 10px 16px;
+}
+
+a {
+  color: #2e658f;
+}
+
+#container {
+  width: 680px;
+  margin: 20px auto;
+  text-align: left;
+  padding: 10px;
+  background: #f9f9f9;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+}
+.logo {
+  float: right;
+  margin-top: 80px;
+}
+.clear {
+  height: 1px;
+  clear: both;
+}

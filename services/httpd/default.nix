@@ -2,6 +2,7 @@
 let
   common = import ../../common/variables.nix;
   vhosts = import ./vhosts.nix { inherit config; };
+  errorPages = import ../../packages/httpd-error-pages { inherit pkgs; };
   adminAddr = "webmaster@${common.tld}";
 
   # Define a base vhost for all TLDs. This will serve only ACME on port 80
@@ -34,10 +35,10 @@ let
       Alias /robots.txt "${common.webtreeDir}/redbrick/extras/robots.txt"
 
       # Redirect rb.dcu.ie/~user => user.rb.dcu.ie
-      RedirectMatch 301 "^/~(.*)(/(.*))?$" "https://$1.${common.tld}/$2"
+      RedirectMatch 301 "^/~([^/]*)(.*)$" "https://$1.${common.tld}/$2"
 
       # Redirect /cmt to cmtwiki.rb
-      RedirectMatch 301 "^/cmt/wiki(/(.*))?$" "https://cmtwiki.${common.tld}/$1"
+      RedirectMatch 301 "^/cmt/wiki/?(.*)$" "https://cmtwiki.${common.tld}/$1"
 
       <Directory ${documentRoot}>
         RewriteEngine on
@@ -92,7 +93,7 @@ in {
       ProxyVia Off
       ProxyPreserveHost On
 
-      Alias /rb_custom_error/ "${common.webtreeDir}/redbrick/rb_custom_error/"
+      Alias /rb_custom_error/ "${errorPages}/"
       ErrorDocument 400 /rb_custom_error/404.html
       ErrorDocument 401 /rb_custom_error/401.html
       ErrorDocument 403 /rb_custom_error/403.html
@@ -102,7 +103,9 @@ in {
       ErrorDocument 503 /rb_custom_error/500.html
       ErrorDocument 504 /rb_custom_error/500.html
 
-      <Directory "${common.webtreeDir}/redbrick/rb_custom_error/">
+      <Directory "${errorPages}/" >
+        Options Indexes FollowSymLinks
+        AllowOverride None
         Require all granted
       </Directory>
 
