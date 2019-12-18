@@ -35,7 +35,7 @@ let
       Alias /robots.txt "${common.webtreeDir}/redbrick/extras/robots.txt"
 
       # Redirect rb.dcu.ie/~user => user.rb.dcu.ie
-      RedirectMatch 301 "^/~([^/]*)(.*)$" "https://$1.${common.tld}/$2"
+      RedirectMatch 301 "^/~([^/]*)/?(.*)$" "https://$1.${common.tld}/$2"
 
       # Redirect /cmt to cmtwiki.rb
       RedirectMatch 301 "^/cmt/wiki/?(.*)$" "https://cmtwiki.${common.tld}/$1"
