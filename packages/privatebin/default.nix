@@ -1,12 +1,12 @@
-{ pkgs ? import <nixpkgs> {} mkDerivation, ? pkgs.stdenv.mkDerivation, fetchFromGitHub ? pkgs.fetchFromGitHub }:
+{ pkgs ? import <nixpkgs> {}, mkDerivation ? pkgs.stdenv.mkDerivation, fetchFromGitHub ? pkgs.fetchFromGitHub }:
 
 mkDerivation {
   name = "privatebin";
   src = fetchFromGitHub {
-    owner = "PrivateBin";
+    owner = "m1cr0man";
     repo = "PrivateBin";
-    rev = "825f6884be3fbfde3ed7d1e05502fdc877af8622";
-    sha256 = "11a96650g97az1f3ww5924k88yzxrwcw0f5chazi96srbg3jy9g7";
+    rev = "6b0468ebff2883b4bd395dbdb3c581fa9936ee24";
+    sha256 = "1g9vzg6jf21kwi9plc0ja2ln7wjcmzhid78hiywp0sfzy8ax2fva";
   };
   installPhase = ''
     cp -ar $src $out

@@ -8,6 +8,7 @@ with (import ./shared.nix);
       hostName = "paste.${tld}";
       serverAliases = [];
       documentRoot = import ../../packages/privatebin {inherit pkgs;};
+      extraConfig = "SetEnv CONFIG_PATH /var/lib/privatebin/conf.php";
     })
   ];
 }
