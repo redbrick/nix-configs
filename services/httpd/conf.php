@@ -20,7 +20,6 @@ default = "1week"
 1hour = 3600
 1day = 86400
 1week = 604800
-never = 0
 
 [formatter_options]
 plaintext = "Plain Text"

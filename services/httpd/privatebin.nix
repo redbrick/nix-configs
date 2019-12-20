@@ -6,8 +6,8 @@ let
 in {
   services.httpd.virtualHosts = [
     (vhost {
-      user = "${user}";
-      group = "${group}";
+      inherit user;
+      inherit group;
       hostName = "paste.${tld}";
       serverAliases = [];
       documentRoot = import ../../packages/privatebin {inherit pkgs;};
