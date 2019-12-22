@@ -1,7 +1,7 @@
 { pkgs, ... }:
 with (import ./shared.nix);
 let
-  user = "wiki";
+  user = "paste";
   group = "redbrick";
 in {
   services.httpd.virtualHosts = [

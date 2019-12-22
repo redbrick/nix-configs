@@ -45,7 +45,7 @@ def main(webtree: str):
             gid = get_gid_from_number(val)
 
         if uid and home and gid:
-            if os.path.exists(f'{webtree}/{uid[0]}/{uid}'):
+            if os.path.exists(f'{webtree}/{uid[0]}/{uid}') or '/var/lib' in home:
                 print(user2nix(uid=uid, home=home, gid=gid))
                 num_users += 1
             else:

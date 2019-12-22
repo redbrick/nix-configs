@@ -3,3 +3,4 @@
 /configuration.nix
 /nixpkgs
 users.nix
+*users*.nix

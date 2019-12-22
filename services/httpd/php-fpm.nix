@@ -20,7 +20,7 @@ let
     '' ] ++ (map (user: ''
       [${replaceStrings ["global" "wwwrun"] ["global_user" "wwwrun_user"] user.uid}]
       listen = /run/phpfpm/${user.uid}.sock
-      chdir = ${common.userWebtree user.uid}
+      chdir = ${if ((substring 0 8 user.home) == "/var/lib") then user.home else common.userWebtree user.uid}
       user = ${user.uid}
       group = ${user.gid}
       pm = ondemand
