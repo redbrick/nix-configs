@@ -192,7 +192,7 @@ in {
   services.rspamd = {
     enable = true;
     postfix.enable = true;
-    locals.dkim_signing.text = ''
+    locals."dkim_signing.conf".text = ''
       path = "/var/secrets/$domain.$selector.dkim.key";
       selector = "${config.networking.hostName}";
     '';
