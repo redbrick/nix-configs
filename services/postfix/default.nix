@@ -1,3 +1,5 @@
+# Requires rspamadm dkim_keygen -k /var/secrets/${tld}.$(hostname).dkim.key -b 2048 -s $(hostname) -d ${tld}
+# chown rspamd:root chmod 400
 {config, pkgs, ...}:
 let
   tld = config.redbrick.tld;
@@ -187,9 +189,12 @@ in {
   };
 
   # Enable rspamd and connect to postfix.
-  # That's too easy..
   services.rspamd = {
     enable = true;
     postfix.enable = true;
+    locals.dkim_signing.text = ''
+      path = "/var/secrets/$domain.$selector.dkim.key";
+      selector = "${config.networking.hostName}";
+    '';
   };
 }
