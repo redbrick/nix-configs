@@ -1,5 +1,7 @@
 {config, pkgs, ...}:
 let
+  tld = config.redbrick.tld;
+
   common = import ../../common/variables.nix;
 
   commonDovecot = import ./variables.nix;
@@ -22,8 +24,8 @@ in {
     enablePAM = false;
     showPAMFailure = false;
 
-    sslServerCert = "${common.certsDir}/${common.tld}/fullchain.pem";
-    sslServerKey = "${common.certsDir}/${common.tld}/key.pem";
+    sslServerCert = "${common.certsDir}/${tld}/fullchain.pem";
+    sslServerKey = "${common.certsDir}/${tld}/key.pem";
     sslCACert = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
 
     mailUser = vmailUserName;

@@ -1,5 +1,5 @@
-{ pkgs, ... }:
-with (import ./shared.nix);
+{ config, pkgs, ... }:
+with (import ./shared.nix { tld = config.redbrick.tld; });
 let
   user = "paste";
   group = "redbrick";

@@ -1,6 +1,4 @@
 rec {
-  tld = "redbrick.dcu.ie";
-
   certsDir = "/var/lib/acme";
   webtreeCertsDir = "${certsDir}/.webroot";
   webtreeDir = "/storage/webtree";

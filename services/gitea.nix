@@ -1,6 +1,7 @@
-{ lib, ... }:
+{ config, lib, ... }:
 let
-  common = import ../common/variables.nix;
+  tld = config.redbrick.tld;
+
   secrets = import /var/secrets/gitea.nix;
   tokenPath = "/var/secrets/gitea_token.secret";
 
@@ -24,9 +25,9 @@ in {
     enable = true;
     appName = "Redbrick";
     user = "git";
-    domain = common.tld;
+    domain = tld;
     httpPort = 3000;
-    rootUrl = "https://git.${common.tld}/";
+    rootUrl = "https://git.${tld}/";
 
     database = {
       createDatabase = false;

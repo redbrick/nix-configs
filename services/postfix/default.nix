@@ -1,5 +1,6 @@
 {config, pkgs, ...}:
 let
+  tld = config.redbrick.tld;
   common = import ../../common/variables.nix;
 
   ldapCommon = ''
@@ -12,7 +13,7 @@ let
     search_base = ou=accounts,o=redbrick
     query_filter = (&(objectClass=posixAccount)(uid=%u))
     result_attribute = uid
-    result_format = %s@${common.tld}
+    result_format = %s@${tld}
   '');
 
   commonRestrictions = [
@@ -29,13 +30,13 @@ in {
   services.postfix = {
     enable = true;
     setSendmail = true;
-    origin = common.tld;
-    hostname = "mail.${common.tld}";
-    destination = ["mail.${common.tld}" "localhost"];
+    origin = tld;
+    hostname = "mail.${tld}";
+    destination = ["mail.${tld}" "localhost"];
     recipientDelimiter = "+";
 
-    sslCert = "${common.certsDir}/${common.tld}/fullchain.pem";
-    sslKey = "${common.certsDir}/${common.tld}/key.pem";
+    sslCert = "${common.certsDir}/${tld}/fullchain.pem";
+    sslKey = "${common.certsDir}/${tld}/key.pem";
     sslCACert = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
 
     # disable authentication on port 25. This port should only be used by other
@@ -60,7 +61,7 @@ in {
       # http://www.postfix.org/BASIC_CONFIGURATION_README.html#proxy_interfaces
       proxy_interfaces = "136.206.15.5";
 
-      virtual_mailbox_domains = "${common.tld}";
+      virtual_mailbox_domains = "${tld}";
       virtual_mailbox_maps = "hash:/var/lib/postfix/aliases";
       # virtual_alias_maps = "ldap:" ++ ./ldap-virtual-alias-maps.cf;
 

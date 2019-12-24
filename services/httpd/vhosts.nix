@@ -1,5 +1,5 @@
 { config, ... }:
-with (import ./shared.nix);
+with (import ./shared.nix { tld = config.redbrick.tld; });
 let
   users = import ./users.nix;
 
@@ -12,7 +12,7 @@ let
     group = user.gid;
     serverAliases = [];
   }) users;
-in [
+in (if (config.redbrick.skipVhosts) then [] else ([
   (vhost {
     hostName = "abovethefold.es";
     documentRoot = "${webtree}/r/receive/abovethefold";
@@ -522,4 +522,4 @@ in [
   (vhostRedirect "techweek.${tld}" "https://techweek.dcu.ie")
   (vhostRedirect "tickets.${tld}" "https://dcusu.ticketsolve.com/shows/873599383/events/128190598")
   (vhostRedirect "ubuntu.${tld}" "https://wiki.redbrick.dcu.ie/mw/RedBrick_Ubuntu")
-] ++ userVhosts
+] ++ userVhosts))

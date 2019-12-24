@@ -1,9 +1,9 @@
+{ tld }:
 let
   common = import ../../common/variables.nix;
 
   webtree = common.webtreeDir;
   home = common.homesDir;
-  tld = common.tld;
   adminAddr = "webmaster@${tld}";
 in {
   inherit common webtree home tld adminAddr;
