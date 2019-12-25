@@ -1,5 +1,5 @@
-{ pkgs, lib, ... }:
-with (import ./shared.nix);
+{ config, pkgs, lib, ... }:
+with (import ./shared.nix { tld = config.redbrick.tld; });
 let
   concatStringsSep = lib.strings.concatStringsSep;
 
@@ -180,7 +180,7 @@ let
   };
 
   wikiConfig = {
-    domain = "wiki.${common.tld}";
+    domain = "wiki.${tld}";
     title = "Redbrick Wiki";
     dbName = "wikinew";
     dbPrefix = "rbwiki_";
@@ -190,7 +190,7 @@ let
   wikiCfgPath = mkConfig wikiConfig;
 
   cmtWikiConfig = {
-    domain = "cmtwiki.${common.tld}";
+    domain = "cmtwiki.${tld}";
     title = "Redbrick Committee Wiki";
     dbName = "cmtwiki";
     dbPrefix = "wiki_";

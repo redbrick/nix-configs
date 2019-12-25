@@ -1,11 +1,11 @@
-# Requires tsig-keygen dnsupdate.${common.tld} > /var/secrets/dnskeys.conf
+# Requires tsig-keygen dnsupdate.${tld} > /var/secrets/dnskeys.conf
 # chown named:root chmod 400
-{ lib, ... }:
+{ config, lib, ... }:
 let
-  common = import ../../common/variables.nix;
+  tld = config.redbrick.tld;
 
   keysPath = "/var/secrets/dnskeys.conf";
-  keyName = "dnsupdate.${common.tld}.";
+  keyName = "dnsupdate.${tld}.";
   zonePath = "/var/db/bind";
 in {
   # Enable eddsa support
@@ -33,7 +33,7 @@ in {
 
     zones = [
       {
-        # Not using common.tld here becaue we actually want to configure
+        # Not using tld here becaue we actually want to configure
         # a specific domain
         file = "${zonePath}/redbricktest.ml";
         master = true;

@@ -1,15 +1,16 @@
 { config, pkgs, ... }:
 let
+  tld = config.redbrick.tld;
   common = import ../../common/variables.nix;
   vhosts = import ./vhosts.nix { inherit config; };
   errorPages = import ../../packages/httpd-error-pages { inherit pkgs; };
-  adminAddr = "webmaster@${common.tld}";
+  adminAddr = "webmaster@${tld}";
 
   # Define a base vhost for all TLDs. This will serve only ACME on port 80
   # Everything else is promoted to HTTPS
   acmeVhost = {
     inherit adminAddr;
-    hostName = common.tld;
+    hostName = tld;
     serverAliases = ["*"];
     listen = [{ port = 80; }];
     documentRoot = common.webtreeCertsDir;
@@ -27,7 +28,7 @@ let
     documentRoot = "${common.webtreeDir}/redbrick/htdocs";
   in {
     inherit adminAddr documentRoot;
-    hostName = common.tld;
+    hostName = tld;
     listen = [{ port = 443; }];
     enableSSL = true;
     extraConfig = ''
@@ -35,10 +36,10 @@ let
       Alias /robots.txt "${common.webtreeDir}/redbrick/extras/robots.txt"
 
       # Redirect rb.dcu.ie/~user => user.rb.dcu.ie
-      RedirectMatch 301 "^/~([^/]*)/?(.*)$" "https://$1.${common.tld}/$2"
+      RedirectMatch 301 "^/~([^/]*)/?(.*)$" "https://$1.${tld}/$2"
 
       # Redirect /cmt to cmtwiki.rb
-      RedirectMatch 301 "^/cmt/wiki/?(.*)$" "https://cmtwiki.${common.tld}/$1"
+      RedirectMatch 301 "^/cmt/wiki/?(.*)$" "https://cmtwiki.${tld}/$1"
 
       <Directory ${documentRoot}>
         RewriteEngine on
@@ -86,8 +87,8 @@ in {
     extraModules = [ "suexec" "proxy" "proxy_fcgi" "ldap" "authnz_ldap" ];
     multiProcessingModule = "event";
     maxClients = 250;
-    sslServerKey = "${common.certsDir}/${common.tld}/key.pem";
-    sslServerCert = "${common.certsDir}/${common.tld}/fullchain.pem";
+    sslServerKey = "${common.certsDir}/${tld}/key.pem";
+    sslServerCert = "${common.certsDir}/${tld}/fullchain.pem";
 
     extraConfig = ''
       ProxyRequests off

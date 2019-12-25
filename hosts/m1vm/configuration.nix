@@ -33,6 +33,10 @@
     }];
   };
 
+  # Dev box, skip loading vhosts
+  redbrick.skipVhosts = true;
+  redbrick.tld = "redbricktest.ml";
+
   users.users.lucasade = {
     isNormalUser = true;
     home = "/home/lucasade";

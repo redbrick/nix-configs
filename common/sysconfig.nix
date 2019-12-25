@@ -1,7 +1,10 @@
 {config, pkgs, ...}:
 let
   common = import ./variables.nix;
+  tld = config.redbrick.tld;
 in {
+  imports = [ ./options.nix ];
+
   time.timeZone = "Europe/Dublin";
   i18n = {
     consoleFont = "Lat2-Terminus16";
@@ -16,8 +19,8 @@ in {
   ];
 
   # Use Redbrick DNS and HTTP proxy
-  networking.domain = common.tld;
-  networking.search = [ "internal" common.tld ];
+  networking.domain = tld;
+  networking.search = [ "internal" tld ];
   networking.nameservers = ["192.168.0.4"];
   networking.timeServers = ["192.168.0.254"];
   networking.proxy.default = "http://proxy.internal:3128/";

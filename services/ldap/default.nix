@@ -8,8 +8,6 @@ let
   rootpwFile = "/var/secrets/ldap.secret";
   slurpdpwFile = "/var/secrets/slurpd.secret";
 in {
-  imports = [ ./options.nix ];
-
   services.openldap = {
     inherit rootpwFile;
     enable = true;

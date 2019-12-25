@@ -2,9 +2,10 @@
 with builtins;
 with lib;
 let
+  tld = config.redbrick.tld;
   common = import ../../common/variables.nix;
   vhosts = import ../httpd/vhosts.nix { inherit config; };
-  email = "webmaster+acme@${common.tld}";
+  email = "webmaster+acme@${tld}";
 
   # Filter *.dcu.ie domains
   vhostFilter = vhost:
@@ -22,11 +23,11 @@ in {
   ];
 
   security.acme.legoCerts = {
-    "${common.tld}" = {
+    "${tld}" = {
       inherit email;
       dnsProvider = "rfc2136";
       credentialsFile = "/var/secrets/certs.secret";
-      extraDomains."*.${common.tld}" = null;
+      extraDomains."*.${tld}" = null;
       extraFlags = [ "--dns.disable-cp" ];
     };
   } // (mapAttrs'
