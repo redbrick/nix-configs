@@ -56,18 +56,21 @@ in {
       access to dn.children="ou=accounts,o=redbrick" attrs=cn
         by dn.regex="cn=root,ou=ldap,o=redbrick" write
         by dn.regex="cn=slurpd,ou=ldap,o=redbrick" read
+        by dn.regex="cn=mediawiki,ou=reserved,o=redbrick" read
         by self read
         by * none
 
       access to attrs=yearsPaid,year,course,id,newbie,altmail
         by dn.regex="cn=root,ou=ldap,o=redbrick" write
         by dn.regex="cn=slurpd,ou=ldap,o=redbrick" read
+        by dn.regex="cn=mediawiki,ou=reserved,o=redbrick" read
         by self read
         by * none
 
       access to attrs=userPassword
         by dn.regex="cn=root,ou=ldap,o=redbrick" write continue
         by dn.regex="cn=slurpd,ou=ldap,o=redbrick" read
+        by dn.regex="cn=dovecot,ou=reserved,o=redbrick" read
         by self write
         by anonymous auth
         by * none
