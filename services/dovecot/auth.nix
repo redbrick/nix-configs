@@ -1,15 +1,19 @@
 {common, pkgs, vmailUserName, ...}:
 let
+  bindCreds = import /var/secrets/dovecot_auth.nix;
+
   ldapConfig = pkgs.writeText "dovecot-ldap-config" ''
     hosts = ${common.ldapHost}
+    dn = ${bindCreds.dn}
+    dnpass = ${bindCreds.password}
     ldap_version = 3
     auth_bind = no
     base = ou=accounts,o=redbrick
     deref = never
     scope = subtree
-    user_attrs = uid=user,homeDirectory=home
+    user_attrs = uid=uid,homeDirectory=home
     user_filter = (&(objectclass=posixAccount)(uid=%n))
-    pass_attrs = uid=user,homeDirectory=home,userPassword=password
+    pass_attrs = uid=uid,homeDirectory=home,userPassword=password
     pass_filter = (&(objectclass=posixAccount)(uid=%n))
     default_pass_scheme = CRYPT
   '';
@@ -32,7 +36,5 @@ in pkgs.writeText "dovecot-auth-config" ''
   userdb {
     driver = ldap
     args = ${ldapConfig}
-    # driver = static
-    # args = uid=${vmailUserName} gid=${vmailUserName} home=/var/mail/vhosts/%d/%n
   }
 ''
