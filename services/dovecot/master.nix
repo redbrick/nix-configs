@@ -47,9 +47,4 @@ service auth {
     port = ${builtins.toString common.dovecotSaslPort}
   }
 }
-
-# no need to run this as root
-service auth-worker {
-  user = vmail
-}
 ''

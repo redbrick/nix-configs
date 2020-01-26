@@ -11,7 +11,7 @@ let
     bind = no
   '';
 
-  virtualMailboxMaps = pkgs.writeText "virt-mailbox-maps" (ldapCommon + ''
+  ldapAliasMap = pkgs.writeText "virt-mailbox-maps" (ldapCommon + ''
     search_base = ou=accounts,o=redbrick
     query_filter = (&(objectClass=posixAccount)(uid=%u))
     result_attribute = uid
@@ -62,9 +62,10 @@ in {
       # http://www.postfix.org/BASIC_CONFIGURATION_README.html#proxy_interfaces
       proxy_interfaces = "136.206.15.5";
 
-      #virtual_mailbox_domains = "${tld}";
+      #virtual_mailbox_domains = tld;
       #virtual_mailbox_maps = "hash:/var/lib/postfix/aliases";
-      # virtual_alias_maps = "ldap:" ++ ./ldap-virtual-alias-maps.cf;
+      #virtual_alias_maps = "ldap:" ++ ./ldap-virtual-alias-maps.cf;
+      # alias_maps = "hash:/etc/aliases, ldap:";
 
       # Generate own DHParams
       smtpd_tls_dh512_param_file = config.security.dhparams.params.smtpd_512.path;
@@ -79,11 +80,11 @@ in {
 
       # deliver mail for virtual users to Dovecot's TCP socket
       # http://www.postfix.org/lmtp.8.html
-      virtual_transport = "lmtp:inet:${common.dovecotHost}:${builtins.toString common.dovecotLmtpPort}";
+      mailbox_transport = "lmtp:inet:${common.dovecotHost}:${builtins.toString common.dovecotLmtpPort}";
 
       # cache incoming and outgoing TLS sessions
-      smtpd_tls_session_cache_database = "btree:/var/tmp/smtpd_tlscache";
-      smtp_tls_session_cache_database  = "btree:/var/tmp/smtp_tlscache";
+      smtpd_tls_session_cache_database = "btree:/var/lib/postfix/data/smtpd_tlscache";
+      smtp_tls_session_cache_database  = "btree:/var/lib/postfix/data/smtp_tlscache";
 
       # These two lines define how postfix will connect to other mail servers.
       # DANE is a stronger form of opportunistic TLS. You can read about it here:
