@@ -196,6 +196,7 @@ in {
     locals."dkim_signing.conf".text = ''
       path = "/var/secrets/$domain.$selector.dkim.key";
       selector = "${config.networking.hostName}";
+      allow_username_mismatch = true;
     '';
   };
 }
