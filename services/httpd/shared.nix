@@ -29,6 +29,7 @@ in {
           SetHandler "proxy:unix:/run/phpfpm/${user}.sock|fcgi://localhost/"
         </FilesMatch>
 
+	Options +Includes
         AllowOverride AuthConfig FileInfo Indexes Limit AuthConfig Options=ExecCGI,Includes,IncludesNoExec,Indexes,MultiViews,SymlinksIfOwnerMatch NonFatal=Unknown
         Require all granted
       </Directory>
