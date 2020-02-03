@@ -492,6 +492,12 @@ in (if (config.redbrick.skipVhosts) then [] else ([
     user = "wwwrun";
     group = "wwwrun";
   })
+  (vhost {
+    hostName = "bash.${tld}";
+    documentRoot = "${webtree}/y/yosarian/bash";
+    user = "yosarian";
+    group = "associat";
+  })
   (vhostProxy "dcufm.${tld}" "http://136.206.16.136")
   (vhostProxy "jakarta.${tld}" "http://136.206.15.59:8080")
   (vhostProxy "macspayn.${tld}" "http://136.206.15.25:3007")
