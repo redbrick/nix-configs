@@ -23,6 +23,16 @@ let
     "reject_unauth_pipelining"
   ];
 in {
+  imports = [
+    ./postsrsd.nix
+  ];
+
+  # Ensure postsrsd is started before postfix
+  systemd.services.postfix = {
+    requires = [ "postsrsd.service" ];
+    after = [ "postsrsd.service" ];
+  };
+
   networking.firewall.allowedTCPPorts = [ 25 587 ];
 
   security.dhparams.enable = true;
@@ -81,6 +91,12 @@ in {
       # deliver mail for virtual users to Dovecot's TCP socket
       # http://www.postfix.org/lmtp.8.html
       mailbox_transport = "lmtp:inet:${common.dovecotHost}:${builtins.toString common.dovecotLmtpPort}";
+
+      # Configure postsrsd so that forwarded mail is "remailed" with a safe from address
+      sender_canonical_maps = "tcp:127.0.0.1:${builtins.toString config.services.postsrsd.forwardPort}";
+      recipient_canonical_maps = "tcp:127.0.0.1:${builtins.toString config.services.postsrsd.reversePort}";
+      sender_canonical_classes = "envelope_sender";
+      recipient_canonical_classes = "envelope_recipient";
 
       # cache incoming and outgoing TLS sessions
       smtpd_tls_session_cache_database = "btree:/var/lib/postfix/data/smtpd_tlscache";
