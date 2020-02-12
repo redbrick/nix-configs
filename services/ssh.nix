@@ -9,5 +9,6 @@
     "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDLSLIF2IOo/OzbmbMGp4kt6VP2z8zNCuuVNyuxyBU0A8cOeUhkAbVibVmFqPlcHDJ4+zhkNN0GDnEJEUAmBNi+yc9EJG7StxdguEAKPlA9gQ/Z73cMrfMHtTPOHj/uCKUqi9vzb3tlOltJmuS3SwF0B5dk58j/cwr3nEEzikMmQIykxI+F+rxMnxaQXtNBGz3ednAaJ4Lvv9JSxWcExEtU0lM0X1MgZgkYFr48uQwsDUE+j23+wifMrOA+zhC0uRcuIapnxsyoW/wDOYrQZFlw6acrVX+zNtxcCQoqIX4oAobCXn7tYz9peKrV8TmJwQOspsmyY75xIAbyz0AiD3oh kyle@HP-Kyle"
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIG/8Xf5/DtcOPjZKfag4ATBe5a3I1HvhYqi8fV7si4OU butlerx@notthe.cloud"
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIhA5mm1sBzz6tcrUF2FzW6wrckW1IsQAyS8Bfu4yJRJ d_fens@redbrick.dcu.ie"
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGybjW48+tQaykqDIuSeuH/3GLQRHZDa1toJOIB/FrD4 fraz@azazel"
   ];
 }
