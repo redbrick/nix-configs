@@ -24,6 +24,7 @@ let
   ];
 in {
   imports = [
+    ./mailman.nix
     ./postsrsd.nix
   ];
 
@@ -34,6 +35,10 @@ in {
   };
 
   networking.firewall.allowedTCPPorts = [ 25 587 ];
+
+  # Since the TLD cert is a wildcard, this allows us to use TLS
+  # over localhost and authenticate correctly. Used in mailman
+  networking.hosts."127.0.0.1" = [ "localmail.${tld}" ];
 
   security.dhparams.enable = true;
   security.dhparams.params.smtpd_512.bits = 512;

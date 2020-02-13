@@ -8,7 +8,7 @@ in {
     inherit user group;
     documentRoot = import ../../packages/privatebin {inherit pkgs;};
     extraConfig = "SetEnv CONFIG_PATH ${./conf.php}";
-  }) // (common.vhostCerts tld);
+  }) // (vhostCerts tld);
   systemd.tmpfiles.rules = [
     "d '/var/lib/privatebin' 0750 ${user} ${group} - -"
   ];
