@@ -6,6 +6,7 @@ in {
   services.postsrsd = {
     enable = true;
     domain = tld;
+    excludeDomains = [ "mail.${tld}" ];
     secretsFile = "/var/secrets/postsrsd.secret";
   };
 }
