@@ -500,6 +500,7 @@ in (if (config.redbrick.skipVhosts) then [] else ([
   })
   (vhostProxy "dcufm.${tld}" "http://136.206.16.136")
   (vhostProxy "jakarta.${tld}" "http://136.206.15.59:8080")
+  (vhostProxy "lists.${tld}" "http://mail.internal:80")
   (vhostProxy "macspayn.${tld}" "http://136.206.15.25:3007")
   (vhostProxy "portaldev.${tld}" "http://136.206.15.61:9080")
   (vhostProxy "radio.${tld}" "http://radio.redbrick.dcu.ie:8000")

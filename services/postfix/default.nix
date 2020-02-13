@@ -25,6 +25,7 @@ let
 in {
   imports = [
     ./postsrsd.nix
+    ./mailman.nix
   ];
 
   # Ensure postsrsd is started before postfix
