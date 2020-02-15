@@ -146,7 +146,7 @@ let
       $LDAPProviderDomainConfigs = "${ldapProviderConfig}";
   '';
 
-  vhostWiki = config: cfgPath: (vhost { inherit documentRoot user group; hostName = config.domain; serverAliases = []; extraConfig = ''
+  vhostWiki = config: cfgPath: (vhost { inherit documentRoot user group; extraConfig = ''
     ProxyTimeout 600
     SetEnv MEDIAWIKI_CONFIG "${cfgPath}"
 
@@ -160,7 +160,7 @@ let
     <Directory "${config.stateDir}">
       Require all granted
     </Directory>
-  '';});
+  '';}) // (common.vhostCerts tld);
 
   # Adapted from the nixpkgs repo mediawiki implementation
   # Skips initial setup, this will never be done at RB. Feel free to port it if you think it will.
@@ -208,8 +208,6 @@ in {
   systemd.services.wiki-init = updateService wikiCfgPath;
   systemd.services.cmtwiki-init = updateService cmtWikiCfgPath;
 
-  services.httpd.virtualHosts = [
-    (vhostWiki wikiConfig wikiCfgPath)
-    (vhostWiki cmtWikiConfig cmtWikiCfgPath)
-  ];
+  services.httpd.virtualHosts.${wikiConfig.domain} = vhostWiki wikiConfig wikiCfgPath;
+  services.httpd.virtualHosts.${cmtWikiConfig.domain} = vhostWiki cmtWikiConfig cmtWikiCfgPath;
 }

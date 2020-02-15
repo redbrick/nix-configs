@@ -30,6 +30,11 @@ rec {
     isOurTld = ((builtins.match ".*\\.${tld}" hostName) != null);
   in if isOurTld then tld else theirTld;
 
+  vhostCerts = domain: {
+    sslServerKey = "${certsDir}/${domain}/key.pem";
+    sslServerCert = "${certsDir}/${domain}/fullchain.pem";
+  };
+
   dovecotHost = "192.168.0.135";
   dovecotSaslPort = 3659;
   dovecotLmtpPort = 24;

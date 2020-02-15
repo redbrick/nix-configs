@@ -55,10 +55,7 @@ let
   # need to map over them and add the ssl keys
   vhostsWithCerts = lib.mapAttrs (hostName: vhost: let
     certDomain = common.certDomain tld hostName;
-  in vhost // {
-    sslServerKey = "${common.certsDir}/${certDomain}/key.pem";
-    sslServerCert = "${common.certsDir}/${certDomain}/fullchain.pem";
-  }) vhosts;
+  in vhost // (common.vhostCerts certDomain)) vhosts;
 
   virtualHosts = vhostsWithCerts // {
     tld = redbrickVhost;
