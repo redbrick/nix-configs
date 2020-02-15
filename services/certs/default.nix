@@ -39,7 +39,7 @@ in {
         (mapAttrsToList (hostName: vhost: let
           certDomain = common.certDomain hostName;
         in {
-          certDomain = [ hostName ] ++ vhost.serverAliases;
+          certDomain = [ hostName ] ++ (vhost.serverAliases or []);
         })
 
           # Ignore TLD domains, they are covered by the wildcard
