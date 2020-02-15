@@ -19,7 +19,7 @@ in {
     };
 
     provision = {
-      enabled = true;
+      enable = true;
       datasources = [
         {
           name = "InfluxDB";

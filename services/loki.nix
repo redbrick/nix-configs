@@ -7,7 +7,7 @@ in {
     inherit dataDir;
     enable = true;
     configuration = {
-      auth_enabledi = false;
+      auth_enabled = false;
       server = {
         http_listen_port = 3100;
       };
@@ -40,10 +40,10 @@ in {
 
       storage_config = {
         boltdb = {
-          directory = "/tmp/loki/index";
+          directory = "/var/loki/index";
         };
         filesystem = {
-          directory = "/tmp/loki/chunks";
+          directory = "/var/loki/chunks";
         };
       };
 
