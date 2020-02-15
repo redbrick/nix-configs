@@ -13,6 +13,7 @@ in {
     ../../services/httpd
     ../../services/grafana
     ../../services/loki.nix
+    ../../services/fluentd.nix
   ];
 
   # This value determines the NixOS release with which your system is to be
