@@ -6,10 +6,10 @@ in {
   imports = [ ./options.nix ];
 
   time.timeZone = "Europe/Dublin";
-  i18n = {
-    consoleFont = "Lat2-Terminus16";
-    consoleKeyMap = "uk";
-    defaultLocale = "en_IE.UTF-8";
+  i18n.defaultLocale = "en_IE.UTF-8";
+  console = {
+    font = "Lat2-Terminus16";
+    keyMap = "uk";
   };
 
   # Set sensible kernel parameters
