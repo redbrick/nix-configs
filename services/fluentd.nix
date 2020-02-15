@@ -1,11 +1,12 @@
-{ config, lib, ... }:
+{ pkgs, config, lib, ... }:
 let
+  plugins = import ../packages/fluentd-plugins { inherit pkgs; };
 in {
 
   services.fluentd = {
     enable = true;
-    plugins= ["fluent-plugin-grafana-loki"];
-    config = """
+    plugins = ["${plugins}/lib/ruby/gems/2.6.0/gems/fluent-plugin-grafana-loki-1.2.7/lib/fluent/plugin"];
+    config = ''
     <source>
       @type syslog
       port 5140
@@ -19,7 +20,7 @@ in {
       flush_at_shutdown true
       buffer_chunk_limit 1m
     </match>
-    """;
+    '';
   };
 
   networking.firewall.allowedTCPPorts = [ 5140 ];
