@@ -14,22 +14,17 @@
   boot.extraModulePackages = [ ];
 
   fileSystems."/" =
-    { device = "zroot/nixos";
-      fsType = "zfs";
-    };
-
-  fileSystems."/nix" =
-    { device = "zroot/nixos/store";
-      fsType = "zfs";
+    { device = "/dev/disk/by-uuid/650a3338-b070-45ad-9872-03fb660f64aa";
+      fsType = "ext4";
     };
 
   fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/fb717ed4-eea8-474b-b211-c44883a2005b";
+    { device = "/dev/disk/by-uuid/9edbd44c-32c3-4493-94c4-1e074bc9dd32";
       fsType = "ext4";
     };
 
   swapDevices =
-    [ { device = "/dev/disk/by-uuid/ed6cb80b-5509-4d63-b6fd-d56313699380"; }
+    [ { device = "/dev/disk/by-uuid/7fb4f70b-670c-4daa-aa22-5c8b23b43519"; }
     ];
 
   nix.maxJobs = lib.mkDefault 4;
