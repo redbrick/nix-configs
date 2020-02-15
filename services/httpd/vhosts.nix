@@ -3,16 +3,24 @@ with (import ./shared.nix { tld = config.redbrick.tld; });
 let
   users = import ./users.nix;
 
+  # Reserved or ignored names, e.g. for service accounts
+  # where the service has its own vhost
+  userBlacklist = [
+    "paste"
+    "wiki"
+    "cmtwiki"
+  ];
+
   # This is appended at the top
   # to ensure that custom vhosts take preference
-  userVhosts = builtins.listToAttrs (builtins.map (user: {
+  userVhosts = with builtins; listToAttrs (map (user: {
     name = "${user.uid}.${tld}";
     value = vhost {
       documentRoot = common.userWebtree user.uid;
       user = user.uid;
       group = user.gid;
     };
-  }) users);
+  }) (filter (user: !elem user.uid userBlacklist) users));
 in (if (config.redbrick.skipVhosts) then {} else userVhosts // {
   "abovethefold.es" = vhost {
     documentRoot = "${webtree}/r/receive/abovethefold";
