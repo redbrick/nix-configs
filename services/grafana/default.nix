@@ -57,10 +57,10 @@ in {
     };
 
     extraOptions = {
-      server_enable_gzip = "true";
-      auth_ldap_enabled = "true";
-      auth_ldap_config_file = ldapConfig;
-      auth_ldap_allow_sign_up = "false";
+      SERVER_ENABLE_GZIP = "true";
+      AUTH_LDAP_ENABLED = "true";
+      AUTH_LDAP_CONFIG_FILE = ldapConfig;
+      AUTH_LDAP_ALLOW_SIGN_UP = "true";
     };
   };
 }
