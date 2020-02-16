@@ -236,13 +236,6 @@ in (if (config.redbrick.skipVhosts) then [] else ([
     group = "associat";
   })
   (vhost {
-    hostName = "nemo.${tld}";
-    documentRoot = "${webtree}/n/nemo/wordpress";
-    user = "nemo";
-    group = "associat";
-    serverAliases = [];
-  })
-  (vhost {
     hostName = "obrienronan.com";
     documentRoot = "${webtree}/vhosts/www.obrienronan.com";
     user = "mellow";
