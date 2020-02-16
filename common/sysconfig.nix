@@ -30,6 +30,29 @@ in {
   services.rsyslogd.enable = true;
   services.rsyslogd.extraConfig = "*.* @log.internal:6514;RSYSLOG_SyslogProtocol23Format";
 
+  # Enable Node exporter
+  services.prometheus.exporters.node = {
+    enable = true;
+    enabledCollectors = [
+      "systemd"
+      "conntrack"
+      "cpu"
+      "diskstats"
+      "entropy"
+      "filefd"
+      "filesystem"
+      "interrupts"
+      "loadavg"
+      "meminfo"
+      "netdev"
+      "netstat"
+      "stat"
+      "time"
+      "vmstat"
+    ];
+  };
+  networking.firewall.allowedTCPPorts = [ 9100 ];
+
   # Enable LDAP
   users.ldap.enable = true;
   users.ldap.timeLimit = 2;

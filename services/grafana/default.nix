@@ -1,8 +1,28 @@
-{ config, lib, ... }:
+{ systemd, pkgs, config, lib, ... }:
 let
   tld = config.redbrick.tld;
   dataDir = "/var/lib/grafana";
   ldapConfig = ./ldap.toml;
+  plugins = import ../../packages/grafanaPlugin {
+    inherit pkgs;
+    plugins = [
+      {
+        name = "grafana-polystat-panel";
+        version = "1.1.0";
+        sha256 = "0pi5d7i9gsmi6ysj43yilkjn0rnrh4b46x3bcpqfh36bfzk2kwcx";
+      }
+      {
+        name = "grafana-piechart-panel";
+        version = "1.4.0";
+        sha256 = "05vhdmzhjmr9g0zqzxgixpwhk111kcrl022qi1jhghs6vjc2dcx8";
+      }
+      {
+        name = "grafana-clock-panel";
+        version = "1.0.3";
+        sha256 = "0bn40619gxzbsx8gnsql0i87b3019ggjxchbi73sgiiaiqf9066q";
+      }
+    ];
+  };
 in {
 
   services.grafana = {
@@ -36,7 +56,6 @@ in {
         {
           name = "Loki";
           type = "loki";
-          isDefault = false;
           editable = false;
           url = "http://localhost:3100";
           version = 1;
@@ -44,9 +63,8 @@ in {
         {
           name = "Prometheus";
           type = "prometheus";
-          isDefault = false;
           editable = false;
-          url = "http://zeus.internal:9090";
+          url = "http://localhost:9090";
           version = 1;
           jsonData = {
             scrapeInterval = "15s";
@@ -70,4 +88,7 @@ in {
       AUTH_LDAP_ALLOW_SIGN_UP = "true";
     };
   };
+
+  systemd.services.grafana.preStart = lib.concatStringsSep "\n"
+    (map (plugin: "ln -fs ${plugin.src} ${dataDir}/plugins/${plugin.name}") plugins);
 }
