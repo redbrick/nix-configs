@@ -9,7 +9,7 @@ in {
     config = ''
     <source>
       @type syslog
-      port 5140
+      port 514
       bind 0.0.0.0
       tag system
     </source>
@@ -23,5 +23,5 @@ in {
     '';
   };
 
-  networking.firewall.allowedTCPPorts = [ 5140 ];
+  networking.firewall.allowedTCPPorts = [ 514 ];
 }
