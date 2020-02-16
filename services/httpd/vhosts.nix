@@ -498,6 +498,7 @@ in (if (config.redbrick.skipVhosts) then [] else ([
     user = "yosarian";
     group = "associat";
   })
+  (vhostProxy "git.${tld}" "http://localhost:3000") # TODO: replace with service mapping to hardcase
   (vhostProxy "graphs.${tld}" "http://localhost:3001") # TODO: replace with service mapping to hardcase
   (vhostProxy "dcufm.${tld}" "http://136.206.16.136")
   (vhostProxy "jakarta.${tld}" "http://136.206.15.59:8080")
