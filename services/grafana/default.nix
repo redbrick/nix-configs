@@ -27,7 +27,7 @@ in {
           access = "proxy";
           isDefault = true;
           editable = false;
-          url = "http://influx.internal";
+          url = "http://zeus.internal:8086";
           version = 1;
           jsonData = {
             timeInterval = "15s";
@@ -36,13 +36,20 @@ in {
         {
           name = "Loki";
           type = "loki";
-          access = "proxy";
           isDefault = false;
           editable = false;
           url = "http://localhost:3100";
           version = 1;
+        }
+        {
+          name = "Prometheus";
+          type = "prometheus";
+          isDefault = false;
+          editable = false;
+          url = "http://zeus.internal:9090";
+          version = 1;
           jsonData = {
-            timeInterval = "15s";
+            scrapeInterval = "15s";
           };
         }
       ];
