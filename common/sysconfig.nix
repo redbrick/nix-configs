@@ -33,6 +33,7 @@ in {
   # Enable Node exporter
   services.prometheus.exporters.node = {
     enable = true;
+    openFirewall = true;
     enabledCollectors = [
       "systemd"
       "conntrack"
@@ -51,7 +52,6 @@ in {
       "vmstat"
     ];
   };
-  networking.firewall.allowedTCPPorts = [ 9100 ];
 
   # Enable LDAP
   users.ldap.enable = true;

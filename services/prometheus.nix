@@ -23,6 +23,10 @@ in {
         static_configs = [{ targets = ["localhost:9090"]; }];
       }
       {
+        job_name = "postgres";
+        static_configs = [{ targets = ["localhost:9187"]; }];
+      }
+      {
         job_name = "traefik";
         static_configs = [{ targets = ["zeus.internal:8080"]; }];
       }
@@ -33,6 +37,10 @@ in {
       {
         job_name = "gitea";
         static_configs = [{ targets = ["localhost:3000"]; }];
+      }
+      {
+        job_name = "bind";
+        static_configs = [{ targets = ["m1cr0man.internal:9119"]; }];
       }
       {
         # Only to be used with docker
