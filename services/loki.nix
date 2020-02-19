@@ -1,6 +1,6 @@
 { config, lib, ... }:
 let
-  dataDir = "/var/lib/loki";
+  dataDir = "/var/db/loki";
 in {
 
   services.loki = {
