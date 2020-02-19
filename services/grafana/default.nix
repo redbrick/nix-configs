@@ -90,5 +90,5 @@ in {
   };
 
   systemd.services.grafana.preStart = lib.concatStringsSep "\n"
-    (map (plugin: "ln -fs ${plugin.src} ${dataDir}/plugins/${plugin.name}") plugins);
+    (map (plugin: "ln -fs ${plugin.src}/${plugin.name} ${dataDir}/plugins/") plugins);
 }

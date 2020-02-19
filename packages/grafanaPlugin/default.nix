@@ -12,21 +12,11 @@ let
       cd "$unpackDir"
       renamed="$TMPDIR/${name}.zip"
       mv "$downloadedFile" "$renamed"
-      unpackFile "$renamed"
-      if [ $(ls "$unpackDir" | wc -l) != 1 ]; then
-        echo "error: zip file must contain a single file or directory."
-        exit 1
-      fi
-      fn=$(cd "$unpackDir" && echo *)
-      if [ -f "$unpackDir/$fn" ]; then
-        mkdir $out
-      fi
-      mv "$unpackDir/$fn" "$out"
+      mkdir -p $out
+      ${unzip}/bin/unzip -d $out $renamed
+      mv "$unpackDir" "$out"
     '';
-  } // removeAttrs args [ "version" ])).overrideAttrs (x: {
-    # Hackety-hack: we actually need unzip hooks, too
-    nativeBuildInputs = x.nativeBuildInputs ++ [ unzip ];
-  });
+  } // removeAttrs args [ "version" ]));
 in (map (plugin: {
   name = plugin.name;
   src = fetchPlugins ({
