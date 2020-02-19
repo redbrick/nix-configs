@@ -9,17 +9,17 @@ let
       {
         name = "grafana-polystat-panel";
         version = "1.1.0";
-        sha256 = "151cf9vkdf5r6vhgw2a2j2lvlkvi4aynpi6j5m9ck72qgn3q3v4r";
+        sha256 = "0pi5d7i9gsmi6ysj43yilkjn0rnrh4b46x3bcpqfh36bfzk2kwcx";
       }
       {
         name = "grafana-piechart-panel";
         version = "1.4.0";
-        sha256 = "0xk1ynr05gsd2cmvb52zp2gl8z5qx1h6mbhr80lx6j27rd3q0pxi";
+        sha256 = "05vhdmzhjmr9g0zqzxgixpwhk111kcrl022qi1jhghs6vjc2dcx8";
       }
       {
         name = "grafana-clock-panel";
         version = "1.0.3";
-        sha256 = "03pb2z9ywzza3my4d58fxw79l7lh3c1vhl09xjyfn4wxp82yic86";
+        sha256 = "0bn40619gxzbsx8gnsql0i87b3019ggjxchbi73sgiiaiqf9066q";
       }
     ];
   };

@@ -43,6 +43,10 @@ in {
         static_configs = [{ targets = ["m1cr0man.internal:9119"]; }];
       }
       {
+        job_name = "collectd";
+        static_configs = [{ targets = ["zeus.interal:9103"]; }];
+      }
+      {
         # Only to be used with docker
         job_name = "cadvisor";
         static_configs = [{ targets = ["zeus.interal:8081"]; }];
