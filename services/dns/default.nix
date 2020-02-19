@@ -62,4 +62,10 @@ in {
 
   networking.firewall.allowedTCPPorts = [ 53 ];
   networking.firewall.allowedUDPPorts = [ 53 ];
+
+  # export metrics
+  services.prometheus.exporters.bind = {
+    enable = true;
+    openFirewall = true;
+  };
 }

@@ -1,6 +1,6 @@
 { config, lib, ... }:
 let
-  dataDir = "/var/lib/loki";
+  dataDir = "/var/db/loki";
 in {
 
   services.loki = {
@@ -40,10 +40,10 @@ in {
 
       storage_config = {
         boltdb = {
-          directory = "/var/loki/index";
+          directory = "${dataDir}/index";
         };
         filesystem = {
-          directory = "/var/loki/chunks";
+          directory = "${dataDir}/chunks";
         };
       };
 

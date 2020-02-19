@@ -13,6 +13,7 @@ in {
     ../../services/httpd
     ../../services/grafana
     ../../services/loki.nix
+    ../../services/prometheus.nix
     ../../services/fluentd.nix
   ];
 

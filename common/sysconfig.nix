@@ -24,11 +24,34 @@ in {
   networking.nameservers = ["192.168.0.4"];
   networking.timeServers = ["192.168.0.254"];
   networking.proxy.default = "http://proxy.internal:3128/";
-  networking.proxy.noProxy = "127.0.0.1,localhost,*.internal";
+  networking.proxy.noProxy = "127.0.0.1,localhost,192.168.0,.internal";
 
   # Enable rsyslog
   services.rsyslogd.enable = true;
   services.rsyslogd.extraConfig = "*.* @log.internal:6514;RSYSLOG_SyslogProtocol23Format";
+
+  # Enable Node exporter
+  services.prometheus.exporters.node = {
+    enable = true;
+    openFirewall = true;
+    enabledCollectors = [
+      "systemd"
+      "conntrack"
+      "cpu"
+      "diskstats"
+      "entropy"
+      "filefd"
+      "filesystem"
+      "interrupts"
+      "loadavg"
+      "meminfo"
+      "netdev"
+      "netstat"
+      "stat"
+      "time"
+      "vmstat"
+    ];
+  };
 
   # Enable LDAP
   users.ldap.enable = true;
