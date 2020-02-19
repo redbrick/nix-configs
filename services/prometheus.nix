@@ -1,5 +1,6 @@
 { config, lib, ... }:
 let
+  tld = config.redbrick.tld;
   # We Should be able to generate this
   nodes = [
     "zeus"
@@ -17,6 +18,7 @@ in {
   services.prometheus = {
     inherit globalConfig;
     enable = true;
+    webExternalUrl = "https://prometheus.${tld}";
     scrapeConfigs = [
       {
         job_name = "prometheus";
@@ -44,12 +46,12 @@ in {
       }
       {
         job_name = "collectd";
-        static_configs = [{ targets = ["zeus.interal:9103"]; }];
+        static_configs = [{ targets = ["zeus.internal:9103"]; }];
       }
       {
         # Only to be used with docker
         job_name = "cadvisor";
-        static_configs = [{ targets = ["zeus.interal:8081"]; }];
+        static_configs = [{ targets = ["zeus.internal:8081"]; }];
       }
       {
         job_name = "node-exporter";
