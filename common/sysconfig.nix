@@ -18,6 +18,10 @@ in {
     "panic=30" "boot.panic_on_fail" # reboot the machine upon fatal boot issues
   ];
 
+  # Fix mounting of nfs shares before network is up
+  systemd.targets.nfs-client.after = [ "network.target" ];
+  systemd.targets.nfs-client.requires = [ "network.target" ];
+
   # Use Redbrick DNS and HTTP proxy
   networking.domain = tld;
   networking.search = [ "internal" tld ];
