@@ -25,10 +25,10 @@ let
       sha256 = "06bq3k2nraz1zx3xkaxkcnfb9njrnrf84ah9sv9wb97g61d297a5";
     }; }
     { name = "LDAPProvider"; src = pkgs.fetchFromGitHub {
-      owner = "wikimedia";
+      owner = "m1cr0man";
       repo = "mediawiki-extensions-LDAPProvider";
-      rev = "155fa9b579e9f6a03657897c62cc9c40213f7cff";
-      sha256 = "02dnjg7rpzk79hcjach5sbf0kg2nrmdygc2jzfnyc3fsy0jvwrng";
+      rev = "d77465b78faf25464fe12977be190f6384743198";
+      sha256 = "0gz3s44xng0yw38b2c5nmd407nv24lh44hz9169qgm6dqnz2zkrq";
     }; }
     { name = "LDAPAuthorization"; src = pkgs.fetchFromGitHub {
       owner = "wikimedia";
