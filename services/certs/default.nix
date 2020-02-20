@@ -9,17 +9,14 @@ let
   webroot = common.webtreeCertsDir;
 
 in {
-  imports = [
-    ./rbacme.nix
-  ];
-
-  security.acme.legoCerts = {
+  security.acme.acceptTerms = true;
+  security.acme.certs = {
     tld = {
       inherit email;
       dnsProvider = "rfc2136";
       credentialsFile = "/var/secrets/certs.secret";
       extraDomains."*.${tld}" = null;
-      extraFlags = [ "--dns.disable-cp" ];
+      dnsPropagationCheck = false;
     };
   } //
     # Map all domains to a certs attrset
