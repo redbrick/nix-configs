@@ -114,7 +114,7 @@ in {
       ErrorDocument 504 /rb_custom_error/500.html
 
       <Directory "${errorPages}/" >
-        Options Indexes FollowSymLinks
+        Options Indexes FollowSymLinks IncludesNoExec
         AllowOverride None
         Require all granted
       </Directory>
