@@ -7,10 +7,7 @@ let
   adminAddr = "webmaster@${tld}";
 
   wwwRedirector = ''
-    RewriteEngine On
-    RewriteBase /
-    RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
-    RewriteRule ^(.*)$ http://%1/$1 [R=301,L]
+    RedirectMatch 301 "^www\.(.*)$" "https://$1"
   '';
 in {
   inherit common webtree home tld adminAddr;
