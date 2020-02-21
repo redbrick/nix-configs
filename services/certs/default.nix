@@ -34,9 +34,9 @@ in {
 
         # Map out each vhost into a list of domains under a certDomain
         (mapAttrsToList (hostName: vhost: let
-          certDomain = common.certDomain hostName;
+          certDomain = common.certDomain tld hostName;
         in {
-          certDomain = [ hostName ] ++ (vhost.serverAliases or []);
+          "${certDomain}" = [ hostName ] ++ (vhost.serverAliases or []);
         })
 
           # Ignore TLD domains, they are covered by the wildcard
