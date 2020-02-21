@@ -61,12 +61,12 @@ let
     "${tld}" = redbrickVhost;
     "acme.${tld}" = acmeVhost;
   };
-
 in {
   imports = [
     ./php-fpm.nix
     ./mediawiki.nix
     ./privatebin.nix
+    ./blog.nix
   ];
 
   # Enable suexec support
@@ -136,6 +136,9 @@ in {
       </IfModule>
     '';
   };
+
+  # Needs to be increased because each vhost has a log file
+  systemd.services.httpd.serviceConfig.LimitNOFILE = 16384;
 
   # Once a week, reload httpd to refresh the certificates
   systemd.services.httpd-reload = {

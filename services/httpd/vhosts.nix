@@ -29,16 +29,15 @@ in (if (config.redbrick.skipVhosts) then {} else userVhosts // {
     wwwRedirect = true;
     serverAliases = [ "www.abovethefold.es" ];
   };
-  "blog.${tld}" = vhost {
-    documentRoot = "${webtree}/vhosts/blog.redbrick.dcu.ie";
-    user = "wwwrun";
-    group = "wwwrun";
-  };
+  "admin.${tld}" = vhostRedirect "https://blog.${tld}";
+  "admins.${tld}" = vhostRedirect "https://blog.${tld}";
+  "ajaxterm.${tld}" = vhostRedirect "https://term.${tld}";
   "alanwalsh.${tld}" = vhost {
     documentRoot = "${webtree}/s/sonic/cv";
     user = "sonic";
     group = "member";
   };
+  "anyterm.${tld}" = vhostRedirect "https://term.${tld}";
   "assassins.${tld}" = vhost {
     documentRoot = "${webtree}/a/art_wolf/assassins";
     user = "art_wolf";
@@ -49,15 +48,25 @@ in (if (config.redbrick.skipVhosts) then {} else userVhosts // {
     user = "k100";
     group = "associat";
   };
+  "bash.${tld}" = vhost {
+    documentRoot = "${webtree}/y/yosarian/bash";
+    user = "yosarian";
+    group = "associat";
+  };
   "birthday.${tld}" = vhost {
     documentRoot = "${webtree}/s/space/Redbrick-Turns-20/resources/public";
     user = "space";
     group = "member";
   };
-  "bricket.${tld}" = vhost {
-    documentRoot = "${webtree}/w/werdz/bricket";
-    user = "werdz";
+  "blog.lessthanthree.be" = vhost {
+    documentRoot = "${webtree}/o/ornat/blog";
+    user = "ornat";
     group = "member";
+  };
+  "blog.theinternets.be" = vhost {
+    documentRoot = "${webtree}/r/receive/blog";
+    user = "receive";
+    group = "staff";
   };
   "bugzilla.${tld}" = vhost {
     documentRoot = "${webtree}/vhosts/bugzilla.redbrick.dcu.ie";
@@ -101,6 +110,7 @@ in (if (config.redbrick.skipVhosts) then {} else userVhosts // {
     user = "chair";
     group = "committe";
   };
+  "dconcannon.${tld}" = vhostRedirect "https://shimoda.${tld}";
   "dcudrama.ie" = vhost {
     documentRoot = "${webtree}/d/drama";
     user = "drama";
@@ -108,11 +118,23 @@ in (if (config.redbrick.skipVhosts) then {} else userVhosts // {
     wwwRedirect = true;
     serverAliases = [ "www.dcudrama.ie" ];
   };
+  "dcufm.${tld}" = vhostProxy "http://136.206.15.74";
+  "dermot.${tld}" = vhostRedirect "https://homer.${tld}";
+  "devnull.${tld}" = vhostRedirect "https://colmmacc.${tld}";
+  "devrandom.${tld}" = vhostRedirect "https://marvin.${tld}";
   "djbdns.now.ie" = vhost {
     documentRoot = "${webtree}/l/lecter/djbdns";
     user = "lecter";
     group = "associat";
   };
+  "ejmitchell.com" = vhost {
+    documentRoot = "${home}/member/d/deadlock/ejmitchellcom";
+    user = "deadlock";
+    group = "member";
+    wwwRedirect = true;
+    serverAliases = [ "www.ejmitchell.com" ];
+  };
+  "events.${tld}" = vhostRedirect "https://${tld}/events";
   "forbidden.${tld}" = vhost {
     documentRoot = "${webtree}/vhosts/forbidden.redbrick.dcu.ie";
     user = "stolnart";
@@ -123,11 +145,24 @@ in (if (config.redbrick.skipVhosts) then {} else userVhosts // {
     user = "mick";
     group = "associat";
   };
+  "fosdem.${tld}" = vhostRedirect "https://redbrickdcu.typeform.com/to/ZwETj0";
   "freedom.${tld}" = vhost {
     documentRoot = "${webtree}/b/bunbun";
     user = "bunbun";
     group = "member";
   };
+  "gamessoc.${tld}" = vhost {
+    documentRoot = "${webtree}/g/games";
+    user = "gamessoc";
+    group = "society";
+    serverAliases = [ "games.${tld}" "www.games.${tld}" ];
+    extraConfig = ''
+      RedirectMatch 301 "^games\.(.*)$" "https://www.games.$1"
+      RedirectMatch 301 "^gamesoc\.(.*)$" "https://www.games.$1"
+    '';
+  };
+  "git.${tld}" = vhostProxy "http://localhost:3000";
+  "github.${tld}" = vhostRedirect "https://github.com/redbrick";
   "grahambartley.com" = vhost {
     documentRoot = "${webtree}/d/dedoctor";
     user = "dedoctor";
@@ -135,6 +170,7 @@ in (if (config.redbrick.skipVhosts) then {} else userVhosts // {
     wwwRedirect = true;
     serverAliases = [ "www.grahambartley.com" ];
   };
+  "graphs.${tld}" = vhostProxy "http://localhost:3001";
   "h8.work" = vhost {
     documentRoot = "${webtree}/a/ainran/domains/h8.work";
     user = "ainran";
@@ -159,21 +195,16 @@ in (if (config.redbrick.skipVhosts) then {} else userVhosts // {
     wwwRedirect = true;
     serverAliases = [ "www.halenger.com" ];
   };
+  "help.${tld}" = vhostRedirect "https://wiki.${tld}/mw/Helpdesk";
+  "helpdesk.${tld}" = vhostRedirect "https://wiki.${tld}/mw/Helpdesk";
+  "helpdeskexam.${tld}" = vhostRedirect "https://md.${tld}/s/SJzip7F9X#";
+  "hoodies.${tld}" = vhostRedirect "https://redbrickdcu.typeform.com/to/Q4uIzR";
   "interlan.dcu.ie" = vhost {
     documentRoot = "${webtree}/vhosts/www.interlan.dcu.ie";
     user = "gamessoc";
     group = "society";
   };
-  "gamessoc.${tld}" = vhost {
-    documentRoot = "${webtree}/g/games";
-    user = "gamessoc";
-    group = "society";
-    serverAliases = [ "games.${tld}" "www.games.${tld}" ];
-    extraConfig = ''
-      RedirectMatch 301 "^games\.(.*)$" "https://www.games.$1"
-      RedirectMatch 301 "^gamesoc\.(.*)$" "https://www.games.$1"
-    '';
-  };
+  "jakarta.${tld}" = vhostProxy "http://136.206.15.59:8080";
   "lessthanthree.be" = vhost {
     documentRoot = "${webtree}/o/ornat";
     user = "ornat";
@@ -181,11 +212,7 @@ in (if (config.redbrick.skipVhosts) then {} else userVhosts // {
     wwwRedirect = true;
     serverAliases = [ "www.lessthanthree.be" ];
   };
-  "blog.lessthanthree.be" = vhost {
-    documentRoot = "${webtree}/o/ornat/blog";
-    user = "ornat";
-    group = "member";
-  };
+  "macspayn.${tld}" = vhostProxy "http://136.206.15.25:3007";
   "mak.${tld}" = vhost {
     documentRoot = "${webtree}/m/mak/mak";
     user = "mak";
@@ -220,6 +247,7 @@ in (if (config.redbrick.skipVhosts) then {} else userVhosts // {
     user = "paintbal";
     group = "club";
   };
+  "parlour.${tld}" = vhostRedirect "https://songsfromtheparlour.com";
   "performingarts.${tld}" = vhost {
     documentRoot = "${webtree}/p/perfarts";
     user = "perfarts";
@@ -230,11 +258,21 @@ in (if (config.redbrick.skipVhosts) then {} else userVhosts // {
     user = "plstalk";
     group = "dcu";
   };
+  "portaldev.${tld}" = vhostProxy "http://136.206.15.61:9080";
   "profiles.${tld}" = vhost {
     documentRoot = "${webtree}/d/d_fens/profiles";
     user = "d_fens";
     group = "associat";
   };
+  "prometheus.${tld}" = vhostProxy "http://localhost:9090";
+  "radio.${tld}" = vhostProxy "http://radio.${tld}:8000";
+  "radio.theinternets.be" = vhostRedirect "https://radio.${tld}";
+  "receive.theinternets.be" = vhost {
+    documentRoot = "${webtree}/r/receive";
+    user = "receive";
+    group = "staff";
+  };
+  "riainccc.${tld}" = vhostProxy "http://http://136.206.15.25:3000";
   "richardwalsh.ie" = vhost {
     documentRoot = "${webtree}/k/koffee/";
     user = "koffee";
@@ -256,7 +294,7 @@ in (if (config.redbrick.skipVhosts) then {} else userVhosts // {
     documentRoot = "${webtree}/e/edu/n109a";
     user = "edu";
     group = "redbrick";
-    serverAliases = ["n109a.${tld}"];
+    serverAliases = [ "n109a.${tld}" ];
   };
   "ryanmcdyer.com" = vhost {
     documentRoot = "${webtree}/r/ryanmcd";
@@ -279,10 +317,10 @@ in (if (config.redbrick.skipVhosts) then {} else userVhosts // {
     documentRoot = "${webtree}/s/shaun/koken";
     user = "shaun";
     group = "member";
+    # TODO shout at shaun, his www. NS points to a different server
     extraConfig = ''
       RedirectMatch 301 "^/~shaun/koken(/(.*))?$" "/$1"
     '';
-    # TODO shout at shaun, his www. NS points to a different server
   };
   "signup.${tld}" = vhost {
     documentRoot = "${webtree}/e/events/csday";
@@ -296,6 +334,11 @@ in (if (config.redbrick.skipVhosts) then {} else userVhosts // {
     wwwRedirect = true;
     serverAliases = [ "www.solarsystemscanlan.com" ];
   };
+  "someoneiswrong.theinternets.be" = vhost {
+    documentRoot = "${webtree}/r/receive/wrong";
+    user = "receive";
+    group = "staff";
+  };
   "songsfromtheparlour.com" = vhost {
     documentRoot = "${webtree}/vhosts/www.songsfromtheparlour.com";
     user = "parlour";
@@ -308,6 +351,7 @@ in (if (config.redbrick.skipVhosts) then {} else userVhosts // {
     user = "sailing";
     group = "club";
   };
+  "techweek.${tld}" = vhostRedirect "https://techweek.dcu.ie";
   "techweek.dcu.ie" = vhost {
     documentRoot = "${webtree}/t/techwk/dist";
     user = "techwk";
@@ -327,21 +371,6 @@ in (if (config.redbrick.skipVhosts) then {} else userVhosts // {
     wwwRedirect = true;
     serverAliases = [ "www.theinternets.be" ];
   };
-  "blog.theinternets.be" = vhost {
-    documentRoot = "${webtree}/r/receive/blog";
-    user = "receive";
-    group = "staff";
-  };
-  "receive.theinternets.be" = vhost {
-    documentRoot = "${webtree}/r/receive";
-    user = "receive";
-    group = "staff";
-  };
-  "someoneiswrong.theinternets.be" = vhost {
-    documentRoot = "${webtree}/r/receive/wrong";
-    user = "receive";
-    group = "staff";
-  };
   "thelookdcu.com" = vhost {
     documentRoot = "${webtree}/t/thelook/";
     user = "thelook";
@@ -349,9 +378,17 @@ in (if (config.redbrick.skipVhosts) then {} else userVhosts // {
     wwwRedirect = true;
     serverAliases = [ "www.thelookdcu.com" ];
   };
+  "tickets.${tld}" = vhostRedirect "https://dcusu.ticketsolve.com/shows/873599383/events/128190598";
+  "tomcat.dregin.${tld}" = vhostProxy "http://136.206.15.14:20002";
   "travel.colmreilly.com" = vhost {
     documentRoot = "${webtree}/n/nettles/travel/";
     user = "nettles";
+    group = "associat";
+  };
+  "ubuntu.${tld}" = vhostRedirect "https://wiki.${tld}/mw/RedBrick_Ubuntu";
+  "unkle77.com" = vhost {
+    documentRoot = "${webtree}/s/shivo/unkle77/wordpress/";
+    user = "shivo";
     group = "associat";
   };
   "wanderers.${tld}" = vhost {
@@ -359,18 +396,19 @@ in (if (config.redbrick.skipVhosts) then {} else userVhosts // {
     user = "wander";
     group = "projects";
   };
+  "webchat.${tld}" = vhostProxy "http://127.0.0.1:16667";
+  "webmail.${tld}" = vhost {
+    documentRoot = "${webtree}/vhosts/rainloop";
+    user = "wwwrun";
+    group = "wwwrun";
+  };
+  "werdztomcat.${tld}" = vhostProxy "http://136.206.15.14:20001";
   "wiki.colmreilly.com" = vhost {
     documentRoot = "${webtree}/n/nettles/wiki/";
     user = "nettles";
     group = "associat";
   };
-  "ejmitchell.com" = vhost {
-    documentRoot = "${home}/member/d/deadlock/ejmitchellcom";
-    user = "deadlock";
-    group = "member";
-    wwwRedirect = true;
-    serverAliases = [ "www.ejmitchell.com" ];
-  };
+  "www.${tld}" = vhostRedirect "https://${tld}";
   "www.iahpc.ie" = vhost {
     documentRoot = "${home}/guest/iahpc/public_html";
     user = "iahpc";
@@ -378,11 +416,6 @@ in (if (config.redbrick.skipVhosts) then {} else userVhosts // {
   };
   "www.luxgaa.lu" = vhost {
     documentRoot = "${webtree}/s/shivo/LuxGAA";
-    user = "shivo";
-    group = "associat";
-  };
-  "unkle77.com" = vhost {
-    documentRoot = "${webtree}/s/shivo/unkle77/wordpress/";
     user = "shivo";
     group = "associat";
   };
@@ -401,48 +434,4 @@ in (if (config.redbrick.skipVhosts) then {} else userVhosts // {
     user = "gamessoc";
     group = "society";
   };
-  "webmail.${tld}" = vhost {
-    documentRoot = "${webtree}/vhosts/rainloop";
-    user = "wwwrun";
-    group = "wwwrun";
-  };
-  "bash.${tld}" = vhost {
-    documentRoot = "${webtree}/y/yosarian/bash";
-    user = "yosarian";
-    group = "associat";
-  };
-  "git.${tld}" = vhostProxy "http://localhost:3000";
-  "prometheus.${tld}" = vhostProxy "http://localhost:9090";
-  "graphs.${tld}" = vhostProxy "http://localhost:3001";
-  "dcufm.${tld}" = vhostProxy "http://136.206.15.74";
-  "jakarta.${tld}" = vhostProxy "http://136.206.15.59:8080";
-  "lists.${tld}" = vhostProxy "http://mail.internal:80";
-  "macspayn.${tld}" = vhostProxy "http://136.206.15.25:3007";
-  "portaldev.${tld}" = vhostProxy "http://136.206.15.61:9080";
-  "radio.${tld}" = vhostProxy "http://radio.${tld}:8000";
-  "riainccc.${tld}" = vhostProxy "http://http://136.206.15.25:3000";
-  "tomcat.dregin.${tld}" = vhostProxy "http://136.206.15.14:20002";
-  "webchat.${tld}" = vhostProxy "http://127.0.0.1:16667";
-  "werdztomcat.${tld}" = vhostProxy "http://136.206.15.14:20001";
-  "www.${tld}" = vhostRedirect "https://${tld}";
-  "admin.${tld}" = vhostRedirect "https://blog.${tld}";
-  "admins.${tld}" = vhostRedirect "https://blog.${tld}";
-  "ajaxterm.${tld}" = vhostRedirect "https://term.${tld}";
-  "anyterm.${tld}" = vhostRedirect "https://term.${tld}";
-  "dconcannon.${tld}" = vhostRedirect "https://shimoda.${tld}";
-  "dermot.${tld}" = vhostRedirect "https://homer.${tld}";
-  "devnull.${tld}" = vhostRedirect "https://colmmacc.${tld}";
-  "devrandom.${tld}" = vhostRedirect "https://marvin.${tld}";
-  "events.${tld}" = vhostRedirect "https://${tld}/events";
-  "fosdem.${tld}" = vhostRedirect "https://redbrickdcu.typeform.com/to/ZwETj0";
-  "github.${tld}" = vhostRedirect "https://github.com/redbrick";
-  "help.${tld}" = vhostRedirect "https://wiki.${tld}/mw/Helpdesk";
-  "helpdesk.${tld}" = vhostRedirect "https://wiki.${tld}/mw/Helpdesk";
-  "helpdeskexam.${tld}" = vhostRedirect "https://md.${tld}/s/SJzip7F9X#";
-  "hoodies.${tld}" = vhostRedirect "https://redbrickdcu.typeform.com/to/Q4uIzR";
-  "parlour.${tld}" = vhostRedirect "https://songsfromtheparlour.com";
-  "radio.theinternets.be" = vhostRedirect "https://radio.${tld}";
-  "techweek.${tld}" = vhostRedirect "https://techweek.dcu.ie";
-  "tickets.${tld}" = vhostRedirect "https://dcusu.ticketsolve.com/shows/873599383/events/128190598";
-  "ubuntu.${tld}" = vhostRedirect "https://wiki.${tld}/mw/RedBrick_Ubuntu";
 })

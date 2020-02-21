@@ -5,15 +5,20 @@ let
   webtree = common.webtreeDir;
   home = common.homesDir;
   adminAddr = "webmaster@${tld}";
-
   wwwRedirector = ''
     RedirectMatch 301 "^www\.(.*)$" "https://$1"
   '';
 in {
   inherit common webtree home tld adminAddr;
 
-  vhost = {user, group, documentRoot, serverAliases ? [],
-            extraConfig ? "", wwwRedirect ? false}: {
+  vhost = {
+    user,
+    group,
+    documentRoot,
+    serverAliases ? [],
+    extraConfig ? "",
+    wwwRedirect ? false
+  }: {
     inherit documentRoot serverAliases;
     adminAddr = if user == "wwwrun" then adminAddr else "${user}@${tld}";
     onlySSL = true;
