@@ -149,6 +149,9 @@ in {
     script = "systemctl reload httpd";
   };
 
+  # Needs to be increased because each vhost has a log file
+  systemd.services.httpd.serviceConfig.LimitNOFILE = 16384;
+
   systemd.timers.httpd-reload = {
     description = "Reload HTTPD at 5am every Saturday to update certs";
     wantedBy = [ "timers.target" ];
