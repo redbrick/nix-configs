@@ -4,9 +4,11 @@ rec {
   webtreeDir = "/storage/webtree";
   homesDir = "/storage/home";
 
-  # This maps some domains to other domains
-  # usually due to broken DNS entries
-  # Allows certs to be correctly generated
+  # Part of the script for generating certs will break down domains to their tld.
+  # So for example, www.iahpc.ie will become iahpc.ie. In most cases, this is totally
+  # fine, but for these few sites their tld's do not point at redbrick and thus we
+  # can't generate HTTP-validated certs for them.
+  # This mapping allos certs to be correctly generated and loaded for those vhosts
   brokenDomains = {
     "djbdns.now.ie" = "djbdns.now.ie";
     "romana.now.ie" = "djbdns.now.ie";
