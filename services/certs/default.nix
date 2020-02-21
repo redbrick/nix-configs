@@ -11,7 +11,7 @@ let
 in {
   security.acme.acceptTerms = true;
   security.acme.certs = {
-    tld = {
+    "${tld}" = {
       inherit email;
       dnsProvider = "rfc2136";
       credentialsFile = "/var/secrets/certs.secret";

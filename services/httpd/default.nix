@@ -58,7 +58,7 @@ let
   in vhost // (common.vhostCerts certDomain)) vhosts;
 
   virtualHosts = vhostsWithCerts // {
-    tld = redbrickVhost;
+    "${tld}" = redbrickVhost;
     "acme.${tld}" = acmeVhost;
   };
 

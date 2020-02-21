@@ -208,6 +208,6 @@ in {
   systemd.services.wiki-init = updateService wikiCfgPath;
   systemd.services.cmtwiki-init = updateService cmtWikiCfgPath;
 
-  services.httpd.virtualHosts.${wikiConfig.domain} = vhostWiki wikiConfig wikiCfgPath;
-  services.httpd.virtualHosts.${cmtWikiConfig.domain} = vhostWiki cmtWikiConfig cmtWikiCfgPath;
+  services.httpd.virtualHosts."${wikiConfig.domain}" = vhostWiki wikiConfig wikiCfgPath;
+  services.httpd.virtualHosts."${cmtWikiConfig.domain}" = vhostWiki cmtWikiConfig cmtWikiCfgPath;
 }
