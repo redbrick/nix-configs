@@ -19,7 +19,7 @@ in {
     onlySSL = true;
     extraConfig = ''
       <Directory "${documentRoot}">
-        <FilesMatch \.php\d*$>hostName
+        <FilesMatch \.php\d*$>
           SetHandler "proxy:unix:/run/phpfpm/${user}.sock|fcgi://localhost/"
         </FilesMatch>
 
