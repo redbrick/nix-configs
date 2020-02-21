@@ -59,11 +59,6 @@ in (if (config.redbrick.skipVhosts) then {} else userVhosts // {
     user = "werdz";
     group = "member";
   };
-  "brickjet.${tld}" = vhost {
-    documentRoot = "${webtree}/j/johan/brickjet";
-    user = "johan";
-    group = "member";
-  };
   "bugzilla.${tld}" = vhost {
     documentRoot = "${webtree}/vhosts/bugzilla.redbrick.dcu.ie";
     user = "bugs";
@@ -112,11 +107,6 @@ in (if (config.redbrick.skipVhosts) then {} else userVhosts // {
     group = "society";
     wwwRedirect = true;
     serverAliases = [ "www.dcudrama.ie" ];
-  };
-  "dibs.${tld}" = vhost {
-    documentRoot = "${webtree}/d/dever/dibs";
-    user = "dever";
-    group = "member";
   };
   "djbdns.now.ie" = vhost {
     documentRoot = "${webtree}/l/lecter/djbdns";
@@ -202,11 +192,6 @@ in (if (config.redbrick.skipVhosts) then {} else userVhosts // {
     group = "associat";
     wwwRedirect = true;
     serverAliases = [ "www.mlane.org" ];
-  };
-  "nemo.${tld}" = vhost {
-    documentRoot = "${webtree}/n/nemo/wordpress";
-    user = "nemo";
-    group = "associat";
   };
   "obrienronan.com" = vhost {
     documentRoot = "${webtree}/vhosts/www.obrienronan.com";
@@ -307,14 +292,6 @@ in (if (config.redbrick.skipVhosts) then {} else userVhosts // {
     group = "guest";
     wwwRedirect = true;
     serverAliases = [ "www.songsfromtheparlour.com" ];
-  };
-  # TODO dead
-  "speakeasyireland.ie" = vhost {
-    documentRoot = "${webtree}/s/spkeasy";
-    user = "spkeasy";
-    group = "society";
-    wwwRedirect = true;
-    serverAliases = [ "www.speakeasyireland.ie" ];
   };
   "surfnsail.${tld}" = vhost {
     documentRoot = "${webtree}/s/sailing";
