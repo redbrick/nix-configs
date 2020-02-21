@@ -426,7 +426,7 @@ in (if (config.redbrick.skipVhosts) then {} else userVhosts // {
   };
   "dcufm.${tld}" = vhostProxy "http://136.206.15.74";
   "jakarta.${tld}" = vhostProxy "http://136.206.15.59:8080";
-  "lists.${tld}" = vhostProxy "http://m1vm.internal:80";
+  "lists.${tld}" = vhostProxy "http://127.0.0.1:80";
   "macspayn.${tld}" = vhostProxy "http://136.206.15.25:3007";
   "portaldev.${tld}" = vhostProxy "http://136.206.15.61:9080";
   "radio.${tld}" = vhostProxy "http://radio.${tld}:8000";
