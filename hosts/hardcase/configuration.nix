@@ -14,7 +14,7 @@ in {
     ../../services/grafana
     ../../services/loki.nix
     ../../services/prometheus.nix
-    ../../services/fluentd.nix
+    ../../services/promtail.nix
   ];
 
   # This value determines the NixOS release with which your system is to be

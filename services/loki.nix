@@ -2,7 +2,6 @@
 let
   dataDir = "/var/db/loki";
 in {
-
   services.loki = {
     inherit dataDir;
     enable = true;
