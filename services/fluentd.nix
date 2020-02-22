@@ -33,6 +33,7 @@ in {
       @type loki
       url "http://localhost:3100"
       extra_labels {"source":"syslog"}
+      label_keys "host,ident"
       flush_interval 10s
       flush_at_shutdown true
       buffer_chunk_limit 1m

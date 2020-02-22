@@ -28,7 +28,7 @@ in {
 
   # Enable rsyslog
   services.rsyslogd.enable = true;
-  services.rsyslogd.extraConfig = "*.* @log.internal:6514;RSYSLOG_SyslogProtocol23Format";
+  services.rsyslogd.extraConfig = "*.* @log.internal:514;RSYSLOG_SyslogProtocol23Format";
 
   # Enable Node exporter
   services.prometheus.exporters.node = {
