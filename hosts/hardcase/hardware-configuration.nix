@@ -28,7 +28,7 @@
     };
 
   # zfs create -o dedup=off -o mountpoint=legacy -o recordsize=4K  zroot/postgres
-  fileSystems."/zroot/postgres" =
+  fileSystems."/var/db/postgres" =
     { device = "zroot/postgres";
       fsType = "zfs";
     };
