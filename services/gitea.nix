@@ -44,7 +44,7 @@ in {
       TEMP_PATH = ${stateDir}/uploads
 
       [server]
-      SSH_DOMAIN       = git.${tld}/
+      SSH_DOMAIN       = git.${tld}
       DISABLE_SSH      = true
       SSH_PORT         = 10022
       LFS_START_SERVER = false
