@@ -6,53 +6,41 @@ let
   common = import ../../common/variables.nix;
   vhosts = import ../httpd/vhosts.nix { inherit config; };
   email = "webmaster+acme@${tld}";
+  webroot = common.webtreeCertsDir;
 
-  # Filter *.dcu.ie domains
-  vhostFilter = vhost:
-    !(hasSuffix "dcu.ie" vhost.hostName);
-
-  # Groups vhosts based on the tld + domain
-  vhostGroupFunc = vhost: common.domainTld vhost.hostName;
-
-  # Creates a list of all names of a vhost
-  allNames = vhostGroup:
-    flatten (map (vh: concatLists [vh.serverAliases [vh.hostName]]) vhostGroup);
 in {
-  imports = [
-    ./rbacme.nix
-  ];
-
-  security.acme.legoCerts = {
+  security.acme.acceptTerms = true;
+  security.acme.certs = {
     "${tld}" = {
       inherit email;
       dnsProvider = "rfc2136";
       credentialsFile = "/var/secrets/certs.secret";
       extraDomains."*.${tld}" = null;
-      extraFlags = [ "--dns.disable-cp" ];
+      dnsPropagationCheck = false;
     };
-  } // (mapAttrs'
-    (domain: vhostGroup: nameValuePair
+  } //
+    # Map all domains to a certs attrset
+    mapAttrs (certDomain: domains: {
+      inherit email webroot;
+      extraDomains = listToAttrs
+        (map (domain: nameValuePair domain null)
 
-      # If the vhost only has one name, use that, otherwise use the domain
-      # For example look at luxgaa.lu
-      (if (length (allNames vhostGroup)) == 1 then (head (allNames vhostGroup)) else domain)
-      {
-        inherit email;
-        webroot = common.webtreeCertsDir;
+          # Remove domains that match the certDomain
+          (filter (domain: domain != certDomain) domains));
+    })
 
-        # Map the values to null, since we don't want to set anything for the extraDomains
-        extraDomains = mapAttrs (k: v: null)
+      # Combine all common certDomains
+      (foldAttrs (next: last: next ++ last) []
 
-          # 2 birds with 1 stone: Turn list into attributes with alias as key, also groups duplicates
-          (groupBy (alias: alias)
+        # Map out each vhost into a list of domains under a certDomain
+        (mapAttrsToList (hostName: vhost: let
+          certDomain = common.certDomain tld hostName;
+        in {
+          "${certDomain}" = [ hostName ] ++ (vhost.serverAliases or []);
+        })
 
-            # Remove aliases that match the domain
-            (filter (alias: alias != domain)
-
-              # Get hostnames and aliases of all vhosts for this domain
-              (allNames vhostGroup)
-            )
-          );
-      })
-    (groupBy vhostGroupFunc (filter vhostFilter vhosts)));
+          # Ignore TLD domains, they are covered by the wildcard
+          (filterAttrs (hostName: vhost: !(hasSuffix tld hostName)) vhosts)
+        )
+      );
 }

@@ -6,10 +6,10 @@ in {
   imports = [ ./options.nix ];
 
   time.timeZone = "Europe/Dublin";
-  i18n = {
-    consoleFont = "Lat2-Terminus16";
-    consoleKeyMap = "uk";
-    defaultLocale = "en_IE.UTF-8";
+  i18n.defaultLocale = "en_IE.UTF-8";
+  console = {
+    font = "Lat2-Terminus16";
+    keyMap = "uk";
   };
 
   # Set sensible kernel parameters
@@ -17,6 +17,10 @@ in {
     "boot.shell_on_fail"
     "panic=30" "boot.panic_on_fail" # reboot the machine upon fatal boot issues
   ];
+
+  # Fix mounting of nfs shares before network is up
+  systemd.targets.nfs-client.after = [ "network.target" ];
+  systemd.targets.nfs-client.requires = [ "network.target" ];
 
   # Use Redbrick DNS and HTTP proxy
   networking.domain = tld;

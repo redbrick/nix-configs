@@ -28,10 +28,12 @@
     };
 
   # zfs create -o dedup=off -o mountpoint=legacy -o recordsize=4K  zroot/postgres
-  fileSystems."/zroot/postgres" =
+  fileSystems."/var/db/postgres" =
     { device = "zroot/postgres";
       fsType = "zfs";
     };
+  systemd.services.postgresql.requires = [ "var-db-postgres.mount" ];
+  systemd.services.postgresql.after = [ "var-db-postgres.mount" ];
 
   # zfs create -o mountpoint=legacy  zroot/git
   fileSystems."/zroot/git" =

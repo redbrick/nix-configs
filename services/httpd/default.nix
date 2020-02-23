@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 let
   tld = config.redbrick.tld;
   common = import ../../common/variables.nix;
@@ -10,9 +10,7 @@ let
   # Everything else is promoted to HTTPS
   acmeVhost = {
     inherit adminAddr;
-    hostName = tld;
     serverAliases = ["*"];
-    listen = [{ port = 80; }];
     documentRoot = common.webtreeCertsDir;
 
     extraConfig = ''
@@ -28,9 +26,9 @@ let
     documentRoot = "${common.webtreeDir}/redbrick/htdocs";
   in {
     inherit adminAddr documentRoot;
-    hostName = tld;
-    listen = [{ port = 443; }];
-    enableSSL = true;
+    onlySSL = true;
+    sslServerKey = "${common.certsDir}/${tld}/key.pem";
+    sslServerCert = "${common.certsDir}/${tld}/fullchain.pem";
     extraConfig = ''
       Alias /cgi-bin/ "${common.webtreeDir}/redbrick/extras/cgi-bin/"
       Alias /robots.txt "${common.webtreeDir}/redbrick/extras/robots.txt"
@@ -52,6 +50,18 @@ let
       </Directory>
     '';
   };
+
+  # Since there's no hostName field inside the vhost attrset,
+  # need to map over them and add the ssl keys
+  vhostsWithCerts = lib.mapAttrs (hostName: vhost: let
+    certDomain = common.certDomain tld hostName;
+  in vhost // (common.vhostCerts certDomain)) vhosts;
+
+  virtualHosts = vhostsWithCerts // {
+    "${tld}" = redbrickVhost;
+    "acme.${tld}" = acmeVhost;
+  };
+
 in {
   imports = [
     ./php-fpm.nix
@@ -82,13 +92,11 @@ in {
   };
 
   services.httpd = {
-    inherit adminAddr;
+    inherit adminAddr virtualHosts;
     enable = true;
     extraModules = [ "suexec" "proxy" "proxy_fcgi" "ldap" "authnz_ldap" ];
     multiProcessingModule = "event";
     maxClients = 250;
-    sslServerKey = "${common.certsDir}/${tld}/key.pem";
-    sslServerCert = "${common.certsDir}/${tld}/fullchain.pem";
 
     extraConfig = ''
       ProxyRequests off
@@ -106,7 +114,7 @@ in {
       ErrorDocument 504 /rb_custom_error/500.html
 
       <Directory "${errorPages}/" >
-        Options Indexes FollowSymLinks
+        Options Indexes FollowSymLinks IncludesNoExec
         AllowOverride None
         Require all granted
       </Directory>
@@ -127,11 +135,6 @@ in {
         Suexec On
       </IfModule>
     '';
-
-    virtualHosts = [
-      acmeVhost
-      redbrickVhost
-    ] ++ vhosts;
   };
 
   # Once a week, reload httpd to refresh the certificates
@@ -145,6 +148,9 @@ in {
     };
     script = "systemctl reload httpd";
   };
+
+  # Needs to be increased because each vhost has a log file
+  systemd.services.httpd.serviceConfig.LimitNOFILE = 16384;
 
   systemd.timers.httpd-reload = {
     description = "Reload HTTPD at 5am every Saturday to update certs";

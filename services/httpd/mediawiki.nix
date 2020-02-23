@@ -25,10 +25,10 @@ let
       sha256 = "06bq3k2nraz1zx3xkaxkcnfb9njrnrf84ah9sv9wb97g61d297a5";
     }; }
     { name = "LDAPProvider"; src = pkgs.fetchFromGitHub {
-      owner = "m1cr0man"; # TODO update when merged
+      owner = "m1cr0man";
       repo = "mediawiki-extensions-LDAPProvider";
-      rev = "d8b189d9c732f237757d2133ac1f8b872652827d";
-      sha256 = "1mbn7nx5f3s8dshxjjjn6whfwwmkwk4r00pxdr9c59cw6pa5lnzf";
+      rev = "d77465b78faf25464fe12977be190f6384743198";
+      sha256 = "0gz3s44xng0yw38b2c5nmd407nv24lh44hz9169qgm6dqnz2zkrq";
     }; }
     { name = "LDAPAuthorization"; src = pkgs.fetchFromGitHub {
       owner = "wikimedia";
@@ -146,7 +146,7 @@ let
       $LDAPProviderDomainConfigs = "${ldapProviderConfig}";
   '';
 
-  vhostWiki = config: cfgPath: (vhost { inherit documentRoot user group; hostName = config.domain; serverAliases = []; extraConfig = ''
+  vhostWiki = config: cfgPath: (vhost { inherit documentRoot user group; extraConfig = ''
     ProxyTimeout 600
     SetEnv MEDIAWIKI_CONFIG "${cfgPath}"
 
@@ -160,7 +160,7 @@ let
     <Directory "${config.stateDir}">
       Require all granted
     </Directory>
-  '';});
+  '';}) // (common.vhostCerts tld);
 
   # Adapted from the nixpkgs repo mediawiki implementation
   # Skips initial setup, this will never be done at RB. Feel free to port it if you think it will.
@@ -208,8 +208,6 @@ in {
   systemd.services.wiki-init = updateService wikiCfgPath;
   systemd.services.cmtwiki-init = updateService cmtWikiCfgPath;
 
-  services.httpd.virtualHosts = [
-    (vhostWiki wikiConfig wikiCfgPath)
-    (vhostWiki cmtWikiConfig cmtWikiCfgPath)
-  ];
+  services.httpd.virtualHosts."${wikiConfig.domain}" = vhostWiki wikiConfig wikiCfgPath;
+  services.httpd.virtualHosts."${cmtWikiConfig.domain}" = vhostWiki cmtWikiConfig cmtWikiCfgPath;
 }

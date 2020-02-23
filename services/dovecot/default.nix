@@ -28,10 +28,11 @@ in {
     sslServerKey = "${common.certsDir}/${tld}/key.pem";
     sslCACert = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
 
-    mailUser = vmailUserName;
+    # We don't want all members to be able to read other member's mail
+    # Force a specific group
     mailGroup = vmailUserName;
 
-    mailLocation = "maildir:~/Maildir:INDEX=/var/mail/indexes/%u";
+    mailLocation = "mdbox:~/mdbox";
 
     mailboxes = [{
       name = "Junk";
@@ -65,7 +66,7 @@ in {
         # max IMAP connections per IP address
         mail_max_userip_connections = 50
         # imap_sieve will be used for spam training by rspamd
-        mail_plugins = $mail_plugins imap_sieve
+        mail_plugins = $mail_plugins # imap_sieve
       }
 
       protocol lmtp {
@@ -75,6 +76,10 @@ in {
 
       # require SSL for all non-localhost connections
       ssl = required
+
+      mail_home = /var/mail/%n
+      mail_attachment_dir = /var/mail/attachments
+      mail_attachment_min_size = 64k
 
       # require modern crypto - taken from Mozilla's SSL recommendations page
       ssl_min_protocol = TLSv1.2
@@ -89,9 +94,9 @@ in {
       !include ${masterConfig}
 
       # Enable sieve scripts
-      protocols = $protocols sieve
+      # protocols = $protocols sieve
 
-      plugin {
+      # plugin {
         # location of users' sieve directory and their "active" sieve script
         # sieve = file:~/sieve;active=~/.dovecot.sieve
 
@@ -101,11 +106,11 @@ in {
         # sieve_after  = /usr/local/etc/dovecot/sieve-after.d
 
         # make sieve aware of user+tag@domain.tld aliases
-        recipient_delimiter = +
+        # recipient_delimiter = +
 
         # maximum size of all user's sieve scripts
-        sieve_quota_max_storage = 10M
-      }
+        # sieve_quota_max_storage = 10M
+      # }
     '';
   };
 }

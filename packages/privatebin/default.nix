@@ -3,10 +3,10 @@
 mkDerivation {
   name = "privatebin";
   src = fetchFromGitHub {
-    owner = "m1cr0man";
-    repo = "PrivateBin";
-    rev = "6b0468ebff2883b4bd395dbdb3c581fa9936ee24";
-    sha256 = "1g9vzg6jf21kwi9plc0ja2ln7wjcmzhid78hiywp0sfzy8ax2fva";
+    owner = "privatebin";
+    repo = "privatebin";
+    rev = "12c83a13c77eb9246e9bf94e112bb51494390905";
+    sha256 = "0yiffj1sl1l5bvv2swi5srbsqpvpp3r9xaw7gsnip6hw1s3cszgr";
   };
   installPhase = ''
     cp -ar $src $out
