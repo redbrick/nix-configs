@@ -87,6 +87,8 @@ in {
 
       [metrics]
       ENABLED = true
+      [log.console]
+      COLORIZE = false
     '';
   };
 }
