@@ -45,7 +45,7 @@ in {
           name = "InfluxDB";
           type = "influxdb";
           access = "proxy";
-          isDefault = true;
+          isDefault = false;
           editable = false;
           url = "http://zeus.internal:8086";
           version = 1;
@@ -57,12 +57,13 @@ in {
           name = "Loki";
           type = "loki";
           editable = false;
-          url = "http://localhost:3100";
+          url = "http://log.internal:3100";
           version = 1;
         }
         {
           name = "Prometheus";
           type = "prometheus";
+          isDefault = true;
           editable = false;
           url = "http://localhost:9090";
           version = 1;
