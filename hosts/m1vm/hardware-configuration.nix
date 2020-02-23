@@ -21,6 +21,8 @@
     { device = "icarus.internal:/zbackup";
       fsType = "nfs";
     };
+  systemd.targets.nfs-client.requiredBy = [ "storage.mount" ];
+  systemd.targets.nfs-client.before = [ "storage.mount" ];
 
   swapDevices =
     [ { device = "/dev/disk/by-uuid/7ca217d6-538e-4919-a57f-c5cbaeb93832"; }
