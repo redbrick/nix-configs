@@ -26,11 +26,11 @@ in {
       }
       {
         job_name = "promtail";
-        static_configs = [{ targets = ["logs.internal:9080"]; }];
+        static_configs = [{ targets = ["log.internal:9080"]; }];
       }
       {
         job_name = "loki";
-        static_configs = [{ targets = ["logs.internal:3100"]; }];
+        static_configs = [{ targets = ["log.internal:3100"]; }];
       }
       {
         job_name = "postgres";

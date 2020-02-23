@@ -77,6 +77,7 @@ let
   configuration = {
     server = {
       http_listen_port = 9080;
+      grpc_listen_port = 0;
     };
     clients = [{
       url = "http://log.internal:3100/loki/api/v1/push";
