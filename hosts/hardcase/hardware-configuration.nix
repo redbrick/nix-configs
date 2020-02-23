@@ -26,6 +26,8 @@
     { device = "icarus.internal:/zbackup";
       fsType = "nfs";
     };
+  systemd.targets.nfs-client.requiredBy = [ "storage.mount" ];
+  systemd.targets.nfs-client.before = [ "storage.mount" ];
 
   # zfs create -o dedup=off -o mountpoint=legacy -o recordsize=4K  zroot/postgres
   fileSystems."/var/db/postgres" =
