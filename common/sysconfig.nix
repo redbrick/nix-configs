@@ -1,4 +1,4 @@
-{config, pkgs, ...}:
+{config, pkgs, lib, ...}:
 let
   common = import ./variables.nix;
   tld = config.redbrick.tld;
@@ -21,6 +21,11 @@ in {
   # Fix mounting of nfs shares before network is up
   systemd.targets.nfs-client.after = [ "network.target" ];
   systemd.targets.nfs-client.requires = [ "network.target" ];
+
+  systemd.mounts = lib.mkMerge (lib.mapAttrs (name: fs: {
+    after = [ "nfs-client.target" ];
+    requires = [ "nfs-client.target" ];
+  }) (lib.filterAttrs (name: fs: fs.fsType == "nfs") config.fileSystems));
 
   # Use Redbrick DNS and HTTP proxy
   networking.domain = tld;

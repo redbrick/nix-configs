@@ -91,6 +91,7 @@ in {
       ExecStart = "${pkgs.grafana-loki}/bin/promtail -config.file=${prettyJSON configuration} -positions.file=${dataDir}/position.yaml";
       Restart = "always";
       WorkingDirectory = dataDir;
+      StateDirectory = "promtail";
     };
   };
 
