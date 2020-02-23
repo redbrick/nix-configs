@@ -164,6 +164,16 @@ in (if (config.redbrick.skipVhosts) then {} else userVhosts // {
     user = "gamessoc";
     group = "society";
   };
+  "gamessoc.${tld}" = vhost {
+    documentRoot = "${webtree}/g/games";
+    user = "gamessoc";
+    group = "society";
+    serverAliases = [ "games.${tld}" "www.games.${tld}" ];
+    extraConfig = ''
+      RedirectMatch 301 "^games\.(.*)$" "https://www.games.$1"
+      RedirectMatch 301 "^gamesoc\.(.*)$" "https://www.games.$1"
+    '';
+  };
   "lessthanthree.be" = vhost {
     documentRoot = "${webtree}/o/ornat";
     user = "ornat";

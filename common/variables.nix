@@ -15,6 +15,8 @@ rec {
     "www.luxgaa.lu" = "www.luxgaa.lu";
     "www.iahpc.ie" = "www.iahpc.ie";
     "techweek.dcu.ie" = "techweek.dcu.ie";
+    "games.dcu.ie" = "www.games.dcu.ie";
+    "www.games.dcu.ie" = "www.games.dcu.ie";
   };
 
   userWebtree = uid: "${webtreeDir}/${builtins.substring 0 1 uid}/${uid}";
