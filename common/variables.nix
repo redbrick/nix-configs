@@ -17,6 +17,7 @@ rec {
     "techweek.dcu.ie" = "techweek.dcu.ie";
     "games.dcu.ie" = "www.games.dcu.ie";
     "www.games.dcu.ie" = "www.games.dcu.ie";
+    "interlan.dcu.ie" = "interlan.dcu.ie";
   };
 
   userWebtree = uid: "${webtreeDir}/${builtins.substring 0 1 uid}/${uid}";
