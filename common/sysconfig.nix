@@ -22,7 +22,6 @@ in {
   systemd.targets.nfs-client.after = [ "network.target" ];
   systemd.targets.nfs-client.requires = [ "network.target" ];
 
-
   # Use Redbrick DNS and HTTP proxy
   networking.domain = tld;
   networking.search = [ "internal" tld ];
