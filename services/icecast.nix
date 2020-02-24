@@ -1,9 +1,7 @@
 { config, lib, pkgs, ... }:
 with lib;
 let
-  common = import ../common/variables.nix;
-  tld = common.tld;
-  cfg = config.services.icecast;
+  tld = config.redbrick.tld;
   admin-secret = "/var/secrets/icecast-admin.secret";
   source-secret = "/var/secrets/icecast-source.secret";
   relay-secret = "/var/secrets/icecast-relay.secret";
@@ -18,7 +16,7 @@ in {
 
   services.icecast = {
     enable = true;
-    hostname = "dcufm.${tld}";
+    hostname = "localhost";
     user = "icecast";
     admin = {
       password = "${lib.fileContents admin-secret}";
