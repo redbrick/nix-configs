@@ -442,6 +442,7 @@ in (if (config.redbrick.skipVhosts) then {} else userVhosts // {
   "hoodies.${tld}" = vhostRedirect "https://redbrickdcu.typeform.com/to/Q4uIzR";
   "parlour.${tld}" = vhostRedirect "https://songsfromtheparlour.com";
   "radio.theinternets.be" = vhostRedirect "https://radio.${tld}";
+  "sistem.${tld}" = vhostRedirect "https://sistem.intersocs.ie";
   "techweek.${tld}" = vhostRedirect "https://techweek.dcu.ie";
   "tickets.${tld}" = vhostRedirect "https://dcusu.ticketsolve.com/shows/873599383/events/128190598";
   "ubuntu.${tld}" = vhostRedirect "https://wiki.${tld}/mw/RedBrick_Ubuntu";
