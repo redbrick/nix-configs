@@ -35,8 +35,8 @@
   };
 
   # Dev box, skip loading vhosts
-  redbrick.skipVhosts = true;
   redbrick.tld = "redbricktest.ml";
+  security.acme.server = "https://acme-staging-v02.api.letsencrypt.org/directory";
 
   users.users.lucasade = {
     isNormalUser = true;

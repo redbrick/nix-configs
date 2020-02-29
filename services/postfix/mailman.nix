@@ -9,7 +9,7 @@ let
   postgresHost = "127.0.0.1";
 
   # Mailman needs access to hyperkitty, which is on the same host
-  hyperkittyLocal = "lists.local";
+  hyperkittyLocal = "localmail.${tld}";
 in {
   services.mailman = {
     enable = true;
@@ -110,7 +110,7 @@ in {
 
     EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
     EMAIL_HOST = 'localmail.${tld}'
-    EMAIL_PORT = 25
+    EMAIL_PORT = 587
     EMAIL_USE_TLS = True
     EMAIL_HOST_USER = secrets['email_user']
     EMAIL_HOST_PASSWORD = secrets['email_password']
@@ -122,8 +122,6 @@ in {
     config.transport_maps = [ "hash:/var/lib/mailman/data/postfix_lmtp" ];
     config.local_recipient_maps = [ "hash:/var/lib/mailman/data/postfix_lmtp" ];
   };
-
-  networking.hosts."127.0.0.1" = [ hyperkittyLocal ];
 
   networking.firewall.allowedTCPPorts = [ 80 ];
 }
