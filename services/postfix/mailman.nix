@@ -71,6 +71,10 @@ in {
 
     TIME_ZONE = 'Europe/Dublin'
 
+    # When initialising Mailman, comment this line out until you go to /admin and add a site
+    # Otherwise you might get "Site matching query does not exist"
+    SITE_ID = 2
+
     INSTALLED_APPS = INSTALLED_APPS + ['rbapp']
 
     AUTHENTICATION_BACKENDS = (
@@ -112,9 +116,11 @@ in {
     EMAIL_HOST = 'localmail.${tld}'
     EMAIL_PORT = 587
     EMAIL_USE_TLS = True
-    EMAIL_HOST_USER = secrets['email_user']
-    EMAIL_HOST_PASSWORD = secrets['email_password']
     DEFAULT_FROM_EMAIL = 'mailman@${tld}'
+
+    AUTH_LDAP_USER_FLAGS_BY_GROUP = {
+        "is_superuser": "cn=mailadm,ou=groups,o=redbrick"
+    }
   '';
 
   services.postfix = {
