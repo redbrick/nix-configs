@@ -6,10 +6,13 @@ let
 
   tld = config.redbrick.tld;
   secretsFile = "/var/secrets/mailman.json";
+  secrets = import /var/secrets/mailman.nix;
   postgresHost = "127.0.0.1";
 
+  mailServer = "localmail.${tld}";
+
   # Mailman needs access to hyperkitty, which is on the same host
-  hyperkittyLocal = "localmail.${tld}";
+  hyperkittyLocal = mailServer;
 in {
   services.mailman = {
     enable = true;
@@ -19,6 +22,21 @@ in {
       enable = true;
       baseUrl = "http://${hyperkittyLocal}/hyperkitty/";
     };
+  };
+
+  # Mailman core has no real NixOS Options
+  # Extend the etc file..
+  environment.etc."mailman.cfg" = {
+    mode = "0400";
+    user = "mailman";
+    text = ''
+      [mta]
+      smtp_host: ${mailServer}
+      smtp_port: 587
+      smtp_user: ${secrets.emailUser}
+      smtp_pass: ${secrets.emailPassword}
+      smtp_secure_mode: starttls
+    '';
   };
 
   # Our ldap has combined first name + last name (cn), and no email field
@@ -113,10 +131,13 @@ in {
     }
 
     EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-    EMAIL_HOST = 'localmail.${tld}'
+    EMAIL_HOST = '${mailServer}'
     EMAIL_PORT = 587
     EMAIL_USE_TLS = True
+    EMAIL_HOST_USER = secrets['email_user']
+    EMAIL_HOST_PASSWORD = secrets['email_password']
     DEFAULT_FROM_EMAIL = 'mailman@${tld}'
+    ACCOUNT_EMAIL_VERIFICATION = 'none'
 
     AUTH_LDAP_USER_FLAGS_BY_GROUP = {
         "is_superuser": "cn=mailadm,ou=groups,o=redbrick"

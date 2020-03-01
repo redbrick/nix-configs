@@ -9,13 +9,12 @@ let
     server_host = ldap://${common.ldapHost}/
     version = 3
     bind = no
+    search_base = ou=accounts,o=redbrick
   '';
 
-  ldapAliasMap = pkgs.writeText "virt-mailbox-maps" (ldapCommon + ''
-    search_base = ou=accounts,o=redbrick
+  ldapSenderMap = pkgs.writeText "postfix-sender-maps" (ldapCommon + ''
     query_filter = (&(objectClass=posixAccount)(uid=%u))
     result_attribute = uid
-    result_format = %s@${tld}
   '');
 
   commonRestrictions = [
@@ -68,6 +67,17 @@ in {
     # cipher list
     # smtp_inet found in https://github.com/NixOS/nixpkgs/blob/54361cde9226ae6346b53b34acea9b493f803509/nixos/modules/services/mail/postfix.nix#L768
     masterConfig.smtp_inet.args = [ "-o" "smtpd_sasl_auth_enable=no" ];
+
+    # Authenticated users we always accept mail from over port 587
+    # Allows mailman to spoof addresses
+    mapFiles.sender_whitelist = pkgs.writeText "sender_whitelist" ''
+      mailmgr OK
+    '';
+
+    # Addresses we reject mail from over port 25
+    mapFiles.sender_blacklist = pkgs.writeText "sender_blacklist" ''
+      ${tld} REJECT
+    '';
 
     config = {
       # IP address used by postfix to send outgoing mail. You only need this if
@@ -175,6 +185,9 @@ in {
       # reduces spam
       smtpd_helo_required = true;
 
+      # Require that registered accounts are authenticated to send mail as them
+      smtpd_sender_login_maps = "ldap:${ldapSenderMap}";
+
       smtpd_helo_restrictions = builtins.concatStringsSep ", " (commonRestrictions ++ [
         "reject_invalid_helo_hostname" "reject_non_fqdn_helo_hostname"
         # This will reject all incoming mail without a HELO hostname that
@@ -182,8 +195,16 @@ in {
         # reject legitimate mail.
         "reject_unknown_helo_hostname"
       ]);
-      smtpd_sender_restrictions = builtins.concatStringsSep ", " (commonRestrictions ++ [
+      smtpd_sender_restrictions = builtins.concatStringsSep ", " ([
+        # Check the user isn't mailmgr
+        "check_sasl_access hash:/var/lib/postfix/conf/sender_whitelist"
+        # Allow authenticated users to send their email as themselves
+        "reject_sender_login_mismatch" "permit_sasl_authenticated"
+        # Prevent anyone from @${tld} sending mail unauthenticated
+        "check_sender_access hash:/var/lib/postfix/conf/sender_blacklist"
+        "reject_unlisted_sender" "permit_mynetworks" "reject_unauth_pipelining"
         "reject_non_fqdn_sender" "reject_unknown_sender_domain"
+        "warn_if_reject" "reject_unverified_sender"
       ]);
       smtpd_recipient_restrictions = builtins.concatStringsSep ", " (commonRestrictions ++ [
         "reject_non_fqdn_recipient" "reject_unknown_recipient_domain"
@@ -193,7 +214,7 @@ in {
         "reject_multi_recipient_bounce"
       ]);
       smtpd_relay_restrictions = builtins.concatStringsSep ", " [
-        "permit_mynetworks" "permit_sasl_authenticated"
+        "permit_sasl_authenticated"
         # !!! THIS SETTING PREVENTS YOU FROM BEING AN OPEN RELAY !!!
         "reject_unauth_destination"
         # !!!      DO NOT REMOVE IT UNDER ANY CIRCUMSTANCES      !!!
@@ -211,6 +232,7 @@ in {
   };
 
   # Enable rspamd and connect to postfix.
+  # TODO locals
   services.rspamd = {
     enable = true;
     postfix.enable = true;

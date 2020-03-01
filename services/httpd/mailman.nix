@@ -15,6 +15,10 @@ let
     adminAddr = "webmaster@${tld}";
     servedDirs = [ { dir = "${generatedDataPath}/static"; urlPath = "/static"; } ];
     extraConfig = ''
+      <Location /accounts/signup>
+        Order allow,deny
+        Deny from all
+      </Location>
       <Directory "${webRoot}">
         Options ExecCGI
         <Files wsgi.py>
