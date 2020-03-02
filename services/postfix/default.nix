@@ -12,13 +12,37 @@ let
     search_base = ou=accounts,o=redbrick
   '';
 
+  # Authenticated users we always accept mail from over port 587
+  # Allows mailman to spoof addresses
+  sender_whitelist = pkgs.writeText "sender_whitelist" ''
+    mailmgr OK
+  '';
+
   ldapSenderMap = pkgs.writeText "postfix-sender-maps" (ldapCommon + ''
     query_filter = (&(objectClass=posixAccount)(uid=%u))
     result_attribute = uid
   '');
 
+  # Addresses we reject mail from over port 25
+  sender_blacklist = pkgs.writeText "sender_blacklist" ''
+    ${tld} REJECT
+  '';
+
+  # IPs we reject unauthenticated connections from
+  # Rspamd explicitly allows mail from local addresses which is dangerous for us
+  # List taken from rspamd's local_addrs option
+  unauth_ip_blacklist = pkgs.writeText "unauth_ip_blacklist" ''
+    127.0.0.0/8     REJECT
+    192.168.0.0/16  REJECT
+    10.0.0.0/8      REJECT
+    172.16.0.0/12   REJECT
+    fd00::/8        REJECT
+    169.254.0.0/16  REJECT
+    fe80::/10       REJECT
+  '';
+
   commonRestrictions = [
-    "permit_mynetworks" "permit_sasl_authenticated"
+    "permit_sasl_authenticated"
     "reject_unauth_pipelining"
   ];
 in {
@@ -75,16 +99,11 @@ in {
     # smtp_inet found in https://github.com/NixOS/nixpkgs/blob/54361cde9226ae6346b53b34acea9b493f803509/nixos/modules/services/mail/postfix.nix#L768
     masterConfig.smtp_inet.args = [ "-o" "smtpd_sasl_auth_enable=no" ];
 
-    # Authenticated users we always accept mail from over port 587
-    # Allows mailman to spoof addresses
-    mapFiles.sender_whitelist = pkgs.writeText "sender_whitelist" ''
-      mailmgr OK
-    '';
-
-    # Addresses we reject mail from over port 25
-    mapFiles.sender_blacklist = pkgs.writeText "sender_blacklist" ''
-      ${tld} REJECT
-    '';
+    # Files that need postmap run on them
+    # Added to /var/lib/postfix/conf/<name>
+    mapFiles.sender_whitelist = sender_whitelist;
+    mapFiles.sender_blacklist = sender_blacklist;
+    mapFiles.unauth_ip_blacklist = unauth_ip_blacklist;
 
     config = {
       # IP address used by postfix to send outgoing mail. You only need this if
@@ -205,14 +224,14 @@ in {
       smtpd_sender_restrictions = builtins.concatStringsSep ", " ([
         # Check the user isn't mailmgr
         "check_sasl_access hash:/var/lib/postfix/conf/sender_whitelist"
+        # Not even good users should break these rules
+        "reject_non_fqdn_sender" "reject_unknown_sender_domain"
         # Allow authenticated users to send their email as themselves
         "reject_sender_login_mismatch" "permit_sasl_authenticated"
         # Prevent anyone from @${tld} sending mail unauthenticated
         "check_sender_access hash:/var/lib/postfix/conf/sender_blacklist"
         "reject_unlisted_sender" "reject_unauth_pipelining"
-        # reject_unknown_sender_domain stops people spoofing addresses internally
-        "reject_non_fqdn_sender" "reject_unknown_sender_domain"
-        "permit_mynetworks" "warn_if_reject" "reject_unverified_sender"
+        "warn_if_reject" "reject_unverified_sender"
       ]);
       smtpd_recipient_restrictions = builtins.concatStringsSep ", " (commonRestrictions ++ [
         "reject_non_fqdn_recipient" "reject_unknown_recipient_domain"
@@ -235,10 +254,16 @@ in {
     # Sets smtpd_client_restrictions
     dnsBlacklists = commonRestrictions ++ [
       "reject_unknown_reverse_client_hostname"
+      # Permit authenitcated users
+      "permit_sasl_authenticated"
+      # Reject unauthenticated connections from local addresses. This is due to
+      # a limitation in rspamd which prevents us checking for spoofing internally
+      # see rspamd.nix
+      "check_client_a_access cidr:/var/lib/postfix/conf/unauth_ip_blacklist"
       # This will reject all incoming connections without a reverse DNS
       # entry that resolves back to the client's IP address. This is a very
       # restrictive check and may reject legitimate mail.
-      "reject_unknown_client_hostname"
+      "warn_if_reject" "reject_unknown_client_hostname"
     ];
   };
 }

@@ -16,7 +16,7 @@ let
 in {
   services.mailman = {
     enable = true;
-    siteOwner = "postmaster@${tld}";
+    siteOwner = "admins+mailman@${tld}";
     webHosts = [ "lists.${tld}" ];
     hyperkitty = {
       enable = true;
