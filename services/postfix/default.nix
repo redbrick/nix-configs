@@ -209,9 +209,10 @@ in {
         "reject_sender_login_mismatch" "permit_sasl_authenticated"
         # Prevent anyone from @${tld} sending mail unauthenticated
         "check_sender_access hash:/var/lib/postfix/conf/sender_blacklist"
-        "reject_unlisted_sender" "permit_mynetworks" "reject_unauth_pipelining"
+        "reject_unlisted_sender" "reject_unauth_pipelining"
+        # reject_unknown_sender_domain stops people spoofing addresses internally
         "reject_non_fqdn_sender" "reject_unknown_sender_domain"
-        "warn_if_reject" "reject_unverified_sender"
+        "permit_mynetworks" "warn_if_reject" "reject_unverified_sender"
       ]);
       smtpd_recipient_restrictions = builtins.concatStringsSep ", " (commonRestrictions ++ [
         "reject_non_fqdn_recipient" "reject_unknown_recipient_domain"
