@@ -23,8 +23,15 @@ let
   ];
 in {
   imports = [
+    ../redis.nix
     ./mailman.nix
+    ./rspamd.nix
     ./postsrsd.nix
+  ];
+
+  # Add postfix to redis group
+  users.users.postfix.extraGroups = [
+    "redis"
   ];
 
   # Ensure postsrsd is started before postfix
@@ -214,7 +221,10 @@ in {
         "reject_multi_recipient_bounce"
       ]);
       smtpd_relay_restrictions = builtins.concatStringsSep ", " [
-        "permit_sasl_authenticated"
+        # Check the user isn't mailmgr
+        "check_sasl_access hash:/var/lib/postfix/conf/sender_whitelist"
+        "reject_sender_login_mismatch" "permit_sasl_authenticated"
+        # TODO Consider explicit reject here
         # !!! THIS SETTING PREVENTS YOU FROM BEING AN OPEN RELAY !!!
         "reject_unauth_destination"
         # !!!      DO NOT REMOVE IT UNDER ANY CIRCUMSTANCES      !!!
@@ -229,17 +239,5 @@ in {
       # restrictive check and may reject legitimate mail.
       "reject_unknown_client_hostname"
     ];
-  };
-
-  # Enable rspamd and connect to postfix.
-  # TODO locals
-  services.rspamd = {
-    enable = true;
-    postfix.enable = true;
-    locals."dkim_signing.conf".text = ''
-      path = "/var/secrets/$domain.$selector.dkim.key";
-      selector = "${config.networking.hostName}";
-      allow_username_mismatch = true;
-    '';
   };
 }
