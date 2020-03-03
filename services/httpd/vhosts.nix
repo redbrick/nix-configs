@@ -159,11 +159,6 @@ in (if (config.redbrick.skipVhosts) then {} else userVhosts // {
     wwwRedirect = true;
     serverAliases = [ "www.halenger.com" ];
   };
-  "interlan.dcu.ie" = vhost {
-    documentRoot = "${webtree}/vhosts/www.interlan.dcu.ie";
-    user = "gamessoc";
-    group = "society";
-  };
   "gamessoc.${tld}" = vhost {
     documentRoot = "${webtree}/g/games";
     user = "gamessoc";
@@ -370,11 +365,6 @@ in (if (config.redbrick.skipVhosts) then {} else userVhosts // {
     group = "member";
     wwwRedirect = true;
     serverAliases = [ "www.ejmitchell.com" ];
-  };
-  "www.iahpc.ie" = vhost {
-    documentRoot = "${home}/guest/iahpc/public_html";
-    user = "iahpc";
-    group = "guest";
   };
   "www.luxgaa.lu" = vhost {
     documentRoot = "${webtree}/s/shivo/LuxGAA";
