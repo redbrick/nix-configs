@@ -3,7 +3,10 @@ let
   common = import ./variables.nix;
   tld = config.redbrick.tld;
 in {
-  imports = [ ./options.nix ];
+  imports = [
+    ./options.nix
+    ../packages/overlays
+  ];
 
   time.timeZone = "Europe/Dublin";
   i18n.defaultLocale = "en_IE.UTF-8";
@@ -31,9 +34,8 @@ in {
   networking.proxy.noProxy = "127.0.0.1,localhost,192.168.0,.internal";
 
   # Enable rsyslog
-  # Disabled for now due to an outdated dependency on openssl 1.0.2
-  # services.rsyslogd.enable = true;
-  # services.rsyslogd.extraConfig = "*.* @@log.internal:514;RSYSLOG_SyslogProtocol23Format";
+  services.rsyslogd.enable = true;
+  services.rsyslogd.extraConfig = "*.* @@log.internal:514;RSYSLOG_SyslogProtocol23Format";
 
   # Enable Node exporter
   services.prometheus.exporters.node = {
