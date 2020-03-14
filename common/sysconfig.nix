@@ -31,8 +31,9 @@ in {
   networking.proxy.noProxy = "127.0.0.1,localhost,192.168.0,.internal";
 
   # Enable rsyslog
-  services.rsyslogd.enable = true;
-  services.rsyslogd.extraConfig = "*.* @@log.internal:514;RSYSLOG_SyslogProtocol23Format";
+  # Disabled for now due to an outdated dependency on openssl 1.0.2
+  # services.rsyslogd.enable = true;
+  # services.rsyslogd.extraConfig = "*.* @@log.internal:514;RSYSLOG_SyslogProtocol23Format";
 
   # Enable Node exporter
   services.prometheus.exporters.node = {
