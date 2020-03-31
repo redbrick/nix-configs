@@ -140,7 +140,7 @@ in {
     EMAIL_USE_TLS = True
     EMAIL_HOST_USER = secrets['email_user']
     EMAIL_HOST_PASSWORD = secrets['email_password']
-    DEFAULT_FROM_EMAIL = 'mailman@${tld}'
+    DEFAULT_FROM_EMAIL = 'mailmgr@${tld}'
     ACCOUNT_EMAIL_VERIFICATION = 'none'
 
     AUTH_LDAP_USER_FLAGS_BY_GROUP = {

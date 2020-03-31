@@ -15,12 +15,13 @@ let
   # Authenticated users we always accept mail from over port 587
   # Allows mailman to spoof addresses
   sender_whitelist = pkgs.writeText "sender_whitelist" ''
-    mailmgr OK
+    mailmgr@${tld} OK
   '';
 
   ldapSenderMap = pkgs.writeText "postfix-sender-maps" (ldapCommon + ''
     query_filter = (&(objectClass=posixAccount)(uid=%u))
     result_attribute = uid
+    result_format = %s@${tld}
   '');
 
   # Addresses we reject mail from over port 25
@@ -215,6 +216,8 @@ in {
       smtpd_sender_login_maps = "ldap:${ldapSenderMap}";
 
       smtpd_helo_restrictions = builtins.concatStringsSep ", " (commonRestrictions ++ [
+        # Allow hosts with any hostname internally to connect
+        "permit_mynetworks"
         "reject_invalid_helo_hostname" "reject_non_fqdn_helo_hostname"
         # This will reject all incoming mail without a HELO hostname that
         # properly resolves in DNS. This is a somewhat restrictive check and may
@@ -249,21 +252,20 @@ in {
         "reject_unauth_destination"
         # !!!      DO NOT REMOVE IT UNDER ANY CIRCUMSTANCES      !!!
       ];
+      smtpd_client_restrictions = builtins.concatStringsSep ", " (commonRestrictions ++ [
+        # Allow hosts with any hostname internally to connect
+        "permit_mynetworks"
+        # Reject failed reverse records
+        "reject_unknown_reverse_client_hostname"
+        # Reject unauthenticated connections from local addresses. This is due to
+        # a limitation in rspamd which prevents us checking for spoofing internally
+        # see rspamd.nix
+        "check_client_a_access cidr:/var/lib/postfix/conf/unauth_ip_blacklist"
+        # This will reject all incoming connections without a reverse DNS
+        # entry that resolves back to the client's IP address. This is a very
+        # restrictive check and may reject legitimate mail.
+        "warn_if_reject" "reject_unknown_client_hostname"
+      ]);
     };
-
-    # Sets smtpd_client_restrictions
-    dnsBlacklists = commonRestrictions ++ [
-      "reject_unknown_reverse_client_hostname"
-      # Permit authenitcated users
-      "permit_sasl_authenticated"
-      # Reject unauthenticated connections from local addresses. This is due to
-      # a limitation in rspamd which prevents us checking for spoofing internally
-      # see rspamd.nix
-      "check_client_a_access cidr:/var/lib/postfix/conf/unauth_ip_blacklist"
-      # This will reject all incoming connections without a reverse DNS
-      # entry that resolves back to the client's IP address. This is a very
-      # restrictive check and may reject legitimate mail.
-      "warn_if_reject" "reject_unknown_client_hostname"
-    ];
   };
 }
