@@ -59,9 +59,13 @@ in {
         if not (user and ldap_user):
             return
 
-        first_name, last_name = user.first_name.split()
-
         user.email = user.username + "@${tld}"
+
+        name_split = user.first_name.split()
+        if len(name_split) != 2:
+          return
+
+        first_name, last_name = name_split
         user.first_name = first_name
         user.last_name = last_name
   '';
