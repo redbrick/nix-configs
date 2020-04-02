@@ -61,8 +61,8 @@ in {
 
   # Ensure postsrsd is started before postfix
   systemd.services.postfix = {
-    requires = [ "postsrsd.service" ];
-    after = [ "postsrsd.service" ];
+    requires = [ "postsrsd.service" "redis.service" "rspamd.service" ];
+    after = [ "postsrsd.service" "redis.service" "rspamd.service" ];
   };
 
   networking.firewall.allowedTCPPorts = [ 25 587 ];
@@ -133,6 +133,10 @@ in {
       # deliver mail for virtual users to Dovecot's TCP socket
       # http://www.postfix.org/lmtp.8.html
       mailbox_transport = "lmtp:inet:${common.dovecotHost}:${builtins.toString common.dovecotLmtpPort}";
+
+      # For the sake of possible NixOS overrides,
+      # set the default local_recipient_maps explicitly
+      local_recipient_maps = [ "proxy:unix:passwd.byname" ];
 
       # Configure postsrsd so that forwarded mail is "remailed" with a safe from address
       sender_canonical_maps = "tcp:127.0.0.1:${builtins.toString config.services.postsrsd.forwardPort}";

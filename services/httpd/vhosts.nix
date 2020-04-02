@@ -9,6 +9,7 @@ let
     "paste"
     "wiki"
     "cmtwiki"
+    "lists"
   ];
 
   # This is appended at the top

@@ -17,7 +17,7 @@
   # compatible, in order to avoid breaking some software such as database
   # servers. You should change this only after NixOS release notes say you
   # should.
-  system.stateVersion = "19.09";
+  system.stateVersion = "20.09";
 
   # Use the GRUB 2 boot loader.
   boot.loader.grub.enable = true;
@@ -36,7 +36,7 @@
 
   # Dev box, skip loading vhosts
   redbrick.tld = "redbricktest.ml";
-  security.acme.server = "https://acme-staging-v02.api.letsencrypt.org/directory";
+  redbrick.skipCustomVhosts = true;
 
   users.users.lucasade = {
     isNormalUser = true;
