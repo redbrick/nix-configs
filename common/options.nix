@@ -7,8 +7,8 @@
       type = lib.types.nullOr lib.types.str;
     };
 
-    skipVhosts = lib.mkOption {
-      description = "Skip compiling the list of vhosts. Useful for development boxes";
+    skipCustomVhosts = lib.mkOption {
+      description = "Skip all vhosts that are not based on the TLD. Useful for development boxes";
       default = false;
       defaultText = "False (compile the vhosts)";
       type = lib.types.nullOr lib.types.bool;
