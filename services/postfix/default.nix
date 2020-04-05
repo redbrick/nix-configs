@@ -21,7 +21,7 @@ let
   ldapSenderMap = pkgs.writeText "postfix-sender-maps" (ldapCommon + ''
     query_filter = (&(objectClass=posixAccount)(uid=%u))
     result_attribute = uid
-    result_format = %s@${tld}
+    result_format = %s
   '');
 
   # Addresses we reject mail from over port 25
