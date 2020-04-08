@@ -60,6 +60,18 @@ in {
     ];
   };
 
+  # Enabled Spare cpu cycles to be used for folding@home
+  services.foldingAtHome = {
+    enable = true;
+    nickname = "redbrick";
+    config = ''
+      <config>
+        <power v='light'/>
+        <team v='43166'/>
+      </config>
+    '';
+  };
+
   # Enable LDAP
   users.ldap.enable = true;
   users.ldap.timeLimit = 2;
