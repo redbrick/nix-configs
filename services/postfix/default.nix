@@ -1,9 +1,12 @@
 # Requires rspamadm dkim_keygen -k /var/secrets/${tld}.$(hostname).dkim.key -b 2048 -s $(hostname) -d ${tld}
 # chown rspamd:root chmod 400
-{config, pkgs, ...}:
+{config, pkgs, lib, ...}:
 let
   tld = config.redbrick.tld;
   common = import ../../common/variables.nix;
+
+  aliases = import ./aliases.nix { inherit tld; };
+  aliasesFile = pkgs.writeText "postfix-aliases" (lib.mapAttrs' (k: v: "${k}: ${v}"));
 
   ldapCommon = ''
     server_host = ldap://${common.ldapHost}/
@@ -105,6 +108,9 @@ in {
     mapFiles.sender_whitelist = sender_whitelist;
     mapFiles.sender_blacklist = sender_blacklist;
     mapFiles.unauth_ip_blacklist = unauth_ip_blacklist;
+
+    # Aliases
+    aliasFiles.redbrick = aliasesFile;
 
     config = {
       # IP address used by postfix to send outgoing mail. You only need this if
