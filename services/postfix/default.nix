@@ -6,7 +6,7 @@ let
   common = import ../../common/variables.nix;
 
   aliases = import ./aliases.nix { inherit tld; };
-  aliasesFile = pkgs.writeText "postfix-aliases" (lib.mapAttrs' (k: v: "${k}: ${v}"));
+  aliasesFile = pkgs.writeText "postfix-aliases" (builtins.concatStringsSep "\n" (lib.mapAttrsToList (k: v: "${k}: ${v}") aliases));
 
   ldapCommon = ''
     server_host = ldap://${common.ldapHost}/

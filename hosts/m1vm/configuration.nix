@@ -9,7 +9,6 @@
     ../../services/postfix
     ../../services/dovecot
     ../../services/certs
-    ../../services/thelounge.nix
     ../../services/postgres.nix
   ];
 

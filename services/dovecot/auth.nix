@@ -1,4 +1,4 @@
-{common, pkgs, vmailUserName, ...}:
+{common, pkgs, ...}:
 let
   bindCreds = import /var/secrets/dovecot_auth.nix;
 

@@ -1,9 +1,5 @@
 {common, pkgs, ...}:
 pkgs.writeText "dovecot-master-config" ''
-# to improve performance, disable fsync globally - we will enable it for
-# some specific services later on
-mail_fsync = never
-
 service imap-login {
   # plain-text IMAP should only be accessible from localhost
   inet_listener imap {
@@ -43,6 +39,7 @@ service lmtp {
 
 # Listen on auth socket for postfix to authenticate users
 service auth {
+  client_limit = 2000
   inet_listener {
     port = ${builtins.toString common.dovecotSaslPort}
   }
