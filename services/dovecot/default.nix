@@ -1,3 +1,4 @@
+# ENSURE /var/mail IS CHMOD 3770
 {config, pkgs, ...}:
 let
   tld = config.redbrick.tld;
@@ -31,7 +32,10 @@ in {
   # Name found in https://github.com/NixOS/nixpkgs/blob/d7752fc0ebf9d49dc47c70ce4e674df024a82cfa/nixos/modules/services/mail/dovecot.nix#L26
   security.dhparams.params.dovecot2.bits = 2048;
 
-  # Create the user that will own /var/mail
+  # Create the user + group that will own /var/mail
+  # Uid not actually used. If the year is 2021 and this config is in production
+  # you can remove uid=uid from user_attrs in auth.nix and simplify the perms
+  # in /var/mail. Read the blog post for more info
   users.users.vmail = {
     description = "Owns mail written by dovecot2";
     isSystemUser = true;
@@ -61,8 +65,8 @@ in {
     # We don't want all members to be able to read other member's mail
     # Force a specific group
     createMailUser = false;
-    mailUser = "dovenull";
-    mailGroup = "dovenull";
+    mailUser = "vmail";
+    mailGroup = "vmail";
 
     mailLocation = "mdbox:/var/mail/%d/%n";
 
@@ -106,12 +110,13 @@ in {
       ssl = required
 
       # Only the mail user should be authorized to write mail
-      first_valid_uid = ${builtins.toString vmailId}
-      last_valid_uid = ${builtins.toString vmailId}
 
       mail_home = /var/mail/%d/%n
       mail_attachment_dir = /var/mail/attachments
       mail_attachment_min_size = 64k
+
+      # When copying perms from /var/mail, use this group
+      mail_access_groups = vmail
 
       # require modern crypto - taken from Mozilla's SSL recommendations page
       ssl_min_protocol = TLSv1.2

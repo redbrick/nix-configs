@@ -11,7 +11,7 @@ let
     base = ou=accounts,o=redbrick
     deref = never
     scope = subtree
-    user_attrs = homeDirectory=home
+    user_attrs = uid=uid,homeDirectory=home
     user_filter = (&(objectclass=posixAccount)(uid=%n))
     pass_attrs = uid=uid,homeDirectory=home,userPassword=password
     pass_filter = (&(objectclass=posixAccount)(uid=%n))
@@ -41,9 +41,8 @@ in pkgs.writeText "dovecot-auth-config" ''
     args = ${ldapConfig}
   }
 
-  # The home field here will never be used, since none of our configs reference ~
   userdb {
-    driver = static
-    args = uid=vmail gid=vmail home=/var/empty
+    driver = ldap
+    args = ${ldapConfig}
   }
 ''
