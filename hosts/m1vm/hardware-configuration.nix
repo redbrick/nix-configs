@@ -24,6 +24,13 @@
   systemd.targets.nfs-client.requiredBy = [ "storage.mount" ];
   systemd.targets.nfs-client.before = [ "storage.mount" ];
 
+  fileSystems."/var/spool/mail" =
+    { device = "icarus.internal:/zbackup/mailtest";
+      fsType = "nfs";
+    };
+  systemd.services.dovecot2.requires = [ "var-spool-mail.mount" ];
+  systemd.services.dovecot2.after = [ "var-spool-mail.mount" ];
+
   swapDevices =
     [ { device = "/dev/disk/by-uuid/7ca217d6-538e-4919-a57f-c5cbaeb93832"; }
     ];

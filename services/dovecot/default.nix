@@ -5,8 +5,11 @@ let
   common = import ../../common/variables.nix;
 
   sieveConfig = import ./sieve.nix { inherit pkgs; };
-  authConfig = import ./auth.nix { inherit common pkgs; };
+  authConfig = import ./auth.nix { inherit common pkgs tld; };
   masterConfig = import ./master.nix { inherit common pkgs; };
+
+  # Fixed uid + gid so that the config can roam systems safely
+  vmailId = 975;
 
   # Fix mtime comparison so that scripts can be precompiled
   # See https://github.com/NixOS/nixpkgs/pull/35536/files
@@ -28,6 +31,17 @@ in {
   # Name found in https://github.com/NixOS/nixpkgs/blob/d7752fc0ebf9d49dc47c70ce4e674df024a82cfa/nixos/modules/services/mail/dovecot.nix#L26
   security.dhparams.params.dovecot2.bits = 2048;
 
+  # Create the user that will own /var/mail
+  users.users.vmail = {
+    description = "Owns mail written by dovecot2";
+    isSystemUser = true;
+    group = "vmail";
+    shell = "/dev/null";
+    home = "/dev/null";
+    uid = vmailId;
+  };
+  users.groups.vmail.gid = vmailId;
+
   # Increase ulimit due to service_auth client_limit (2000)
   systemd.services.dovecot2.serviceConfig.LimitNOFILE = 2500;
 
@@ -47,8 +61,8 @@ in {
     # We don't want all members to be able to read other member's mail
     # Force a specific group
     createMailUser = false;
-    mailUser = "dovecot2";
-    mailGroup = "dovecot2";
+    mailUser = "dovenull";
+    mailGroup = "dovenull";
 
     mailLocation = "mdbox:/var/mail/%d/%n";
 
@@ -90,6 +104,10 @@ in {
 
       # require SSL for all non-localhost connections
       ssl = required
+
+      # Only the mail user should be authorized to write mail
+      first_valid_uid = ${builtins.toString vmailId}
+      last_valid_uid = ${builtins.toString vmailId}
 
       mail_home = /var/mail/%d/%n
       mail_attachment_dir = /var/mail/attachments
