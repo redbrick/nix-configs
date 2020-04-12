@@ -11,6 +11,8 @@ in {
     ../../services/thelounge.nix
     ../../services/certs
     ../../services/httpd
+    ../../services/postfix
+    ../../services/dovecot
     ../../services/grafana
     ../../services/loki.nix
     ../../services/prometheus.nix

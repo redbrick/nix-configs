@@ -110,7 +110,7 @@ in {
     mapFiles.unauth_ip_blacklist = unauth_ip_blacklist;
 
     # Aliases
-    aliasFiles.redbrick = aliasesFile;
+    aliasFiles.redbrick_aliases = aliasesFile;
 
     config = {
       # IP address used by postfix to send outgoing mail. You only need this if
@@ -119,11 +119,6 @@ in {
       smtp_bind_address = "192.168.0.135";
       # http://www.postfix.org/BASIC_CONFIGURATION_README.html#proxy_interfaces
       proxy_interfaces = "136.206.15.5";
-
-      #virtual_mailbox_domains = tld;
-      #virtual_mailbox_maps = "hash:/var/lib/postfix/aliases";
-      #virtual_alias_maps = "ldap:" ++ ./ldap-virtual-alias-maps.cf;
-      # alias_maps = "hash:/etc/aliases, ldap:";
 
       # Generate own DHParams
       smtpd_tls_dh512_param_file = config.security.dhparams.params.smtpd_512.path;
@@ -143,6 +138,9 @@ in {
       # For the sake of possible NixOS overrides,
       # set the default local_recipient_maps explicitly
       local_recipient_maps = [ "proxy:unix:passwd.byname" ];
+
+      # Written to /etc/postfix by the nix config
+      alias_maps = [ "hash:/etc/postfix/redbrick_aliases" ];
 
       # Configure postsrsd so that forwarded mail is "remailed" with a safe from address
       sender_canonical_maps = "tcp:127.0.0.1:${builtins.toString config.services.postsrsd.forwardPort}";
