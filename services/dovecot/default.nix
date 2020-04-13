@@ -1,4 +1,3 @@
-# ENSURE /var/mail IS CHMOD 3770
 {config, pkgs, ...}:
 let
   tld = config.redbrick.tld;
@@ -68,6 +67,8 @@ in {
     mailUser = "vmail";
     mailGroup = "vmail";
 
+    # ENSURE /var/mail IS CHMOD 3770
+    # See https://wiki.dovecot.org/SharedMailboxes/Permissions
     mailLocation = "mdbox:/var/mail/%d/%n";
 
     mailboxes = [{

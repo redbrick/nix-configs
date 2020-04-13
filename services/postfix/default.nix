@@ -6,7 +6,10 @@ let
   common = import ../../common/variables.nix;
 
   aliases = import ./aliases.nix { inherit tld; };
-  aliasesFile = pkgs.writeText "postfix-aliases" (builtins.concatStringsSep "\n" (lib.mapAttrsToList (k: v: "${k}: ${v}") aliases));
+  # TLD needs to be appended to use aliases as sender address with smtpd_sender_login_maps
+  # Only supports 1:1 mappings but could be modified to support 1:Many
+  aliasesAbsolute = lib.mapAttrs (alias: owner: if (builtins.match "^[a-zA-Z0-9_\\-\\+\\.]+$" owner) != null then "${owner}@${tld}" else owner) aliases;
+  aliasesFile = pkgs.writeText "postfix-aliases" (builtins.concatStringsSep "\n" (lib.mapAttrsToList (k: v: "${k}: ${v}") aliasesAbsolute));
 
   ldapCommon = ''
     server_host = ldap://${common.ldapHost}/
@@ -24,7 +27,7 @@ let
   ldapSenderMap = pkgs.writeText "postfix-sender-maps" (ldapCommon + ''
     query_filter = (&(objectClass=posixAccount)(uid=%u))
     result_attribute = uid
-    result_format = %s
+    result_format = %s@${tld}
   '');
 
   # Addresses we reject mail from over port 25
@@ -137,7 +140,9 @@ in {
 
       # For the sake of possible NixOS overrides,
       # set the default local_recipient_maps explicitly
-      local_recipient_maps = [ "proxy:unix:passwd.byname" ];
+      # The $alias_maps trick means that aliases will resolve correctly
+      # Lightly documented here: http://www.postfix.org/LOCAL_RECIPIENT_README.html#main_config
+      local_recipient_maps = [ "proxy:unix:passwd.byname" "$alias_maps" ];
 
       # Written to /etc/postfix by the nix config
       alias_maps = [ "hash:/etc/postfix/redbrick_aliases" ];
@@ -221,7 +226,7 @@ in {
       smtpd_helo_required = true;
 
       # Require that registered accounts are authenticated to send mail as them
-      smtpd_sender_login_maps = "ldap:${ldapSenderMap}";
+      smtpd_sender_login_maps = [ "ldap:${ldapSenderMap}" "$alias_maps" ];
 
       smtpd_helo_restrictions = builtins.concatStringsSep ", " (commonRestrictions ++ [
         # Allow hosts with any hostname internally to connect
