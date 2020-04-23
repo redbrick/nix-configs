@@ -43,6 +43,7 @@ in {
       allow_username_mismatch = true;
       sign_local = false;
       sign_authenticated = true;
+	  use_esld = false;
     '';
     locals."worker-controller.inc".text = ''
       # generate a password hash using the `rspamadm pw` command and put it here
