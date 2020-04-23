@@ -160,7 +160,7 @@ let
     <Directory "${config.stateDir}">
       Require all granted
     </Directory>
-  '';}) // (vhostCerts tld);
+  '';}) // (common.vhostCerts tld);
 
   # Adapted from the nixpkgs repo mediawiki implementation
   # Skips initial setup, this will never be done at RB. Feel free to port it if you think it will.

@@ -6,7 +6,7 @@ let
 
   sieveConfig = import ./sieve.nix { inherit pkgs; };
   authConfig = import ./auth.nix { inherit common pkgs tld; };
-  masterConfig = import ./master.nix { inherit common pkgs; };
+  masterConfig = import ./master.nix { inherit pkgs; };
 
   # Fixed uid + gid so that the config can roam systems safely
   vmailId = 975;
@@ -25,7 +25,7 @@ let
   });
 
 in {
-  networking.firewall.allowedTCPPorts = [ 993 common.dovecotSaslPort common.dovecotLmtpPort ];
+  networking.firewall.allowedTCPPorts = [ 993 ];
 
   security.dhparams.enable = true;
   # Name found in https://github.com/NixOS/nixpkgs/blob/d7752fc0ebf9d49dc47c70ce4e674df024a82cfa/nixos/modules/services/mail/dovecot.nix#L26

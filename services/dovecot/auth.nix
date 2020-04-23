@@ -15,7 +15,7 @@ let
     user_filter = (&(objectclass=posixAccount)(uid=%n))
     pass_attrs = uid=uid,homeDirectory=home,userPassword=password
     pass_filter = (&(objectclass=posixAccount)(uid=%n))
-    iterate_attrs = homeDirectory=home
+    iterate_attrs = =user=%{ldap:uid}
     iterate_filter = (objectClass=posixAccount)
     default_pass_scheme = CRYPT
   '';

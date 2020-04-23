@@ -20,7 +20,7 @@ in {
     webHosts = [ "lists.${tld}" ];
     hyperkitty = {
       enable = true;
-      baseUrl = "http://${hyperkittyLocal}/hyperkitty/";
+      baseUrl = "https://${hyperkittyLocal}/hyperkitty/";
     };
   };
 
@@ -92,6 +92,7 @@ in {
     from django_auth_ldap.config import LDAPSearch, PosixGroupType
 
     TIME_ZONE = 'Europe/Dublin'
+    ALLOWED_HOSTS = [ 'lists.${tld}', 'localmail.${tld}' ]
 
     # When initialising Mailman, comment this line out until you go to /admin and add a site
     # Otherwise you might get "Site matching query does not exist"
@@ -143,6 +144,7 @@ in {
     DEFAULT_FROM_EMAIL = 'mailmgr@${tld}'
     ACCOUNT_EMAIL_VERIFICATION = 'none'
 
+    AUTH_LDAP_MIRROR_GROUPS = True
     AUTH_LDAP_USER_FLAGS_BY_GROUP = {
         "is_superuser": "cn=mailadm,ou=groups,o=redbrick"
     }

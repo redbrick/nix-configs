@@ -13,6 +13,7 @@ let
 
   vhostConfig = {
     adminAddr = "webmaster@${tld}";
+    serverAliases = [ "localmail.${tld}" ];
     servedDirs = [ { dir = "${generatedDataPath}/static"; urlPath = "/static"; } ];
     extraConfig = ''
       <Location /accounts/signup>
@@ -41,8 +42,5 @@ in {
     '';
 
     virtualHosts."lists.${tld}" = vhostConfig // { onlySSL = true; } // (vhostCerts tld);
-
-    # Alias for mailman local access to hyperkitty
-    virtualHosts."lists.local" = vhostConfig;
   };
 }

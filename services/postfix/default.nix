@@ -119,9 +119,14 @@ in {
       # IP address used by postfix to send outgoing mail. You only need this if
       # your machine has multiple IP addresses - set it to your MX address to
       # satisfy your SPF record.
-      smtp_bind_address = "192.168.0.135";
+      smtp_bind_address = "192.168.0.158";
       # http://www.postfix.org/BASIC_CONFIGURATION_README.html#proxy_interfaces
-      proxy_interfaces = "136.206.15.5";
+      proxy_interfaces = "136.206.15.3";
+
+      # Some bad clients...like MAILMAN... forget to add some important headers
+      # In particular I saw mailman forget Message-ID. This setting permits postfix
+      # to fix them
+      local_header_rewrite_clients = "permit_sasl_authenticated";
 
       # Generate own DHParams
       smtpd_tls_dh512_param_file = config.security.dhparams.params.smtpd_512.path;
@@ -132,11 +137,11 @@ in {
       # https://wiki.dovecot.org/HowTo/PostfixAndDovecotSASL
       smtpd_sasl_auth_enable = true;
       smtpd_sasl_type = "dovecot";
-      smtpd_sasl_path = "inet:${common.dovecotHost}:${builtins.toString common.dovecotSaslPort}";
+      smtpd_sasl_path = "unix:/var/run/dovecot2_sasl.sock";
 
-      # deliver mail for virtual users to Dovecot's TCP socket
+      # Deliver mail for all users to Dovecot's LMTP socket
       # http://www.postfix.org/lmtp.8.html
-      mailbox_transport = "lmtp:inet:${common.dovecotHost}:${builtins.toString common.dovecotLmtpPort}";
+      mailbox_transport = "lmtp:unix:/var/run/dovecot2_lmtp.sock";
 
       # For the sake of possible NixOS overrides,
       # set the default local_recipient_maps explicitly

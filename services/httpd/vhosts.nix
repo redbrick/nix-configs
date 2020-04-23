@@ -236,6 +236,7 @@ in (userVhosts // {
   "help.${tld}" = vhostRedirect "https://wiki.${tld}/mw/Helpdesk";
   "helpdesk.${tld}" = vhostRedirect "https://wiki.${tld}/mw/Helpdesk";
   "helpdeskexam.${tld}" = vhostRedirect "https://md.${tld}/s/SJzip7F9X#";
+  "mail.${tld}" = vhostRedirect "https://webmail.${tld}";
   "hoodies.${tld}" = vhostRedirect "https://redbrickdcu.typeform.com/to/Q4uIzR";
   "parlour.${tld}" = vhostRedirect "https://songsfromtheparlour.com";
   "sistem.${tld}" = vhostRedirect "https://sistem.intersocs.ie";
