@@ -9,6 +9,7 @@ let
     "paste"
     "wiki"
     "cmtwiki"
+    "lists"
   ];
 
   # This is appended at the top
@@ -213,7 +214,6 @@ in (userVhosts // {
   "graphs.${tld}" = vhostProxy "http://localhost:3001";
   "dcufm.${tld}" = vhostProxy "http://136.206.15.74";
   "jakarta.${tld}" = vhostProxy "http://136.206.15.59:8080";
-  "lists.${tld}" = vhostProxy "http://mail.internal:80";
   "macspayn.${tld}" = vhostProxy "http://136.206.15.25:3007";
   "portaldev.${tld}" = vhostProxy "http://136.206.15.61:9080";
   "radio.${tld}" = vhostProxy "http://radio.${tld}:8000";
@@ -236,6 +236,7 @@ in (userVhosts // {
   "help.${tld}" = vhostRedirect "https://wiki.${tld}/mw/Helpdesk";
   "helpdesk.${tld}" = vhostRedirect "https://wiki.${tld}/mw/Helpdesk";
   "helpdeskexam.${tld}" = vhostRedirect "https://md.${tld}/s/SJzip7F9X#";
+  "mail.${tld}" = vhostRedirect "https://webmail.${tld}";
   "hoodies.${tld}" = vhostRedirect "https://redbrickdcu.typeform.com/to/Q4uIzR";
   "parlour.${tld}" = vhostRedirect "https://songsfromtheparlour.com";
   "sistem.${tld}" = vhostRedirect "https://sistem.intersocs.ie";

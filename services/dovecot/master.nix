@@ -1,9 +1,5 @@
-{common, pkgs, ...}:
+{pkgs, ...}:
 pkgs.writeText "dovecot-master-config" ''
-# to improve performance, disable fsync globally - we will enable it for
-# some specific services later on
-mail_fsync = never
-
 service imap-login {
   # plain-text IMAP should only be accessible from localhost
   inet_listener imap {
@@ -29,22 +25,31 @@ service pop3-login {
 
 # enable semi-long-lived IMAP processes to improve performance
 service imap {
-  service_count = 256
-  # set to the number of CPU cores on your server
-  process_min_avail = 3
+  # Service count must be 1 to prevent imap uid leaking and setuid issues
+  # Seen as "imap(foo)<5288><JWXxCE2ks4ZZE0NM>: Fatal: setuid(foo from userdb lookup) failed with euid=bar: Operation not permitted"
+  # See https://doc.dovecot.org/configuration_manual/service_configuration/
+  # Docs specify you should just do this if you have multiple UIDs
+  service_count = 1
+  process_limit = 2000
 }
 
 # Listen on LMTP port for postfix to deliver mail
 service lmtp {
-  inet_listener {
-    port = ${builtins.toString common.dovecotLmtpPort}
+  client_limit = 1
+  unix_listener /var/run/dovecot2_lmtp.sock {
+    user = postfix
+    group = postfix
+    mode = 0600
   }
 }
 
 # Listen on auth socket for postfix to authenticate users
 service auth {
-  inet_listener {
-    port = ${builtins.toString common.dovecotSaslPort}
+  client_limit = 2000
+  unix_listener /var/run/dovecot2_sasl.sock {
+    user = postfix
+    group = postfix
+    mode = 0600
   }
 }
 ''

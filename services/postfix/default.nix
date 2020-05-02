@@ -1,39 +1,81 @@
 # Requires rspamadm dkim_keygen -k /var/secrets/${tld}.$(hostname).dkim.key -b 2048 -s $(hostname) -d ${tld}
 # chown rspamd:root chmod 400
-{config, pkgs, ...}:
+{config, pkgs, lib, ...}:
 let
   tld = config.redbrick.tld;
   common = import ../../common/variables.nix;
+
+  aliases = import ./aliases.nix { inherit tld; };
+  # TLD needs to be appended to use aliases as sender address with smtpd_sender_login_maps
+  # Only supports 1:1 mappings but could be modified to support 1:Many
+  aliasesAbsolute = lib.mapAttrs (alias: owner: if (builtins.match "^[a-zA-Z0-9_\\-\\+\\.]+$" owner) != null then "${owner}@${tld}" else owner) aliases;
+  aliasesFile = pkgs.writeText "postfix-aliases" (builtins.concatStringsSep "\n" (lib.mapAttrsToList (k: v: "${k}: ${v}") aliasesAbsolute));
 
   ldapCommon = ''
     server_host = ldap://${common.ldapHost}/
     version = 3
     bind = no
+    search_base = ou=accounts,o=redbrick
   '';
 
-  ldapAliasMap = pkgs.writeText "virt-mailbox-maps" (ldapCommon + ''
-    search_base = ou=accounts,o=redbrick
+  # Authenticated users we always accept mail from over port 587
+  # Allows mailman to spoof addresses
+  sender_whitelist = pkgs.writeText "sender_whitelist" ''
+    mailmgr@${tld} OK
+  '';
+
+  ldapSenderMap = pkgs.writeText "postfix-sender-maps" (ldapCommon + ''
     query_filter = (&(objectClass=posixAccount)(uid=%u))
     result_attribute = uid
     result_format = %s@${tld}
   '');
 
+  # Addresses we reject mail from over port 25
+  sender_blacklist = pkgs.writeText "sender_blacklist" ''
+    ${tld} REJECT
+  '';
+
+  # IPs we reject unauthenticated connections from
+  # Rspamd explicitly allows mail from local addresses which is dangerous for us
+  # List taken from rspamd's local_addrs option
+  unauth_ip_blacklist = pkgs.writeText "unauth_ip_blacklist" ''
+    127.0.0.0/8     REJECT
+    192.168.0.0/16  REJECT
+    10.0.0.0/8      REJECT
+    172.16.0.0/12   REJECT
+    fd00::/8        REJECT
+    169.254.0.0/16  REJECT
+    fe80::/10       REJECT
+  '';
+
   commonRestrictions = [
-    "permit_mynetworks" "permit_sasl_authenticated"
+    "permit_sasl_authenticated"
     "reject_unauth_pipelining"
   ];
 in {
   imports = [
+    ../redis.nix
+    ./mailman.nix
+    ./rspamd.nix
     ./postsrsd.nix
+  ];
+
+  # Add postfix to redis group
+  users.users.postfix.extraGroups = [
+    "redis"
   ];
 
   # Ensure postsrsd is started before postfix
   systemd.services.postfix = {
-    requires = [ "postsrsd.service" ];
-    after = [ "postsrsd.service" ];
+    requires = [ "postsrsd.service" "redis.service" "rspamd.service" ];
+    after = [ "postsrsd.service" "redis.service" "rspamd.service" ];
   };
 
   networking.firewall.allowedTCPPorts = [ 25 587 ];
+
+  # Since the TLD cert is a wildcard, this allows us to use TLS
+  # over localhost and authenticate correctly. Used in mailman
+  networking.hosts."127.0.0.1" = [ "localmail.${tld}" ];
 
   security.dhparams.enable = true;
   security.dhparams.params.smtpd_512.bits = 512;
@@ -64,18 +106,27 @@ in {
     # smtp_inet found in https://github.com/NixOS/nixpkgs/blob/54361cde9226ae6346b53b34acea9b493f803509/nixos/modules/services/mail/postfix.nix#L768
     masterConfig.smtp_inet.args = [ "-o" "smtpd_sasl_auth_enable=no" ];
 
+    # Files that need postmap run on them
+    # Added to /var/lib/postfix/conf/<name>
+    mapFiles.sender_whitelist = sender_whitelist;
+    mapFiles.sender_blacklist = sender_blacklist;
+    mapFiles.unauth_ip_blacklist = unauth_ip_blacklist;
+
+    # Aliases
+    aliasFiles.redbrick_aliases = aliasesFile;
+
     config = {
       # IP address used by postfix to send outgoing mail. You only need this if
       # your machine has multiple IP addresses - set it to your MX address to
       # satisfy your SPF record.
-      smtp_bind_address = "192.168.0.135";
+      smtp_bind_address = "192.168.0.158";
       # http://www.postfix.org/BASIC_CONFIGURATION_README.html#proxy_interfaces
-      proxy_interfaces = "136.206.15.5";
+      proxy_interfaces = "136.206.15.3";
 
-      #virtual_mailbox_domains = tld;
-      #virtual_mailbox_maps = "hash:/var/lib/postfix/aliases";
-      #virtual_alias_maps = "ldap:" ++ ./ldap-virtual-alias-maps.cf;
-      # alias_maps = "hash:/etc/aliases, ldap:";
+      # Some bad clients...like MAILMAN... forget to add some important headers
+      # In particular I saw mailman forget Message-ID. This setting permits postfix
+      # to fix them
+      local_header_rewrite_clients = "permit_sasl_authenticated";
 
       # Generate own DHParams
       smtpd_tls_dh512_param_file = config.security.dhparams.params.smtpd_512.path;
@@ -86,11 +137,20 @@ in {
       # https://wiki.dovecot.org/HowTo/PostfixAndDovecotSASL
       smtpd_sasl_auth_enable = true;
       smtpd_sasl_type = "dovecot";
-      smtpd_sasl_path = "inet:${common.dovecotHost}:${builtins.toString common.dovecotSaslPort}";
+      smtpd_sasl_path = "unix:/var/run/dovecot2_sasl.sock";
 
-      # deliver mail for virtual users to Dovecot's TCP socket
+      # Deliver mail for all users to Dovecot's LMTP socket
       # http://www.postfix.org/lmtp.8.html
-      mailbox_transport = "lmtp:inet:${common.dovecotHost}:${builtins.toString common.dovecotLmtpPort}";
+      mailbox_transport = "lmtp:unix:/var/run/dovecot2_lmtp.sock";
+
+      # For the sake of possible NixOS overrides,
+      # set the default local_recipient_maps explicitly
+      # The $alias_maps trick means that aliases will resolve correctly
+      # Lightly documented here: http://www.postfix.org/LOCAL_RECIPIENT_README.html#main_config
+      local_recipient_maps = [ "proxy:unix:passwd.byname" "$alias_maps" ];
+
+      # Written to /etc/postfix by the nix config
+      alias_maps = [ "hash:/etc/postfix/redbrick_aliases" ];
 
       # Configure postsrsd so that forwarded mail is "remailed" with a safe from address
       sender_canonical_maps = "tcp:127.0.0.1:${builtins.toString config.services.postsrsd.forwardPort}";
@@ -170,15 +230,29 @@ in {
       # reduces spam
       smtpd_helo_required = true;
 
+      # Require that registered accounts are authenticated to send mail as them
+      smtpd_sender_login_maps = [ "ldap:${ldapSenderMap}" "$alias_maps" ];
+
       smtpd_helo_restrictions = builtins.concatStringsSep ", " (commonRestrictions ++ [
+        # Allow hosts with any hostname internally to connect
+        "permit_mynetworks"
         "reject_invalid_helo_hostname" "reject_non_fqdn_helo_hostname"
         # This will reject all incoming mail without a HELO hostname that
         # properly resolves in DNS. This is a somewhat restrictive check and may
         # reject legitimate mail.
         "reject_unknown_helo_hostname"
       ]);
-      smtpd_sender_restrictions = builtins.concatStringsSep ", " (commonRestrictions ++ [
+      smtpd_sender_restrictions = builtins.concatStringsSep ", " ([
+        # Check the user isn't mailmgr
+        "check_sasl_access hash:/var/lib/postfix/conf/sender_whitelist"
+        # Not even good users should break these rules
         "reject_non_fqdn_sender" "reject_unknown_sender_domain"
+        # Allow authenticated users to send their email as themselves
+        "reject_sender_login_mismatch" "permit_sasl_authenticated"
+        # Prevent anyone from @${tld} sending mail unauthenticated
+        "check_sender_access hash:/var/lib/postfix/conf/sender_blacklist"
+        "reject_unlisted_sender" "reject_unauth_pipelining"
+        "warn_if_reject" "reject_unverified_sender"
       ]);
       smtpd_recipient_restrictions = builtins.concatStringsSep ", " (commonRestrictions ++ [
         "reject_non_fqdn_recipient" "reject_unknown_recipient_domain"
@@ -188,31 +262,28 @@ in {
         "reject_multi_recipient_bounce"
       ]);
       smtpd_relay_restrictions = builtins.concatStringsSep ", " [
-        "permit_mynetworks" "permit_sasl_authenticated"
+        # Check the user isn't mailmgr
+        "check_sasl_access hash:/var/lib/postfix/conf/sender_whitelist"
+        "reject_sender_login_mismatch" "permit_sasl_authenticated"
+        # TODO Consider explicit reject here
         # !!! THIS SETTING PREVENTS YOU FROM BEING AN OPEN RELAY !!!
         "reject_unauth_destination"
         # !!!      DO NOT REMOVE IT UNDER ANY CIRCUMSTANCES      !!!
       ];
+      smtpd_client_restrictions = builtins.concatStringsSep ", " (commonRestrictions ++ [
+        # Allow hosts with any hostname internally to connect
+        "permit_mynetworks"
+        # Reject failed reverse records
+        "reject_unknown_reverse_client_hostname"
+        # Reject unauthenticated connections from local addresses. This is due to
+        # a limitation in rspamd which prevents us checking for spoofing internally
+        # see rspamd.nix
+        "check_client_a_access cidr:/var/lib/postfix/conf/unauth_ip_blacklist"
+        # This will reject all incoming connections without a reverse DNS
+        # entry that resolves back to the client's IP address. This is a very
+        # restrictive check and may reject legitimate mail.
+        "warn_if_reject" "reject_unknown_client_hostname"
+      ]);
     };
-
-    # Sets smtpd_client_restrictions
-    dnsBlacklists = commonRestrictions ++ [
-      "reject_unknown_reverse_client_hostname"
-      # This will reject all incoming connections without a reverse DNS
-      # entry that resolves back to the client's IP address. This is a very
-      # restrictive check and may reject legitimate mail.
-      "reject_unknown_client_hostname"
-    ];
-  };
-
-  # Enable rspamd and connect to postfix.
-  services.rspamd = {
-    enable = true;
-    postfix.enable = true;
-    locals."dkim_signing.conf".text = ''
-      path = "/var/secrets/$domain.$selector.dkim.key";
-      selector = "${config.networking.hostName}";
-      allow_username_mismatch = true;
-    '';
   };
 }

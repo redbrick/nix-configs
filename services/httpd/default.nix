@@ -1,10 +1,8 @@
 { config, pkgs, lib, ... }:
+with (import ./shared.nix { tld = config.redbrick.tld; });
 let
-  tld = config.redbrick.tld;
-  common = import ../../common/variables.nix;
   vhosts = import ./vhosts.nix { inherit config; };
   errorPages = import ../../packages/httpd-error-pages { inherit pkgs; };
-  adminAddr = "webmaster@${tld}";
 
   # Define a base vhost for all TLDs. This will serve only ACME on port 80
   # Everything else is promoted to HTTPS
@@ -67,6 +65,7 @@ in {
     ./php-fpm.nix
     ./mediawiki.nix
     ./privatebin.nix
+    ./mailman.nix
   ];
 
   # Enable suexec support
@@ -120,7 +119,6 @@ in {
       </Directory>
 
       AddHandler cgi-script .cgi
-      AddHandler cgi-script .py
       AddHandler cgi-script .sh
       AddHandler server-parsed .shtml
       AddHandler server-parsed .html

@@ -1,7 +1,7 @@
 $ORIGIN redbricktest.ml.
 $TTL 300
 @       IN      SOA     ns1.redbricktest.ml.     admins.redbricktest.ml. (
-                        2019060506      ; Serial
+                        2019060507      ; Serial
                         1M              ; Slave refresh interval
                         5M              ; Query retry interval
                         1H              ; Expiry
@@ -20,3 +20,4 @@ mail            IN      A       136.206.15.5
 
 www             IN      CNAME   server1
 wiki            IN      CNAME   server1
+lists           IN      CNAME   mail

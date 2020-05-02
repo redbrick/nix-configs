@@ -38,10 +38,6 @@ rec {
     sslServerCert = "${certsDir}/${domain}/fullchain.pem";
   };
 
-  dovecotHost = "192.168.0.135";
-  dovecotSaslPort = 3659;
-  dovecotLmtpPort = 24;
-
   # Hard coded otherwise NSCD will crash systems during boot if network is down
   # 50 = daedalus
   ldapHostIp = "192.168.0.50";

@@ -29,6 +29,13 @@
   systemd.targets.nfs-client.requiredBy = [ "storage.mount" ];
   systemd.targets.nfs-client.before = [ "storage.mount" ];
 
+  fileSystems."/var/spool/mail" =
+    { device = "icarus.internal:/zbackup/mail";
+      fsType = "nfs";
+    };
+  systemd.services.dovecot2.requires = [ "var-spool-mail.mount" ];
+  systemd.services.dovecot2.after = [ "var-spool-mail.mount" ];
+
   # zfs create -o dedup=off -o mountpoint=legacy -o recordsize=4K  zroot/postgres
   fileSystems."/var/db/postgres" =
     { device = "zroot/postgres";
