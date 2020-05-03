@@ -3,6 +3,7 @@ with (import ./shared.nix { tld = config.redbrick.tld; });
 let
   vhosts = import ./vhosts.nix { inherit config; };
   errorPages = import ../../packages/httpd-error-pages { inherit pkgs; };
+  reactSite = import ../../packages/react-site { inherit pkgs; };
 
   # Define a base vhost for all TLDs. This will serve only ACME on port 80
   # Everything else is promoted to HTTPS
@@ -21,7 +22,7 @@ let
   };
 
   redbrickVhost = let
-    documentRoot = "${common.webtreeDir}/redbrick/htdocs";
+    documentRoot = "${reactSite}/public";
   in {
     inherit adminAddr documentRoot;
     onlySSL = true;
@@ -94,7 +95,7 @@ in {
     inherit adminAddr virtualHosts;
     enable = true;
     extraModules = [ "suexec" "proxy" "proxy_fcgi" "ldap" "authnz_ldap" ];
-    multiProcessingModule = "event";
+    mpm = "event";
     maxClients = 250;
 
     extraConfig = ''
