@@ -12,4 +12,5 @@ jobs:
     - name: Set WIP to Draft
       uses: wip/action@v1.0.0
     - uses: cachix/install-nix-action@v8
+    - run: bash ./generate_test_conf.sh > default.nix 
     - run: nix-build
