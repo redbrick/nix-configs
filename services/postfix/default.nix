@@ -119,9 +119,9 @@ in {
       # IP address used by postfix to send outgoing mail. You only need this if
       # your machine has multiple IP addresses - set it to your MX address to
       # satisfy your SPF record.
-      smtp_bind_address = "192.168.0.158";
+      smtp_bind_address = config.redbrick.smtpBindAddress;
       # http://www.postfix.org/BASIC_CONFIGURATION_README.html#proxy_interfaces
-      proxy_interfaces = "136.206.15.3";
+      proxy_interfaces = config.redbrick.smtpExternalAddress;
 
       # Some bad clients...like MAILMAN... forget to add some important headers
       # In particular I saw mailman forget Message-ID. This setting permits postfix
