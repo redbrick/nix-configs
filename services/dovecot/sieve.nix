@@ -101,6 +101,19 @@ let
   };
 
 in pkgs.writeText "dovecot-sieve-config" ''
+  service managesieve-login {
+    inet_listener sieve {
+      name = sieve
+      address = 127.0.0.1
+      port = 4190
+      ssl = yes
+    }
+  }
+
+  service managesieve {
+    # Blank line required syntactically
+  }
+
   plugin {
     ${sieveSimpleConfig}
 
