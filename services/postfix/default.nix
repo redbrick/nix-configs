@@ -27,7 +27,7 @@ let
   ldapSenderMap = pkgs.writeText "postfix-sender-maps" (ldapCommon + ''
     query_filter = (&(objectClass=posixAccount)(uid=%u))
     result_attribute = uid
-    result_format = %s@${tld}
+    result_format = %s
   '');
 
   # Addresses we reject mail from over port 25
@@ -119,9 +119,9 @@ in {
       # IP address used by postfix to send outgoing mail. You only need this if
       # your machine has multiple IP addresses - set it to your MX address to
       # satisfy your SPF record.
-      smtp_bind_address = "192.168.0.158";
+      smtp_bind_address = config.redbrick.smtpBindAddress;
       # http://www.postfix.org/BASIC_CONFIGURATION_README.html#proxy_interfaces
-      proxy_interfaces = "136.206.15.3";
+      proxy_interfaces = config.redbrick.smtpExternalAddress;
 
       # Some bad clients...like MAILMAN... forget to add some important headers
       # In particular I saw mailman forget Message-ID. This setting permits postfix
@@ -147,7 +147,10 @@ in {
       # set the default local_recipient_maps explicitly
       # The $alias_maps trick means that aliases will resolve correctly
       # Lightly documented here: http://www.postfix.org/LOCAL_RECIPIENT_README.html#main_config
-      local_recipient_maps = [ "proxy:unix:passwd.byname" "$alias_maps" ];
+      local_recipient_maps = [ "ldap:${ldapSenderMap}" "$alias_maps" ];
+
+      # Require that registered accounts are authenticated to send mail as them
+      smtpd_sender_login_maps = [ "ldap:${ldapSenderMap}" "$alias_maps" ];
 
       # Written to /etc/postfix by the nix config
       alias_maps = [ "hash:/etc/postfix/redbrick_aliases" ];
@@ -230,9 +233,6 @@ in {
       # reduces spam
       smtpd_helo_required = true;
 
-      # Require that registered accounts are authenticated to send mail as them
-      smtpd_sender_login_maps = [ "ldap:${ldapSenderMap}" "$alias_maps" ];
-
       smtpd_helo_restrictions = builtins.concatStringsSep ", " (commonRestrictions ++ [
         # Allow hosts with any hostname internally to connect
         "permit_mynetworks"
@@ -264,6 +264,7 @@ in {
       smtpd_relay_restrictions = builtins.concatStringsSep ", " [
         # Check the user isn't mailmgr
         "check_sasl_access hash:/var/lib/postfix/conf/sender_whitelist"
+        "reject_unlisted_sender"
         "reject_sender_login_mismatch" "permit_sasl_authenticated"
         # TODO Consider explicit reject here
         # !!! THIS SETTING PREVENTS YOU FROM BEING AN OPEN RELAY !!!

@@ -34,8 +34,10 @@
   };
 
   # Dev box, skip loading vhosts
-  redbrick.tld = "redbricktest.ml";
+  redbrick.tld = "redbricktest.cf";
   redbrick.skipCustomVhosts = true;
+  redbrick.smtpBindAddress = "192.168.0.135";
+  redbrick.smtpExternalAddress = "136.206.15.5";
 
   users.users.lucasade = {
     isNormalUser = true;

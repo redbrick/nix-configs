@@ -35,13 +35,13 @@ in {
       {
         # Not using tld here becaue we actually want to configure
         # a specific domain
-        file = "${zonePath}/redbricktest.ml";
+        file = "${zonePath}/redbricktest.cf";
         master = true;
-        name = "redbricktest.ml";
+        name = "redbricktest.cf";
         extraConfig = "allow-update { key ${keyName}; };";
       }
       {
-        file = "${zonePath}/redbricktest.ml.rr";
+        file = "${zonePath}/redbricktest.cf.rr";
         master = true;
         name = "15.206.136.in-addr.arpa";
       }
