@@ -3,9 +3,8 @@ let
   bindCreds = import /var/secrets/dovecot_auth.nix;
 
   ldapConfig = pkgs.writeText "dovecot-ldap-config" ''
+    !include /var/secrets/dovecot_auth.conf
     hosts = ${common.ldapHost}
-    dn = ${bindCreds.dn}
-    dnpass = ${bindCreds.password}
     ldap_version = 3
     auth_bind = no
     base = ou=accounts,o=redbrick
