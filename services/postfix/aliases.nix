@@ -389,7 +389,6 @@
   "jennyf" = "ribbons";
   "niall.gaffney" = "gamma";
   "richard.walsh" = "koffee";
-  "richie" = "koffee";
   "vadim" = "vadimck";
   "lorcan.boyle" = "zergless";
   "robert.devereux" = "kylar";
