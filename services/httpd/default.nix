@@ -3,7 +3,6 @@ with (import ./shared.nix { tld = config.redbrick.tld; });
 let
   vhosts = import ./vhosts.nix { inherit config; };
   errorPages = import ../../packages/httpd-error-pages { inherit pkgs; };
-  reactSite = import ../../packages/react-site { inherit pkgs; };
 
   # Define a base vhost for all TLDs. This will serve only ACME on port 80
   # Everything else is promoted to HTTPS
@@ -21,35 +20,6 @@ let
     '';
   };
 
-  redbrickVhost = let
-    documentRoot = "${reactSite}/public";
-  in {
-    inherit adminAddr documentRoot;
-    onlySSL = true;
-    sslServerKey = "${common.certsDir}/${tld}/key.pem";
-    sslServerCert = "${common.certsDir}/${tld}/fullchain.pem";
-    extraConfig = ''
-      Alias /cgi-bin/ "${common.webtreeDir}/redbrick/extras/cgi-bin/"
-      Alias /robots.txt "${common.webtreeDir}/redbrick/extras/robots.txt"
-
-      # Redirect rb.dcu.ie/~user => user.rb.dcu.ie
-      RedirectMatch 301 "^/~([^/]*)/?(.*)$" "https://$1.${tld}/$2"
-
-      # Redirect /cmt to cmtwiki.rb
-      RedirectMatch 301 "^/cmt/wiki/?(.*)$" "https://cmtwiki.${tld}/$1"
-
-      <Directory ${documentRoot}>
-        RewriteEngine on
-        # Don't rewrite files or directories
-        RewriteCond %{REQUEST_FILENAME} -f [OR]
-        RewriteCond %{REQUEST_FILENAME} -d
-        RewriteRule ^ - [L]
-        # Rewrite everything else to index.html to allow html5 state links
-        RewriteRule ^ index.html [L]
-      </Directory>
-    '';
-  };
-
   # Since there's no hostName field inside the vhost attrset,
   # need to map over them and add the ssl keys
   vhostsWithCerts = lib.mapAttrs (hostName: vhost: let
@@ -57,7 +27,6 @@ let
   in vhost // (common.vhostCerts certDomain)) vhosts;
 
   virtualHosts = vhostsWithCerts // {
-    "${tld}" = redbrickVhost;
     "acme.${tld}" = acmeVhost;
   };
 
@@ -65,6 +34,7 @@ in {
   imports = [
     ./php-fpm.nix
     ./mediawiki.nix
+    ./react-site.nix
     ./privatebin.nix
     ./mailman.nix
   ];

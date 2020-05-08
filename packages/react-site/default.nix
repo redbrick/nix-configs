@@ -11,8 +11,4 @@
     rev = "b2c47221f3ed0058ec9ac769a291a0cc3017be4e";
     sha256 = "04xxbvd36lnzddvzbag14cviy0hlx3b5zysg8xkyvs98jxkrcni1";
   };
-  postBuild = ''
-    yarn build
-    cp -ar $src/public $out
-  '';
 }
