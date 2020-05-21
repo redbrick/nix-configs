@@ -9,6 +9,7 @@
     ../../services/postfix
     ../../services/dovecot
     ../../services/certs
+    ../../services/icecast.nix
     ../../services/postgres.nix
   ];
 
@@ -38,6 +39,7 @@
   redbrick.skipCustomVhosts = true;
   redbrick.smtpBindAddress = "192.168.0.135";
   redbrick.smtpExternalAddress = "136.206.15.5";
+  redbrick.internalInterface = "enp1s0";
 
   users.users.lucasade = {
     isNormalUser = true;

@@ -212,7 +212,6 @@ in (userVhosts // {
   "git.${tld}" = vhostProxy "http://localhost:3000";
   "prometheus.${tld}" = vhostProxy "http://localhost:9090";
   "graphs.${tld}" = vhostProxy "http://localhost:3001";
-  "dcufm.${tld}" = vhostProxy "http://localhost:8002";
   "jakarta.${tld}" = vhostProxy "http://136.206.15.59:8080";
   "macspayn.${tld}" = vhostProxy "http://136.206.15.25:3007";
   "portaldev.${tld}" = vhostProxy "http://136.206.15.61:9080";

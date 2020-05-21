@@ -5,24 +5,32 @@ let
   admin-secret = "/var/secrets/icecast-admin.secret";
   source-secret = "/var/secrets/icecast-source.secret";
   relay-secret = "/var/secrets/icecast-relay.secret";
+
+  # Hard-coded listen address, will be added to the host's
+  # internalInterface addresses.
+  listenAddress = "192.168.0.5";
 in {
   users.users.icecast = {
     description = "Service user for icecast";
     isSystemUser = true;
-    group = "icecast";
     shell = "/dev/null";
-    home = "/dev/null";
   };
+
+  networking.interfaces."${config.redbrick.internalInterface}".ipv4.addresses = [{
+    address = listenAddress;
+    prefixLength = 24;
+  }];
 
   services.icecast = {
     enable = true;
-    hostname = "localhost";
+    hostname = "dcufm.${tld}";
     user = "icecast";
     admin = {
       password = "${lib.fileContents admin-secret}";
     };
     listen = {
       port = 8002;
+      address = listenAddress;
     };
     logDir = "/var/log/icecast/";
     extraConf = ''

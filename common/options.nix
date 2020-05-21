@@ -38,5 +38,11 @@
       default = "136.206.15.3";
       type = lib.types.str;
     };
+
+    internalInterface = lib.mkOption {
+      description = "The interface name which owns the host's internal address. Default is the internal VLAN";
+      default = "internal";
+      type = lib.types.str;
+    };
   };
 }
