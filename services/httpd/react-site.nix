@@ -2,6 +2,7 @@
 with (import ./shared.nix { tld = config.redbrick.tld; });
 let
   pkg = import ../../packages/react-site { inherit pkgs; };
+  gatsby = import ../../packages/gatsby { inherit pkgs; };
   user = "wwwrun";
   group = "redbrick";
   cacheDir = "/var/tmp/react-site";
@@ -15,7 +16,7 @@ in {
   systemd.services.react-site-build = {
     wantedBy = [ "multi-user.target" ];
     before = [ "httpd.service" ];
-    script = "${pkgs.yarn}/bin/yarn build";
+    script = "${gatsby}/bin/gatsby build";
     serviceConfig = {
       Type = "oneshot";
       User = user;
