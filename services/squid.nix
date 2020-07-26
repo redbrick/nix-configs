@@ -1,6 +1,13 @@
 { pkgs, ... }:
 let
-  certKeyPath = "/var/secrets/squidCA.key";
+  # Generating self-signed cert:
+  # cd /var/secrets
+  # openssl req -new -newkey rsa:2048 -days 3650 -nodes -x509 -keyout squidCA.key -out squidCA.pem
+  # cat squidCA.pem squidCA.key > squidCA.full.pem
+  # chown squid squid*
+  # chmod 400 squid*
+  # Update nix-configs/common/proxycert.pem
+  certKeyPath = "/var/secrets/squidCA.full.pem";
 
   configText = ''
     #
