@@ -112,4 +112,8 @@ in {
   networking.firewall.allowedUDPPorts = [ 3128 3129 ];
 
   networking.hosts."127.0.0.1" = [ "proxy.internal" ];
+
+  systemd.services.squid.preStart = pkgs.lib.mkMerge ''
+    test -e /var/cache/squid/ssl_db || ${pkgs.squid}/libexec/security_file_certgen -c -s /var/cache/squid/ssl_db
+  '';
 }
