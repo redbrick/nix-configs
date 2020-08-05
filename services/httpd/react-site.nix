@@ -1,29 +1,36 @@
 { config, pkgs, lib, ... }:
 with (import ./shared.nix { tld = config.redbrick.tld; });
 let
-  pkg = import ../../packages/react-site { inherit pkgs; };
-  gatsby = import ../../packages/gatsby { inherit pkgs; };
-  user = "wwwrun";
-  group = "redbrick";
-  cacheDir = "/var/tmp/react-site";
-  googleApiKey = "/var/secrets/google_api_key.pass";
-  documentRoot = "${pkg}/public";
+  nodePackages = import ../../packages/node-packages/override.nix { inherit pkgs; };
+  react-site = nodePackages.react-site;
+  documentRoot = "/var/lib/react-site";
+  proxyEnv = with { addr = config.networking.proxy.default; }; pkgs.writeText "proxy-env-vars" ''
+    http_proxy=${addr}
+    https_proxy=${addr}
+    HTTP_PROXY=${addr}
+    HTTPS_PROXY=${addr}
+  '';
 in {
-  systemd.tmpfiles.rules = [
-    "d '${cacheDir}' 0750 ${user} ${group} - -"
-  ];
-
   systemd.services.react-site-build = {
-    wantedBy = [ "multi-user.target" ];
     before = [ "httpd.service" ];
-    script = "${gatsby}/bin/gatsby build";
+    script = ''
+      ln -s react-site-ro/node_modules .
+      ln -s react-site-ro/src .
+      cp -an react-site-ro/*.js* .
+      node_modules/.bin/gatsby build
+      chown -R wwwrun:wwwrun public/.
+      chmod -R 440 public/.
+    '';
     serviceConfig = {
       Type = "oneshot";
-      User = user;
-      Group = group;
       PrivateTmp = true;
+      EnvironmentFile = [ "/var/secrets/react-site.env" proxyEnv ];
+      BindPaths = "${react-site}/lib/node_modules/Redbrick:/tmp/react-site-ro ${documentRoot}:/tmp/public";
+      StateDirectory = "react-site"; # /var/lib/react-site
+      WorkingDirectory = "/tmp";
     };
   };
+
   systemd.timers.react-site-build = {
     wantedBy = [ "timers.target" ];
     partOf = [ "react-site-build.service" ];
@@ -32,9 +39,7 @@ in {
 
   services.httpd.virtualHosts."${tld}" = {
     inherit adminAddr documentRoot;
-    onlySSL = true;
-    sslServerKey = "${common.certsDir}/${tld}/key.pem";
-    sslServerCert = "${common.certsDir}/${tld}/fullchain.pem";
+    useACMEHost = tld;
     extraConfig = ''
       Alias /cgi-bin/ "${common.webtreeDir}/redbrick/extras/cgi-bin/"
       Alias /robots.txt "${common.webtreeDir}/redbrick/extras/robots.txt"
