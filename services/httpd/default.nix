@@ -20,35 +20,6 @@ let
     '';
   };
 
-  redbrickVhost = let
-    documentRoot = "${common.webtreeDir}/redbrick/htdocs";
-  in {
-    inherit adminAddr documentRoot;
-    onlySSL = true;
-    sslServerKey = "${common.certsDir}/${tld}/key.pem";
-    sslServerCert = "${common.certsDir}/${tld}/fullchain.pem";
-    extraConfig = ''
-      Alias /cgi-bin/ "${common.webtreeDir}/redbrick/extras/cgi-bin/"
-      Alias /robots.txt "${common.webtreeDir}/redbrick/extras/robots.txt"
-
-      # Redirect rb.dcu.ie/~user => user.rb.dcu.ie
-      RedirectMatch 301 "^/~([^/]*)/?(.*)$" "https://$1.${tld}/$2"
-
-      # Redirect /cmt to cmtwiki.rb
-      RedirectMatch 301 "^/cmt/wiki/?(.*)$" "https://cmtwiki.${tld}/$1"
-
-      <Directory ${documentRoot}>
-        RewriteEngine on
-        # Don't rewrite files or directories
-        RewriteCond %{REQUEST_FILENAME} -f [OR]
-        RewriteCond %{REQUEST_FILENAME} -d
-        RewriteRule ^ - [L]
-        # Rewrite everything else to index.html to allow html5 state links
-        RewriteRule ^ index.html [L]
-      </Directory>
-    '';
-  };
-
   # Since there's no hostName field inside the vhost attrset,
   # need to map over them and add the ssl keys
   vhostsWithCerts = lib.mapAttrs (hostName: vhost: let
@@ -56,7 +27,6 @@ let
   in vhost // (common.vhostCerts certDomain)) vhosts;
 
   virtualHosts = vhostsWithCerts // {
-    "${tld}" = redbrickVhost;
     "acme.${tld}" = acmeVhost;
   };
 
@@ -64,6 +34,7 @@ in {
   imports = [
     ./php-fpm.nix
     ./mediawiki.nix
+    ./react-site.nix
     ./privatebin.nix
     ./mailman.nix
   ];
@@ -94,7 +65,7 @@ in {
     inherit adminAddr virtualHosts;
     enable = true;
     extraModules = [ "suexec" "proxy" "proxy_fcgi" "ldap" "authnz_ldap" ];
-    multiProcessingModule = "event";
+    mpm = "event";
     maxClients = 250;
 
     extraConfig = ''
