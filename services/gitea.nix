@@ -64,7 +64,7 @@ in {
 
       [mailer]
       ENABLED = true
-      HOST    = mailhost.redbrick.dcu.ie:587
+      HOST    = localmail.redbrick.dcu.ie:587
       FROM    = gitea@redbrick.dcu.ie
 
       [service]

@@ -277,13 +277,6 @@ in (userVhosts // {
     user = "lecter";
     group = "associat";
   };
-  "grahambartley.com" = vhost {
-    documentRoot = "${webtree}/d/dedoctor";
-    user = "dedoctor";
-    group = "member";
-    wwwRedirect = true;
-    serverAliases = [ "www.grahambartley.com" ];
-  };
   "h8.work" = vhost {
     documentRoot = "${webtree}/a/ainran/domains/h8.work";
     user = "ainran";
