@@ -3,44 +3,29 @@
 { pkgs, lib, config, ... }:
 with (import ./shared.nix { tld = config.redbrick.tld; });
 let
-  webRoot = config.services.mailman.webRoot;
-  generatedDataPath = "/var/lib/mailman-web";
-
-  # Build mod_wsgi with python3
-  wsgiPkg = with pkgs; mod_wsgi.overrideAttrs (oldAttrs: {
-    buildInputs = [ apacheHttpd python3 ncurses ];
-  });
+  # Values taken from mailman nix module
+  staticRoot = "/var/lib/mailman-web-static";
+  proxyAddress = "unix:/run/mailman-web.socket|http://127.0.0.1/";
 
   vhostConfig = {
     adminAddr = "webmaster@${tld}";
     serverAliases = [ "localmail.${tld}" ];
-    servedDirs = [ { dir = "${generatedDataPath}/static"; urlPath = "/static"; } ];
+    servedDirs = [ { dir = staticRoot; urlPath = "/static"; } ];
     extraConfig = ''
-      <Location /accounts/signup>
-        Order allow,deny
-        Deny from all
-      </Location>
-      <Directory "${webRoot}">
-        Options ExecCGI
-        <Files wsgi.py>
-          Require all granted
-        </Files>
-        WSGIProcessGroup mailman
-      </Directory>
-      WSGIScriptAlias / ${webRoot}/mailman_web/wsgi.py
+      <Proxy *>
+        Order deny,allow
+        Allow from all
+      </Proxy>
+
+      ProxyPass / ${proxyAddress}
+      ProxyPassReverse / ${proxyAddress}
     '';
   };
 in {
-  services.httpd = {
-    extraModules = [ { name = "wsgi"; path = "${wsgiPkg}/modules/mod_wsgi.so"; } ];
-    extraConfig = ''
-      WSGISocketPrefix /run/httpd/wsgi
-      WSGIDaemonProcess mailman threads=4 home=${generatedDataPath} python-path=/etc/mailman3:${webRoot}:${
-        lib.makeSearchPath pkgs.python3.sitePackages
-          pkgs.python3Packages.mailman-web.requiredPythonModules
-      }
-    '';
+  # Serve tries to enable nginx. Force it off.
+  services.mailman.serve.enable = true;
+  services.nginx.enable = false;
 
-    virtualHosts."lists.${tld}" = vhostConfig // { onlySSL = true; } // (vhostCerts tld);
-  };
+  services.mailman.webUser = config.services.httpd.user;
+  services.httpd.virtualHosts."lists.${tld}" = vhostConfig // { onlySSL = true; } // (vhostCerts tld);
 }
