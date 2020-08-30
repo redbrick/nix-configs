@@ -91,14 +91,13 @@ in {
 
     sslCert = "${common.certsDir}/${tld}/fullchain.pem";
     sslKey = "${common.certsDir}/${tld}/key.pem";
-    sslCACert = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
 
     # disable authentication on port 25. This port should only be used by other
     # mail servers
     enableSubmission = true;
     submissionOptions = {
       smtpd_tls_security_level = "encrypt";
-      tls_preempt_cipherlist = "yes";
+      tls_preempt_cipherlist = "no";
     };
 
     # on the authenticated submission port, force TLS and use our more secure
@@ -184,6 +183,7 @@ in {
       # there that do not use TLS, and many that do only support old ciphers.
       # Forcing TLS for everyone *will* cause you to lose mail.
       smtpd_tls_mandatory_protocols = "!SSLv2, !SSLv3, !TLSv1, !TLSv1.1, TLSv1.2";
+      smtpd_tls_protocols = "!SSLv2, !SSLv3, !TLSv1, !TLSv1.1, TLSv1.2";
       smtpd_tls_mandatory_ciphers = "high";
       tls_high_cipherlist = "ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA256";
 
