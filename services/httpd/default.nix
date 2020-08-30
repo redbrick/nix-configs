@@ -94,7 +94,7 @@ in {
     inherit adminAddr virtualHosts;
     enable = true;
     extraModules = [ "suexec" "proxy" "proxy_fcgi" "ldap" "authnz_ldap" ];
-    multiProcessingModule = "event";
+    mpm = "event";
     maxClients = 250;
 
     extraConfig = ''

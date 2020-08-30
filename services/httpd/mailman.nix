@@ -7,19 +7,9 @@ let
   staticRoot = "/var/lib/mailman-web-static";
   proxyAddress = "unix:/run/mailman-web.socket|http://127.0.0.1/";
 
-  vhostConfig = {
-    adminAddr = "webmaster@${tld}";
+  vhostConfig = (vhostProxy proxyAddress) // {
     serverAliases = [ "localmail.${tld}" ];
     servedDirs = [ { dir = staticRoot; urlPath = "/static"; } ];
-    extraConfig = ''
-      <Proxy *>
-        Order deny,allow
-        Allow from all
-      </Proxy>
-
-      ProxyPass / ${proxyAddress}
-      ProxyPassReverse / ${proxyAddress}
-    '';
   };
 in {
   # Serve tries to enable nginx. Force it off.
@@ -27,5 +17,5 @@ in {
   services.nginx.enable = false;
 
   services.mailman.webUser = config.services.httpd.user;
-  services.httpd.virtualHosts."lists.${tld}" = vhostConfig // { onlySSL = true; } // (vhostCerts tld);
+  services.httpd.virtualHosts."lists.${tld}" = vhostConfig // (vhostCerts tld);
 }

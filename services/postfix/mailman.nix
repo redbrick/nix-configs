@@ -1,5 +1,5 @@
 # Manual steps post-deploy:
-# cd /var/lib/mailman && sudo -u mailman mailman aliases && sysemctl restart postfix
+# cd /var/lib/mailman && sudo -u mailman mailman aliases && systemctl restart postfix
 {pkgs, config, lib, ...}:
 let
   common = import ../../common/variables.nix;
