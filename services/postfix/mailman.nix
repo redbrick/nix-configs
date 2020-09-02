@@ -17,7 +17,7 @@ let
   # We have some custom overrides in settings.py which means we need to generate this ourselves
   webSettingsJSON = pkgs.writeText "settings.json" (builtins.toJSON config.services.mailman.webSettings);
 in {
-  services.mailman = {
+  services.mailman = rec {
     enable = true;
     siteOwner = "admins+mailman@${tld}";
     webHosts = [ "lists.${tld}" "localmail.${tld}" ];
@@ -30,8 +30,31 @@ in {
       # When initialising Mailman, comment this line out until you go to /admin and add a site
       # Otherwise you might get "Site matching query does not exist"
       SITE_ID = 2;
+
+      # Basic settings. Most of these are actually in the Nix module, but we can't merge with
+      # those unfortunately.
       TIME_ZONE = "Europe/Dublin";
       DEFAULT_FROM_EMAIL = "mailmgr@${tld}";
+      SERVER_EMAIL = "mailmgr@${tld}";
+      ALLOWED_HOSTS = [ "localhost" "127.0.0.1" ] ++ webHosts;
+      COMPRESS_OFFLINE = true;
+      STATIC_ROOT = "/var/lib/mailman-web-static";
+      MEDIA_ROOT = "/var/lib/mailman-web/media";
+      LOGGING = {
+        version = 1;
+        disable_existing_loggers = true;
+        handlers.console.class = "logging.StreamHandler";
+        loggers.django = {
+          handlers = [ "console" ];
+          level = "INFO";
+        };
+      };
+      HAYSTACK_CONNECTIONS.default = {
+        ENGINE = "haystack.backends.whoosh_backend.WhooshEngine";
+        PATH = "/var/lib/mailman-web/fulltext-index";
+      };
+
+      # Auth settings
       ACCOUNT_EMAIL_VERIFICATION = "none";
       AUTHENTICATION_BACKENDS = [
         "django_auth_ldap.backend.LDAPBackend"
