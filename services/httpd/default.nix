@@ -93,7 +93,7 @@ in {
   services.httpd = {
     inherit adminAddr virtualHosts;
     enable = true;
-    extraModules = [ "suexec" "proxy" "proxy_fcgi" "ldap" "authnz_ldap" ];
+    extraModules = [ "suexec" "proxy" "proxy_fcgi" "proxy_uwsgi" "ldap" "authnz_ldap" ];
     mpm = "event";
     maxClients = 250;
 

@@ -5,7 +5,7 @@ with (import ./shared.nix { tld = config.redbrick.tld; });
 let
   # Values taken from mailman nix module
   staticRoot = "/var/lib/mailman-web-static";
-  proxyAddress = "unix:/run/mailman-web.socket|http://127.0.0.1/";
+  proxyAddress = "unix:/run/mailman-web.socket|uwsgi://127.0.0.1/";
 
   vhostConfig = (vhostProxy proxyAddress) // {
     serverAliases = [ "localmail.${tld}" ];

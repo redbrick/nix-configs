@@ -7,12 +7,13 @@ let
   vhosts = import ../httpd/vhosts.nix { inherit config; };
   email = "webmaster+acme@${tld}";
   webroot = common.webtreeCertsDir;
-
+  group = "wwwrun";
+  allowKeysForGroup = true;
 in {
   security.acme.acceptTerms = true;
   security.acme.certs = {
     "${tld}" = {
-      inherit email;
+      inherit email group allowKeysForGroup;
       dnsProvider = "rfc2136";
       credentialsFile = "/var/secrets/certs.secret";
       extraDomains."*.${tld}" = null;
@@ -21,7 +22,7 @@ in {
   } //
     # Map all domains to a certs attrset
     mapAttrs (certDomain: domains: {
-      inherit email webroot;
+      inherit email group allowKeysForGroup webroot;
       extraDomains = listToAttrs
         (map (domain: nameValuePair domain null)
 
