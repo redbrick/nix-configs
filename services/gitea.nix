@@ -2,7 +2,6 @@
 let
   tld = config.redbrick.tld;
 
-  secrets = import /var/secrets/gitea.nix;
   tokenPath = "/var/secrets/gitea_token.secret";
 
   stateDir = "/var/lib/gitea";
@@ -28,6 +27,9 @@ in {
     domain = tld;
     httpPort = 3000;
     rootUrl = "https://git.${tld}/";
+    disableRegistration = true;
+    mailerPasswordFile = "/var/secrets/rbgit_password.txt";
+    log.level = "Info";
 
     database = {
       createDatabase = false;
@@ -39,56 +41,74 @@ in {
       passwordFile = "/var/secrets/giteadb.secret";
     };
 
-    extraConfig = ''
-      [repository.upload]
-      TEMP_PATH = ${stateDir}/uploads
+    ssh = {
+      enable = true;
+      clonePort = 10022;
+    };
 
-      [server]
-      SSH_DOMAIN       = git.${tld}
-      DISABLE_SSH      = true
-      SSH_PORT         = 10022
-      LFS_START_SERVER = false
-      OFFLINE_MODE     = false
+    settings = {
+      "repository.upload" = {
+        TEMP_PATH = "${stateDir}/uploads";
+      };
 
-      [session]
-      PROVIDER_CONFIG = ${stateDir}/sessions
-      PROVIDER        = file
+      database = {
+        LOG_SQL = false;
+      };
 
-      [picture]
-      AVATAR_UPLOAD_PATH      = ${stateDir}/avatars
-      DISABLE_GRAVATAR        = false
-      ENABLE_FEDERATED_AVATAR = false
+      server = {
+        SSH_DOMAIN       = "git.${tld}";
+        LFS_START_SERVER = false;
+        OFFLINE_MODE     = false;
+      };
 
-      [attachment]
-      PATH = ${stateDir}/attachments
+      session = {
+        PROVIDER_CONFIG = "${stateDir}/sessions";
+        PROVIDER        = "file";
+      };
 
-      [mailer]
-      ENABLED = true
-      HOST    = localmail.redbrick.dcu.ie:587
-      FROM    = gitea@redbrick.dcu.ie
+      picture = {
+        AVATAR_UPLOAD_PATH      = "${stateDir}/avatars";
+        DISABLE_GRAVATAR        = false;
+        ENABLE_FEDERATED_AVATAR = false;
+      };
 
-      [service]
-      REGISTER_EMAIL_CONFIRM     = false
-      ENABLE_NOTIFY_MAIL         = true
-      DISABLE_REGISTRATION       = true
-      ENABLE_CAPTCHA             = false
-      REQUIRE_SIGNIN_VIEW        = false
-      DEFAULT_KEEP_EMAIL_PRIVATE = false
-      NO_REPLY_ADDRESS           = noreply.redbrick.dcu.ie
+      attachment = {
+        PATH = "${stateDir}/attachments";
+      };
 
-      [security]
-      INSTALL_LOCK   = true
-      SECRET_KEY     = ${secrets.secret_key}
-      INTERNAL_TOKEN_URI = file:${tokenPath}
+      mailer = {
+        ENABLED     = true;
+        MAILER_TYPE = "smtp";
+        HOST        = "localmail.redbrick.dcu.ie:587";
+        USER        = "rbgit@redbrick.dcu.ie";
+        FROM        = "Redbrick Gitea <rbgit@redbrick.dcu.ie>";
+      };
 
-      [openid]
-      ENABLE_OPENID_SIGNUP = false
-      ENABLE_OPENID_SIGNIN = false
+      service = {
+        REGISTER_EMAIL_CONFIRM     = false;
+        ENABLE_NOTIFY_MAIL         = true;
+        ENABLE_CAPTCHA             = false;
+        REQUIRE_SIGNIN_VIEW        = false;
+        DEFAULT_KEEP_EMAIL_PRIVATE = false;
+        NO_REPLY_ADDRESS           = "noreply.redbrick.dcu.ie";
+      };
 
-      [metrics]
-      ENABLED = true
-      [log.console]
-      COLORIZE = false
-    '';
+      security = {
+        INTERNAL_TOKEN_URI = "file:${tokenPath}";
+      };
+
+      openid = {
+        ENABLE_OPENID_SIGNUP = false;
+        ENABLE_OPENID_SIGNIN = false;
+      };
+
+      metrics = {
+        ENABLED = true;
+      };
+
+      "log.console" = {
+        COLORIZE = false;
+      };
+    };
   };
 }
