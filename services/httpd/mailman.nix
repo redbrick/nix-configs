@@ -7,9 +7,10 @@ let
   staticRoot = "/var/lib/mailman-web-static";
   proxyAddress = "unix:/run/mailman-web.socket|uwsgi://127.0.0.1/";
 
-  vhostConfig = (vhostCerts tld) // {
+  vhostConfig = {
     inherit adminAddr;
     onlySSL = true;
+    useACMEHost = tld;
     serverAliases = [ "localmail.${tld}" ];
     servedDirs = [ { dir = staticRoot; urlPath = "/static"; } ];
     extraConfig = ''

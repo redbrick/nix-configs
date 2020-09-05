@@ -51,9 +51,9 @@ let
 
   # Since there's no hostName field inside the vhost attrset,
   # need to map over them and add the ssl keys
-  vhostsWithCerts = lib.mapAttrs (hostName: vhost: let
-    certDomain = common.certDomain tld hostName;
-  in vhost // (common.vhostCerts certDomain)) vhosts;
+  vhostsWithCerts = lib.mapAttrs (hostName: vhost: vhost // {
+    useACMEHost = common.certDomain tld hostName;
+  }) vhosts;
 
   virtualHosts = vhostsWithCerts // {
     "${tld}" = redbrickVhost;
@@ -135,31 +135,8 @@ in {
     '';
   };
 
-  # Once a week, reload httpd to refresh the certificates
-  systemd.services.httpd-reload = {
-    description = "Reload HTTPD + load new certs";
-    requires = [ "httpd.service" ];
-    serviceConfig = {
-      Type = "oneshot";
-      SuccessExitStatus = [ "0" "1" ];
-      PermissionsStartOnly = true;
-    };
-    script = "systemctl reload httpd";
-  };
-
   # Needs to be increased because each vhost has a log file
   systemd.services.httpd.serviceConfig.LimitNOFILE = 16384;
-
-  systemd.timers.httpd-reload = {
-    description = "Reload HTTPD at 5am every Saturday to update certs";
-    wantedBy = [ "timers.target" ];
-    timerConfig = {
-      OnCalendar = "Sat *-*-* 05:00:00";
-      Unit = "httpd-reload.service";
-      Persistent = "yes";
-      AccuracySec = "5m";
-    };
-  };
 
   networking.firewall.allowedTCPPorts = [ 80 443 ];
 }

@@ -52,9 +52,4 @@ in {
       ProxyPassReverse / ${proxyAddress}/
     '';
   };
-
-  vhostCerts = domain: {
-    sslServerKey = "${common.certsDir}/${domain}/key.pem";
-    sslServerCert = "${common.certsDir}/${domain}/fullchain.pem";
-  };
 }
