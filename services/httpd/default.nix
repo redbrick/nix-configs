@@ -31,6 +31,8 @@ let
       Alias /cgi-bin/ "${common.webtreeDir}/redbrick/extras/cgi-bin/"
       Alias /robots.txt "${common.webtreeDir}/redbrick/extras/robots.txt"
 
+      Header always set Strict-Transport-Security "max-age=63072000"
+
       # Redirect rb.dcu.ie/~user => user.rb.dcu.ie
       RedirectMatch 301 "^/~([^/]*)/?(.*)$" "https://$1.${tld}/$2"
 
@@ -101,6 +103,10 @@ in {
       ProxyRequests off
       ProxyVia Off
       ProxyPreserveHost On
+
+      SSLSessionTickets off
+      SSLUseStapling On
+      SSLStaplingCache "shmcb:/run/httpd/ssl_stapling(32768)"
 
       Alias /rb_custom_error/ "${errorPages}/"
       ErrorDocument 400 /rb_custom_error/404.html

@@ -29,6 +29,7 @@ in {
       </Directory>
 
       SuExecUserGroup ${user} ${group}
+      Header always set Strict-Transport-Security "max-age=63072000"
 
       ${extraConfig}
     '' + (if wwwRedirect then wwwRedirector else "");
@@ -47,6 +48,8 @@ in {
         Order deny,allow
         Allow from all
       </Proxy>
+
+      Header always set Strict-Transport-Security "max-age=63072000"
 
       ProxyPass / ${proxyAddress}/
       ProxyPassReverse / ${proxyAddress}/

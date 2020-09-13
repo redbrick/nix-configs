@@ -19,6 +19,8 @@ let
         Allow from all
       </Proxy>
 
+      Header always set Strict-Transport-Security "max-age=63072000"
+
       ProxyPassMatch ^/static !
       ProxyPass / ${proxyAddress}/
       ProxyPassReverse / ${proxyAddress}/
