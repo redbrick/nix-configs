@@ -5,6 +5,7 @@
     ../../common/sysconfig.nix
     ../../services/ssh.nix
     ../../services/gluster.nix
+    ../../services/squid.nix
     ../../services/ldap
   ];
 
