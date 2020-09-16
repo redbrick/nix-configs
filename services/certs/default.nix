@@ -7,26 +7,23 @@ let
   vhosts = import ../httpd/vhosts.nix { inherit config; };
   email = "webmaster+acme@${tld}";
   webroot = common.webtreeCertsDir;
-
+  group = "wwwrun";
 in {
   security.acme.acceptTerms = true;
   security.acme.certs = {
     "${tld}" = {
-      inherit email;
+      inherit email group;
       dnsProvider = "rfc2136";
       credentialsFile = "/var/secrets/certs.secret";
-      extraDomains."*.${tld}" = null;
+      extraDomainNames = [ "*.${tld}" ];
       dnsPropagationCheck = false;
     };
   } //
     # Map all domains to a certs attrset
     mapAttrs (certDomain: domains: {
-      inherit email webroot;
-      extraDomains = listToAttrs
-        (map (domain: nameValuePair domain null)
-
-          # Remove domains that match the certDomain
-          (filter (domain: domain != certDomain) domains));
+      inherit email group webroot;
+      # Remove domains that match the certDomain
+      extraDomainNames = filter (domain: domain != certDomain) domains;
     })
 
       # Combine all common certDomains

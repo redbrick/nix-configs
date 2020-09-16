@@ -4,17 +4,20 @@
   search_filter = "(uid=%s)"
   search_base_dns = ["ou=accounts,o=redbrick"]
   group_search_base_dns = ["ou=groups,o=redbrick"]
+  group_search_filter = "(&(objectClass=posixGroup)(memberUid=%s))"
+  group_search_filter_user_attribute = "uid"
+
 [servers.attributes]
   name = "cn"
   username = "uid"
-  member_of = "objectClass"
+  member_of = "dn"
   email =  "altmail"
 [[servers.group_mappings]]
-  group_dn = "cn=root"
+  group_dn = "cn=root,ou=groups,o=redbrick"
   org_role = "Admin"
-  grafana_admin = true # Available in Grafana v5.3 and above
+  grafana_admin = true
 [[servers.group_mappings]]
-  group_dn = "cn=helpdesk"
+  group_dn = "cn=helpdesk,ou=groups,o=redbrick"
   org_role = "Editor"
 [[servers.group_mappings]]
   group_dn = "*"

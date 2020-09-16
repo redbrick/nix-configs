@@ -1,5 +1,5 @@
 # Manual steps post-deploy:
-# cd /var/lib/mailman && sudo -u mailman mailman aliases && sysemctl restart postfix
+# cd /var/lib/mailman && sudo -u mailman mailman aliases && systemctl restart postfix
 {pkgs, config, lib, ...}:
 let
   common = import ../../common/variables.nix;
@@ -13,14 +13,67 @@ let
 
   # Mailman needs access to hyperkitty, which is on the same host
   hyperkittyLocal = mailServer;
+
+  # We have some custom overrides in settings.py which means we need to generate this ourselves
+  webSettingsJSON = pkgs.writeText "settings.json" (builtins.toJSON config.services.mailman.webSettings);
 in {
-  services.mailman = {
+  services.mailman = rec {
     enable = true;
     siteOwner = "admins+mailman@${tld}";
-    webHosts = [ "lists.${tld}" ];
+    webHosts = [ "lists.${tld}" "localmail.${tld}" ];
     hyperkitty = {
       enable = true;
       baseUrl = "https://${hyperkittyLocal}/hyperkitty/";
+    };
+    extraPythonPackages = with pkgs.python3Packages; [ ldap pyasn1-modules django-auth-ldap ];
+    webSettings = {
+      # When initialising Mailman, comment this line out until you go to /admin and add a site
+      # Otherwise you might get "Site matching query does not exist"
+      SITE_ID = 2;
+
+      # Basic settings. Most of these are actually in the Nix module, but we can't merge with
+      # those unfortunately.
+      TIME_ZONE = "Europe/Dublin";
+      DEFAULT_FROM_EMAIL = "mailmgr@${tld}";
+      SERVER_EMAIL = "mailmgr@${tld}";
+      ALLOWED_HOSTS = [ "localhost" "127.0.0.1" ] ++ webHosts;
+      COMPRESS_OFFLINE = true;
+      STATIC_ROOT = "/var/lib/mailman-web-static";
+      MEDIA_ROOT = "/var/lib/mailman-web/media";
+      LOGGING = {
+        version = 1;
+        disable_existing_loggers = true;
+        handlers.console.class = "logging.StreamHandler";
+        loggers.django = {
+          handlers = [ "console" ];
+          level = "INFO";
+        };
+      };
+      HAYSTACK_CONNECTIONS.default = {
+        ENGINE = "haystack.backends.whoosh_backend.WhooshEngine";
+        PATH = "/var/lib/mailman-web/fulltext-index";
+      };
+
+      # Auth settings
+      ACCOUNT_EMAIL_VERIFICATION = "none";
+      AUTHENTICATION_BACKENDS = [
+        "django_auth_ldap.backend.LDAPBackend"
+        "django.contrib.auth.backends.ModelBackend"
+      ];
+      # Use the user's own credentials to bind to LDAP. Allows for reading of
+      # special fields, and no need for a mailman LDAP user
+      AUTH_LDAP_SERVER_URI = "ldap://${common.ldapHost}";
+      AUTH_LDAP_BIND_AS_AUTHENTICATING_USER = true;
+      AUTH_LDAP_USER_ATTRLIST = ["*" "+"];
+      AUTH_LDAP_USER_DN_TEMPLATE = "uid=%(user)s,ou=accounts,o=redbrick";
+      AUTH_LDAP_USER_ATTR_MAP = {
+        username = "uid";
+        first_name = "cn";
+      };
+      AUTH_LDAP_MIRROR_GROUPS = true;
+      AUTH_LDAP_USER_FLAGS_BY_GROUP = {
+        is_superuser = "cn=mailadm,ou=groups,o=redbrick";
+      };
     };
   };
 
@@ -80,42 +133,23 @@ in {
             import rbapp.signals
   '';
   environment.etc."mailman3/settings.py".text = ''
-    # Add ldap to search path
-    # Package must be updated if main python3 version changes
-    import site
-    site.addsitedir('${pkgs.python37Packages.ldap}/lib/python3.7/site-packages')
-    site.addsitedir('${pkgs.python37Packages.pyasn1-modules}/lib/python3.7/site-packages')
-    site.addsitedir('${pkgs.python37Packages.django-auth-ldap}/lib/python3.7/site-packages')
+    import json
+    import os
+
+    # Required by mailman_web.settings, but will be overridden when
+    # settings_local.json is loaded.
+    os.environ["SECRET_KEY"] = ""
+
+    from mailman_web.settings import *
+
+    with open('${webSettingsJSON}') as f:
+        globals().update(json.load(f))
+
+    with open('/var/lib/mailman-web/settings_local.json') as f:
+        globals().update(json.load(f))
 
     import ldap
-    import json
     from django_auth_ldap.config import LDAPSearch, PosixGroupType
-
-    TIME_ZONE = 'Europe/Dublin'
-    ALLOWED_HOSTS = [ 'lists.${tld}', 'localmail.${tld}' ]
-
-    # When initialising Mailman, comment this line out until you go to /admin and add a site
-    # Otherwise you might get "Site matching query does not exist"
-    SITE_ID = 2
-
-    INSTALLED_APPS = INSTALLED_APPS + ['rbapp']
-
-    AUTHENTICATION_BACKENDS = (
-        'django_auth_ldap.backend.LDAPBackend',
-        'django.contrib.auth.backends.ModelBackend',
-    )
-
-    AUTH_LDAP_SERVER_URI = "ldap://${common.ldapHost}"
-
-    # Use the user's own credentials to bind to LDAP. Allows for reading of
-    # special fields, and no need for a mailman LDAP user
-    AUTH_LDAP_BIND_AS_AUTHENTICATING_USER = True
-    AUTH_LDAP_USER_ATTRLIST = ["*", "+"]
-    AUTH_LDAP_USER_DN_TEMPLATE = "uid=%(user)s,ou=accounts,o=redbrick"
-    AUTH_LDAP_USER_ATTR_MAP = {
-        "username": "uid",
-        "first_name": "cn",
-    }
 
     AUTH_LDAP_GROUP_TYPE = PosixGroupType()
     AUTH_LDAP_USER_SEARCH = LDAPSearch("ou=accounts,o=redbrick", ldap.SCOPE_SUBTREE, "(uid=%(user)s)")
@@ -141,13 +175,6 @@ in {
     EMAIL_USE_TLS = True
     EMAIL_HOST_USER = secrets['email_user']
     EMAIL_HOST_PASSWORD = secrets['email_password']
-    DEFAULT_FROM_EMAIL = 'mailmgr@${tld}'
-    ACCOUNT_EMAIL_VERIFICATION = 'none'
-
-    AUTH_LDAP_MIRROR_GROUPS = True
-    AUTH_LDAP_USER_FLAGS_BY_GROUP = {
-        "is_superuser": "cn=mailadm,ou=groups,o=redbrick"
-    }
   '';
 
   services.postfix = {

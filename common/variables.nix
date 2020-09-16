@@ -33,11 +33,6 @@ rec {
     isOurTld = ((builtins.match ".*\\.${tld}" hostName) != null);
   in if isOurTld then tld else theirTld;
 
-  vhostCerts = domain: {
-    sslServerKey = "${certsDir}/${domain}/key.pem";
-    sslServerCert = "${certsDir}/${domain}/fullchain.pem";
-  };
-
   # Hard coded otherwise NSCD will crash systems during boot if network is down
   # 50 = daedalus
   ldapHostIp = "192.168.0.50";

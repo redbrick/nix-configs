@@ -29,6 +29,7 @@ in {
       </Directory>
 
       SuExecUserGroup ${user} ${group}
+      Header always set Strict-Transport-Security "max-age=63072000"
 
       ${extraConfig}
     '' + (if wwwRedirect then wwwRedirector else "");
@@ -48,13 +49,10 @@ in {
         Allow from all
       </Proxy>
 
+      Header always set Strict-Transport-Security "max-age=63072000"
+
       ProxyPass / ${proxyAddress}/
       ProxyPassReverse / ${proxyAddress}/
     '';
-  };
-
-  vhostCerts = domain: {
-    sslServerKey = "${common.certsDir}/${domain}/key.pem";
-    sslServerCert = "${common.certsDir}/${domain}/fullchain.pem";
   };
 }

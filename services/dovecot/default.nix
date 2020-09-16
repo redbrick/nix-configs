@@ -71,19 +71,22 @@ in {
     # See https://wiki.dovecot.org/SharedMailboxes/Permissions
     mailLocation = "mdbox:/var/mail/%d/%n";
 
-    mailboxes = [{
-      name = "Junk";
-      specialUse = "Junk";
-    } {
-      name = "Trash";
-      specialUse = "Trash";
-    } {
-      name = "Sent";
-      specialUse = "Sent";
-    } {
-      name = "Drafts";
-      specialUse = "Drafts";
-    }];
+    mailboxes = {
+      Junk = {
+        specialUse = "Junk";
+        autoexpunge = "90d";
+      };
+      Trash = {
+        specialUse = "Trash";
+        autoexpunge = "60d";
+      };
+      Sent = {
+        specialUse = "Sent";
+      };
+      Drafts = {
+        specialUse = "Drafts";
+      };
+    };
 
     extraConfig = ''
       # Having trouble? Try enabling these
