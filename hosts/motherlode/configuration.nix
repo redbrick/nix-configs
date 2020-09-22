@@ -28,5 +28,7 @@ in {
       id = 5;
       interface = "eno4";
     };
+   interfaces.eno4.useDHCP = false;
+   interfaces.dculife.useDHCP = false;
   } (variables.bondConfig [ "eno1" "eno2" ] "192.168.0.130");
 }
