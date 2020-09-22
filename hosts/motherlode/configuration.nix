@@ -13,7 +13,7 @@ in {
   # compatible, in order to avoid breaking some software such as database
   # servers. You should change this only after NixOS release notes say you
   # should.
-  system.stateVersion = "20.09";
+  system.stateVersion = "21.03";
 
   # Use the GRUB 2 boot loader.
   boot.loader.grub.enable = true;
@@ -24,5 +24,9 @@ in {
     hostName = "motherlode";
     hostId = "fccc9415";
     defaultGateway = "192.168.0.254";
+    vlans.dculife = {
+      id = 5;
+      interface = "eno4";
+    };
   } // (variables.bondConfig [ "eno1" "eno2" ] "192.168.0.130");
 }
