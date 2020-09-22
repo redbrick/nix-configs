@@ -24,9 +24,7 @@
     hostName = "daedalus";
     hostId = "0f127302";
     defaultGateway = "192.168.0.254";
-    interfaces.eno1.ipv4.addresses = [{
-      address = "192.168.0.50";
-      prefixLength = 24;
-    }];
-  };
+  } // (variables.bondConfig [ "eno1" "eno2" ] "192.168.0.50");
+
+
 }
