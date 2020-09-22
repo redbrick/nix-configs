@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 let
   variables = import ../../common/variables.nix;
 in {
@@ -20,7 +20,7 @@ in {
   boot.loader.grub.version = 2;
   boot.loader.grub.device = "/dev/sda";
 
-  networking = {
+  networking = lib.recursiveUpdate {
     hostName = "motherlode";
     hostId = "fccc9415";
     defaultGateway = "192.168.0.254";
@@ -28,5 +28,5 @@ in {
       id = 5;
       interface = "eno4";
     };
-  } // (variables.bondConfig [ "eno1" "eno2" ] "192.168.0.130");
+  } (variables.bondConfig [ "eno1" "eno2" ] "192.168.0.130");
 }
