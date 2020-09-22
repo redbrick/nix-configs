@@ -1,5 +1,7 @@
 { config, pkgs, ... }:
-{
+let
+  variables = import ../../common/variables.nix;
+in {
   imports = [
     ./hardware-configuration.nix
     ../../common/sysconfig.nix
@@ -25,6 +27,4 @@
     hostId = "0f127302";
     defaultGateway = "192.168.0.254";
   } // (variables.bondConfig [ "eno1" "eno2" ] "192.168.0.50");
-
-
 }
