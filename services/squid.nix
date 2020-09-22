@@ -63,9 +63,7 @@ let
     http_access deny all
 
     # Squid normally listens to port 3128
-    http_port 3128 ssl-bump \
-      cert=${certKeyPath} \
-      generate-host-certificates=on dynamic_cert_mem_cache_size=16MB
+    http_port 3128
     https_port 3129 tls-cert=${certKeyPath}
     https_port 3130 intercept ssl-bump \
       cert=${certKeyPath} \
