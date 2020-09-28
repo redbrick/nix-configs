@@ -32,5 +32,11 @@
       default = "136.206.15.3";
       type = lib.types.str;
     };
+
+    ircServerAddress = lib.mkOption {
+      description = "The appropriate public IP forwarding port 6697 for this IRC host";
+      default = "136.206.15.3";
+      type = lib.types.str;
+    };
   };
 }
