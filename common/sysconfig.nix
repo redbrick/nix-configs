@@ -107,6 +107,11 @@ in {
   # Add Root CA for Squid proxy
   security.pki.certificateFiles = [ ./proxycert.pem ];
 
+  # Ensure curl loads the certs so it can connect to proxy
+  environment.variables.NIX_CURL_FLAGS = let
+    cafile = config.environment.etc."ssl/certs/ca-certificates.crt".source;
+  in "--proxy-cacert ${cafile} --cacert ${cafile}";
+
   users.ldap.daemon.enable = true;
   # Increasing this limit helps with phpfpm/httpd startup issues
   systemd.services.nscd.serviceConfig.LimitNOFILE = 16384;
