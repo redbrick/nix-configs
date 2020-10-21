@@ -30,7 +30,7 @@ in {
   networking.search = [ "internal" tld ];
   networking.nameservers = ["192.168.0.4"];
   networking.timeServers = ["192.168.0.254"];
-  networking.proxy.default = "https://proxy.internal:3129/";
+  networking.proxy.default = "http://proxy.internal:3128/";
   networking.proxy.noProxy = "127.0.0.1,localhost,192.168.0,.internal";
 
   # Enable rsyslog
