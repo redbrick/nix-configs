@@ -7,10 +7,11 @@ stdenv.mkDerivation rec {
   version = "3.7.0";
 
   extras = [
-    "m_ssl_openssl.cpp"
-    "m_ssl_gnutls.cpp"
-    "m_sslrehashsignal.cpp"
-    "m_regex_posix.cpp"
+    "ldap"
+    "regex_posix"
+    "ssl_gnutls"
+    "ssl_openssl"
+    "sslrehashsignal"
   ];
 
   src = fetchFromGitHub {
@@ -22,7 +23,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ perl openssl gnutls pkgconfig ];
+  nativeBuildInputs = [ openldap perl openssl gnutls pkgconfig ];
 
 
   # So, this package is still not ready for prime-time. Why not?

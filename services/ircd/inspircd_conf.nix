@@ -93,7 +93,7 @@ in {
     butlerx = {
       hash="hmac-sha256";
       # password: A hash of the password (see above option) hashed
-      # with /mkpasswd <hash> <password>. See m_password_hash in modules.conf
+      # with /mkpasswd <hash> <password>. See password_hash in modules.conf
       # for more information about password hashing.
       password=lib.fileContents /var/secrets/ircd/butlerx.sha256.pass;
       host="*@*";
@@ -204,43 +204,53 @@ in {
     nickmasks="no";
     trigger="95.5";
   }];
+  log = [{
+    method = "file";
+    type = "m_ldapauth";
+    level="debug";
+    target="/var/log/ircd.log";
+    flush="20";
+  }];
   module = {
-    "m_sha256.so" = {};
-    "m_alias.so" = {};
-    "m_alltime.so" = {};
-    "m_banexception.so" = {};
-    "m_banredirect.so" = {};
-    "m_botmode.so" = {};
-    "m_chanhistory.so" = {};
-    "m_check.so" = {};
-    "m_chgident.so" = {};
-    "m_chgname.so" = {};
-    "m_clones.so" = {};
-    "m_conn_join.so" = {};
-    "m_cycle.so" = {};
-    "m_customprefix.so" = {};
-    "m_ldapauth.so" = {};
-    "m_operjoin.so" = {};
-    "m_operlog.so" = {};
-    "m_operprefix.so" = {};
-    "m_opermodes.so" = {};
-    "m_passforward.so" = {};
-    "m_password_hash.so" = {};
-    "m_muteban.so" = {};
-    "m_randquote.so" = {};
-    "m_regex_glob.so" = {};
-    "m_regex_posix.so" = {};
-    "m_remove.so" = {};
-    "m_rline.so" = {};
-    "m_sakick.so" = {};
-    "m_samode.so" = {};
-    "m_satopic.so" = {};
-    "m_serverban.so" = {};
-    "m_sslmodes.so" = {};
-    "m_timedbans.so" = {};
-    "m_uninvite.so" = {};
-    "m_ssl_openssl.so" = {};
-    "m_spanningtree.so" = {};
+    "alias" = {};
+    "alltime" = {};
+    "banexception" = {};
+    "banredirect" = {};
+    "botmode" = {};
+    "chanhistory" = {};
+    "check" = {};
+    "chgident" = {};
+    "chgname" = {};
+    "clones" = {};
+    "conn_join" = {};
+    "customprefix" = {};
+    "cycle" = {};
+    "hidechans" = {};
+    "ldap" = {};
+    "ldapauth" = {};
+    "muteban" = {};
+    "operjoin" = {};
+    "operlog" = {};
+    "opermodes" = {};
+    "operprefix" = {};
+    "passforward" = {};
+    "password_hash" = {};
+    "randquote" = {};
+    "regex_glob" = {};
+    "regex_posix" = {};
+    "remove" = {};
+    "rline" = {};
+    "sakick" = {};
+    "samode" = {};
+    "satopic" = {};
+    "serverban" = {};
+    "services_account" = {};
+    "sha256" = {};
+    "spanningtree" = {};
+    "ssl_openssl" = {};
+    "sslmodes" = {};
+    "timedbans" = {};
+    "uninvite" = {};
   };
   customprefix = {
     halfop = {
@@ -324,17 +334,27 @@ in {
     notice="yes";
   }];
   autojoin = [{ channel="#lobby,#helpdesk"; }];
-  ldapauth = [{
-    baserdn="ou=accounts,o=redbrick";
-    attribute="uid";
-    server="ldap://ldap.internal";
-    # The allowpattern value allows you to specify a wildcard mask which
-    # will always be allowed to connect regardless of if they have an account
-    killreason="Access denied, User not in LDAP";
+  database = [{
+    module="ldap";
+    id="ldapdb";
+    bindauth=lib.fileContents /var/secrets/ircd/ldap.secret;
+    # LDAP MASTER WAS DOWN COULDNT CREATE ACCOUNT
+    # binddn="cn=inspircd,ou=reserved,o=redbrick";
+    binddn="cn=mediawiki,ou=reserved,o=redbrick";
     searchscope="subtree";
-    binddn="cn=inspircd,ou=reserved,o=redbrick";
-    bindauth=/var/secrets/ircd/ldap.secret;
+    server="ldap://ldap.internal";
+    timeout="5s";
   }];
+
+  ldapauth = [{
+    attribute="uid";
+    baserdn="ou=accounts,o=redbrick";
+    dbid="ldapdb";
+    killreason="Access denied, User not in LDAP";
+    userfield="yes";
+    useusername="yes";
+  }];
+
   # ldapwhitelist indicates that clients connecting from an IP in the
   # provided CIDR do not need to authenticate against LDAP. It can be
   # repeated to whitelist multiple CIDRs.
@@ -363,7 +383,7 @@ in {
     tlsv1="false";
   }];
 
-  uline = [ { server="services.localhost.net"; silent="yes"; } ];
+  uline = [ { server="services.${tld}"; silent="yes"; } ];
   link = {
     "services.${tld}" = {
       ipaddr="127.0.0.1";

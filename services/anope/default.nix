@@ -2,12 +2,16 @@
 with lib;
 let
   package = import ../../packages/anope { inherit pkgs; };
-  configFile = ./services.conf;
+  configFile = ./conf;
+  dataDir = "/var/lib/anope";
 in {
   users.groups.anope = {};
   users.users.anope = {
     description = "anope daemon user";
     group = "anope";
+    home = dataDir;
+    createHome = true;
+    isSystemUser = true;
   };
 
   systemd.services.anope = {
@@ -17,7 +21,7 @@ in {
     stopIfChanged = false;
 
     serviceConfig = {
-      ExecStart = "${package}/bin/services --config=${configFile} --confdir=${package}/conf --dbdir=/var/lib/anope --localedir=/usr/lib/anope/locale --logdir=/var/log/anope --modulesdir=${package}/lib/modules --nofork";
+      ExecStart = "${package}/bin/services --confdir=${configFile} --config=services.conf --dbdir=${dataDir} --localedir=/usr/lib/anope/locale --logdir=${dataDir} --modulesdir=${package}/lib/ --nofork";
       ExecReload = "${pkgs.coreutils}/bin/kill -1 $MAINPID";
       User = "anope";
       Restart = "always";
