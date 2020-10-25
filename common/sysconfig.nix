@@ -34,6 +34,7 @@ in {
   networking.proxy.noProxy = "127.0.0.1,localhost,192.168.0,.internal";
   networking.extraHosts = ''
   192.168.0.156 irc.redbrick.dcu.ie
+  192.168.0.156 bitlbee.redbrick.dcu.ie
   192.168.0.158 mail.redbrick.dcu.ie
   '';
 
