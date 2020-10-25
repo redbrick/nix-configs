@@ -360,7 +360,8 @@ in {
   # repeated to whitelist multiple CIDRs.
   ldapwhitelist = [
     { cidr="178.62.221.152/32"; } # oldsoc.net
-    { cidr="136.206.15.0/24"; } # Redbrick.dcu.ie
+    { cidr="136.206.15.0/24"; } # redbrick.dcu.ie
+    { cidr="192.168.0.0/24"; } # redbrick.internal
   ];
 
   operjoin = [{
