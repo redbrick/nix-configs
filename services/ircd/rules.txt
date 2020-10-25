@@ -1,0 +1,3 @@
+This is the InspIRCd rules file.
+
+https://wiki.redbrick.dcu.ie/index.php/IRC#Chat_etiquette_and_channel_operators
