@@ -1,12 +1,17 @@
-{config, lib, pkgs, ...}:
+{stdenv, config, lib, pkgs, buildGoPackage, ...}:
 with lib;
 let
   tld = config.redbrick.tld;
   configPath = "/etc/inspircd/inspircd.conf";
+  package = import ../../packages/inspircd { inherit pkgs; };
   attrToConfig = import ./config.nix { inherit lib; };
   inspircdConf = import ./inspircd_conf.nix { inherit config lib; };
-  package = import ../../packages/inspircd { inherit pkgs; };
   configFile = pkgs.writeText "inspircd.conf" (attrToConfig inspircdConf);
+  goDiscordIrcPkg = import ../../packages/go-discord-irc {
+    inherit pkgs stdenv buildGoPackage;
+  };
+  discordConf = import ./discord_conf.nix { inherit config lib; };
+  discordConfFile = pkgs.writeText "discord.yaml" (builtins.toJSON discordConf);
 in {
   environment.etc."inspircd/inspircd.conf" = { source = configFile; };
   security.dhparams.enable = true;
@@ -71,4 +76,20 @@ in {
     serviceConfig.RemainAfterExit = true;
   };
   networking.firewall.allowedTCPPorts = [ 6697 7001 ];
+
+
+  systemd.services.go-discord-irc = {
+    description = "Discord IRC Bridge Service";
+    after = [ "network.target" ];
+    wantedBy = [ "multi-user.target" ];
+    stopIfChanged = false;
+
+    serviceConfig = {
+      ExecStart = "${goDiscordIrcPkg}/go-discord-irc --config ${discordConfFile}";
+      User = "inspircd";
+      Restart = "always";
+      RestartSec = "10s";
+    };
+  };
+
 }
