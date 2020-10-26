@@ -43,6 +43,8 @@ in {
       hash="sha256";
       timeout="10";
       limit="5000";
+      localmax="1000";
+      globalmax="2000";
     };
   };
   cidr = [{

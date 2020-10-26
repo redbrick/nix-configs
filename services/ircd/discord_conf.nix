@@ -5,7 +5,7 @@ let
   common = import ../../common/variables.nix;
 in {
   discord_token = lib.fileContents /var/secrets/ircd/discord.secret;
-  irc_server = "localhost:6697";
+  irc_server = "irc.redbrick.dcu.ie:6697";
   guild_id = "568403963595063307";
   channel_mappings = {
     "#announcements"="568809962323836940";
