@@ -8,11 +8,11 @@ in {
   irc_server = "localhost:6697";
   guild_id = "568403963595063307";
   channel_mappings = {
-    "#lobby"="627542044390457350";
+    "#announcements"="568809962323836940";
+    "#committee-contact"="568810777407127562";
     "#helpdesk"="568810176640188460";
+    "#lobby"="627542044390457350";
     "#rbadmin"="578713901043286026";
-    "#committee-contact"="627542044390457350";
-    "#announcements"="627542044390457350";
   };
   suffix = "_d2";
   separator = "_";

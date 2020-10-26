@@ -1,4 +1,4 @@
-{stdenv, config, lib, pkgs, buildGoPackage, ...}:
+{ config, lib, pkgs, ... }:
 with lib;
 let
   tld = config.redbrick.tld;
@@ -7,9 +7,7 @@ let
   attrToConfig = import ./config.nix { inherit lib; };
   inspircdConf = import ./inspircd_conf.nix { inherit config lib; };
   configFile = pkgs.writeText "inspircd.conf" (attrToConfig inspircdConf);
-  goDiscordIrcPkg = import ../../packages/go-discord-irc {
-    inherit pkgs stdenv buildGoPackage;
-  };
+  goDiscordIrcPkg = import ../../packages/go-discord-irc { inherit pkgs; };
   discordConf = import ./discord_conf.nix { inherit config lib; };
   discordConfFile = pkgs.writeText "discord.yaml" (builtins.toJSON discordConf);
 in {
@@ -83,9 +81,15 @@ in {
     after = [ "network.target" ];
     wantedBy = [ "multi-user.target" ];
     stopIfChanged = false;
+    environment = let proxy = config.networking.proxy.default; in {
+      http_proxy = proxy;
+      https_proxy = proxy;
+      HTTP_PROXY = proxy;
+      HTTPS_PROXY = proxy;
+    };
 
     serviceConfig = {
-      ExecStart = "${goDiscordIrcPkg}/go-discord-irc --config ${discordConfFile}";
+      ExecStart = "${goDiscordIrcPkg}/bin/go-discord-irc --config ${discordConfFile}";
       User = "inspircd";
       Restart = "always";
       RestartSec = "10s";

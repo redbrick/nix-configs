@@ -333,7 +333,6 @@ in {
     maxlines="20";
     notice="yes";
   }];
-  autojoin = [{ channel="#lobby,#helpdesk"; }];
   database = [{
     module="ldap";
     id="ldapdb";

@@ -1,25 +1,27 @@
-{ stdenv, buildGoPackage, pkgs ? import <nixpkgs> {} }:
+{ pkgs ? import <nixpkgs> {} }:
 
-buildGoPackage rec {
-  name = "go-discord-irc";
-  version = "20201026-${stdenv.lib.strings.substring 0 7 rev}";
-  rev = "718c85cd733bca964abf03f5371c939d19845f72";
+with pkgs;
 
-  goPackagePath = "github.com/qaisjp/${name}";
+let
+  metadata = import ./metadata.nix;
+in buildGoModule rec {
+  pname = "go-discord-irc";
+  version = metadata.rev;
 
-  src = pkgs.fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = "qaisjp";
-    repo = name;
-    sha256 = "1lbdjmyby8iz0782y9mfshl5a6b7isn2b2zavgsflrfj90s82xam";
+    repo = pname;
+    rev = metadata.rev;
+    sha256 = metadata.sha256;
   };
 
-  goDeps = ./deps.nix;
+  vendorSha256 = metadata.vendorSha256;
 
-  meta = {
-    homepage    = "https://${goPackagePath}";
+  meta = with stdenv.lib; {
+    homepage    = "https://github.com/qaisjp/go-discord-irc";
     description = "The Discord and IRC bridge with puppets!";
-    platforms   = stdenv.lib.platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [ butlerx ];
-    license     = stdenv.lib.licenses.mit;
+    platforms   = platforms.unix;
+    maintainers = with maintainers; [ butlerx ];
+    license     = licenses.mit;
   };
 }
