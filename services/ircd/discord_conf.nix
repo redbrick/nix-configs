@@ -30,7 +30,7 @@ in {
   };
   suffix = "_d2";
   separator = "_";
-  irc_listener_name = "_d2";
+  irc_listener_name = "discord_bridge";
   # webirc_pass = lib.fileContents /var/secrets/ircd/discord_webirc.secret;
   insecure = false;
   no_tls = false;
