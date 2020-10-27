@@ -1,8 +1,9 @@
 {config, lib, pkgs, ...}:
 with lib;
 let
-  package = import ../../packages/anope { inherit pkgs; };
-  configFile = ./conf;
+  pkg = import ../../../packages/anope { inherit pkgs; };
+  configDir = ./confs;
+  configFile = "services.conf";
   dataDir = "/var/lib/anope";
 in {
   users.groups.anope = {};
@@ -21,7 +22,7 @@ in {
     stopIfChanged = false;
 
     serviceConfig = {
-      ExecStart = "${package}/bin/services --confdir=${configFile} --config=services.conf --dbdir=${dataDir} --localedir=/usr/lib/anope/locale --logdir=${dataDir} --modulesdir=${package}/lib/ --nofork";
+      ExecStart = "${pkg}/bin/services --confdir=${configDir} --config=${configFile} --dbdir=${dataDir} --localedir=/usr/lib/anope/locale --logdir=${dataDir} --modulesdir=${pkg}/lib/ --nofork";
       ExecReload = "${pkgs.coreutils}/bin/kill -1 $MAINPID";
       User = "anope";
       Restart = "always";

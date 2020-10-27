@@ -1,14 +1,11 @@
-{config, lib, ...}:
-let
-  tld = config.redbrick.tld;
-  ipAddress = config.redbrick.ircServerAddress;
-  common = import ../../common/variables.nix;
-in {
-  discord_token = lib.fileContents /var/secrets/ircd/discord.secret;
+{lib, ...}:
+with lib;
+{
+  discord_token = fileContents /var/secrets/ircd/discord.secret;
   irc_server = "irc.redbrick.dcu.ie:6697";
   guild_id = "568403963595063307";
   channel_mappings = {
-    "#announcements"="568809962323836940";
+    "#rbAnnouncements"="568809962323836940";
     "#beverages"="716026722738241536";
     "#committee-contact"="568810777407127562";
     #"#corona-time"="692071508662550579";
@@ -20,7 +17,7 @@ in {
     #"#hackerclub"="568809835844337704";
     #"#hardware"="769991247112175626";
     "#helpdesk"="568810176640188460";
-    #"#infosec"="629062533374017543";
+    "#infosec"="629062533374017543";
     "#lobby"="627542044390457350";
     #"#memes"="614434947867869215";
     #"#music"="600748501135130625";
@@ -31,7 +28,7 @@ in {
   suffix = "_d2";
   separator = "_";
   irc_listener_name = "discord_bridge";
-  # webirc_pass = lib.fileContents /var/secrets/ircd/discord_webirc.secret;
+  # webirc_pass = fileContents /var/secrets/ircd/discord_webirc.secret;
   insecure = false;
   no_tls = false;
   webhook_prefix = "(auto-test)";

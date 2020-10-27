@@ -2,7 +2,7 @@
 let
   tld = config.redbrick.tld;
   ipAddress = config.redbrick.ircServerAddress;
-  common = import ../../common/variables.nix;
+  common = import ../../../common/variables.nix;
 in {
   server = {
     "irc.${tld}" = {
