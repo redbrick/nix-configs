@@ -206,13 +206,6 @@ in {
     nickmasks="no";
     trigger="95.5";
   }];
-  log = [{
-    method = "file";
-    type = "m_ldapauth";
-    level="debug";
-    target="/var/log/ircd.log";
-    flush="20";
-  }];
   module = {
     "alias" = {};
     "alltime" = {};
