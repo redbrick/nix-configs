@@ -8,7 +8,6 @@ in {
     ../../services/ssh.nix
     ../../services/bitlbee.nix
     ../../services/ircd
-    ../../services/anope
   ];
 
   # This value determines the NixOS release with which your system is to be

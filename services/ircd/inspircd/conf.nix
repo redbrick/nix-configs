@@ -2,7 +2,7 @@
 let
   tld = config.redbrick.tld;
   ipAddress = config.redbrick.ircServerAddress;
-  common = import ../../common/variables.nix;
+  common = import ../../../common/variables.nix;
 in {
   server = {
     "irc.${tld}" = {
@@ -43,6 +43,8 @@ in {
       hash="sha256";
       timeout="10";
       limit="5000";
+      localmax="1000";
+      globalmax="2000";
     };
   };
   cidr = [{
@@ -204,13 +206,6 @@ in {
     nickmasks="no";
     trigger="95.5";
   }];
-  log = [{
-    method = "file";
-    type = "m_ldapauth";
-    level="debug";
-    target="/var/log/ircd.log";
-    flush="20";
-  }];
   module = {
     "alias" = {};
     "alltime" = {};
@@ -333,7 +328,6 @@ in {
     maxlines="20";
     notice="yes";
   }];
-  autojoin = [{ channel="#lobby,#helpdesk"; }];
   database = [{
     module="ldap";
     id="ldapdb";

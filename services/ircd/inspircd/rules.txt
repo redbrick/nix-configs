@@ -1,0 +1,14 @@
+This is the InspIRCd rules file.
+
+https://wiki.redbrick.dcu.ie/index.php/IRC#Chat_etiquette_and_channel_operators
+
+1) Be respectful to other members.
+2) Sending/Linking any harmful material such as viruses, IP grabbers or any harmful software results in an immediate and permanent ban.
+3) No spamming
+4) If you wish to make an announcement to the membership as a whole ask the permission of the committee first.
+5) Try and post content in its relevant channels.
+6) Do not dox or post any private information of any individual.
+7) Listen to what the committee says at all times.
+8) Do not post graphic images or any illegal content on the server.
+9) No bots are allowed in channels shared with discord please use #bots
+10) We have allowed @greenday to collect metrics for what is said in #lobby, it is similar to what was on IRC before we had Discord! IRC metrics can be found at https://shadow.redbrick.dcu.ie/  By default everyone is opted in but if you do not want to be included in the metrics in #lobby type !!optout and you will not be logged for metrics.
