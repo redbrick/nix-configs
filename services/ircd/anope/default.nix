@@ -22,9 +22,10 @@ in {
     stopIfChanged = false;
 
     serviceConfig = {
-      ExecStart = "${pkg}/bin/services --confdir=${configDir} --config=${configFile} --dbdir=${dataDir} --localedir=/usr/lib/anope/locale --logdir=${dataDir} --modulesdir=${pkg}/lib/ --nofork";
+      ExecStart = "${pkg}/bin/services --confdir=${configDir} --config=${configFile} --dbdir=${dataDir} --localedir=${pkg}/lib/anope/locale --logdir=${dataDir} --modulesdir=${pkg}/lib/ --nofork";
       ExecReload = "${pkgs.coreutils}/bin/kill -1 $MAINPID";
       User = "anope";
+      StateDirectory = "anope";
       Restart = "always";
       RestartSec = "10s";
     };

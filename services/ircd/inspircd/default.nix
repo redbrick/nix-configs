@@ -2,13 +2,11 @@
 with lib;
 let
   tld = config.redbrick.tld;
-  configPath = "/etc/inspircd/inspircd.conf";
   pkg = import ../../../packages/inspircd { inherit pkgs; };
   attrToConfig = import ../../../common/xml.nix { inherit lib; };
   inspircdConf = import ./conf.nix { inherit config lib; };
   configFile = pkgs.writeText "inspircd.conf" (attrToConfig inspircdConf);
 in {
-  environment.etc."inspircd/inspircd.conf" = { source = configFile; };
   security.dhparams.enable = true;
   security.dhparams.params.ircd.bits = 2048;
   security.acme.acceptTerms = true;
@@ -46,7 +44,7 @@ in {
     stopIfChanged = false;
 
     serviceConfig = {
-      ExecStart = "${pkg}/bin/inspircd --nofork --nopid --config ${configPath}";
+      ExecStart = "${pkg}/bin/inspircd --nofork --nopid --config ${configFile}";
       ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
       User = "inspircd";
       Restart = "always";
