@@ -17,6 +17,7 @@ in {
     };
     serviceConfig = {
       ExecStart = "${pkg}/bin/go-discord-irc --config ${confFile}";
+      ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
       User = "inspircd";
       Restart = "always";
       RestartSec = "10s";

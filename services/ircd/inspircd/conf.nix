@@ -370,6 +370,7 @@ in {
   }];
   randquote = [{ file=./quotes.txt; }];
   openssl = [{
+    ciphers = "DEFAULT:AES256-SHA256";
     certfile = "${common.certsDir}/irc.${tld}/fullchain.pem";
     keyfile = "${common.certsDir}/irc.${tld}/key.pem";
     dhfile = config.security.dhparams.params.ircd.path;
