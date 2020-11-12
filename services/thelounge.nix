@@ -17,13 +17,13 @@ in {
         enable = true;
         port = 16667;
         extraConfig = {
-            bind = "127.0.0.1";
+            leaveMessage = "Bye for now";
             lockNetwork = true;
             defaults = {
                 name = "Redbrick";
-                host = "127.0.0.1";
-                port = 6667;
-                tls = false;
+                host = "irc.redbrick.dcu.ie";
+                port = 6697;
+                tls = true;
                 password = "";
                 join = "#lobby,#intersocs,#bots,#helpdesk";
             };
@@ -50,24 +50,6 @@ in {
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         ExecStart = "${pkgs.oidentd}/bin/oidentd -c ${oidentdConfig} -i -S";
-      };
-    };
-
-    # TODO remove when ircd-hybrid is listening on a 192.168.0.0/24 address
-    systemd.services.irc-tunnel = {
-      description = "IRC tunnel";
-      before = [ "thelounge.service" ];
-      after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
-
-      serviceConfig = {
-          ExecStart = ''
-            ${pkgs.openssh}/bin/ssh -o 'UserKnownHostsFile=/dev/null' -o 'StrictHostKeyChecking=no' \
-            -i ${identityFile} -vNL 6667:irc.redbrick.dcu.ie:6667 portfwd@zeus.internal
-          '';
-          Restart = "always";
-          RestartSec = "10";
-          WorkingDirectory = "/var/empty";
       };
     };
 

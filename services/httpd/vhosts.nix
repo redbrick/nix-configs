@@ -220,6 +220,7 @@ in (userVhosts // {
   "riainccc.${tld}" = vhostProxy "http://http://136.206.15.25:3000";
   "tomcat.dregin.${tld}" = vhostProxy "http://136.206.15.14:20002";
   "webchat.${tld}" = vhostProxy "http://127.0.0.1:16667";
+  "irc.${tld}" = vhostProxy "http://127.0.0.1:16667";
   "werdztomcat.${tld}" = vhostProxy "http://136.206.15.14:20001";
   "www.${tld}" = vhostRedirect "https://${tld}/";
   "admin.${tld}" = vhostRedirect "https://blog.${tld}/";
