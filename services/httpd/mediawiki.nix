@@ -189,6 +189,7 @@ let
     dbPrefix = "rbwiki_";
     cacheDir = "/var/tmp/wiki";
     stateDir = "${webtree}/w/wiki";
+    needLogin = true;
   };
   wikiCfgPath = mkConfig wikiConfig;
 
