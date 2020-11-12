@@ -17,6 +17,7 @@ in {
         enable = true;
         port = 16667;
         extraConfig = {
+            leaveMessage = "Bye for now";
             lockNetwork = true;
             defaults = {
                 name = "Redbrick";
