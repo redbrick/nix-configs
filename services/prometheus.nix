@@ -4,6 +4,7 @@ let
   # We Should be able to generate this
   nodes = [
     "zeus"
+	"albus"
     "daedalus"
     "icarus"
     "hardcase"
