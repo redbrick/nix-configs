@@ -3,14 +3,14 @@ let
   tld = config.redbrick.tld;
   # We Should be able to generate this
   nodes = [
-    "zeus"
-	"albus"
-    "daedalus"
-    "icarus"
-    "hardcase"
-    "m1cr0man"
+    "albus"
     "butlerxvm"
+    "daedalus"
+    "hardcase"
+    "icarus"
+    "m1cr0man"
     "metharme"
+    "zeus"
   ];
   globalConfig = {
     scrape_interval = "15s";
