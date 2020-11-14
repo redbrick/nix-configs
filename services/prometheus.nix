@@ -9,6 +9,7 @@ let
     "hardcase"
     "m1cr0man"
     "butlerxvm"
+    "metharme"
   ];
   globalConfig = {
     scrape_interval = "15s";
