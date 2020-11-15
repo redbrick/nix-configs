@@ -130,9 +130,10 @@ let
       $wgNonincludableNamespaces[] = 100;
       $wgGroupPermissions['*']['readrbonly'] = false;
       $wgNamespaceProtection[ 100 ] = array( 'readrbonly' );
-      $wgGroupPermissions['*']['createaccount']   = false;
-      $wgGroupPermissions['*']['read']            = ${if needLogin then "false" else "true"};
-      $wgGroupPermissions['*']['edit']            = false;
+      $wgGroupPermissions['*']['createaccount']     = false;
+      $wgGroupPermissions['*']['autocreateaccount'] = true;
+      $wgGroupPermissions['*']['read']              = ${if needLogin then "false" else "true"};
+      $wgGroupPermissions['*']['edit']              = false;
 
       # When you make changes to this configuration file, this will make
       # sure that cached pages are cleared.
