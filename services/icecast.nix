@@ -1,6 +1,8 @@
 { config, lib, pkgs, ... }:
 with lib;
 let
+  metrics-pkg = import ../../../packages/icecast-exporter { inherit pkgs; };
+  port = 8002;
   tld = config.redbrick.tld;
   admin-secret = "/var/secrets/icecast-admin.secret";
   source-secret = "/var/secrets/icecast-source.secret";
@@ -29,7 +31,7 @@ in {
       password = "${lib.fileContents admin-secret}";
     };
     listen = {
-      port = 8002;
+      inherit port;
       address = listenAddress;
     };
     logDir = "/var/log/icecast/";
@@ -64,5 +66,18 @@ in {
     <fileserve>1</fileserve>
     '';
   };
-  networking.firewall.allowedTCPPorts = [ 8002 ];
+
+  systemd.services.icecast-exporter = {
+    description = "Icecast Metrics exporter";
+    after = [ "network.target" ];
+    wantedBy = [ "multi-user.target" ];
+    serviceConfig = {
+      ExecStart = "${metrics-pkg}/bin/icecast_exporter -log.format='logger:stdout?json=true' -icecast.scrape-uri='http://${listenAddress}:${port}/status-json.xsl'";
+      User = "icecast";
+      Restart = "always";
+      RestartSec = "10s";
+    };
+  };
+
+  networking.firewall.allowedTCPPorts = [ 8002 9146 ];
 }
