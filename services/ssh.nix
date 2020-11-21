@@ -25,7 +25,7 @@ in {
   users.users.root.openssh.authorizedKeys.keys = [
     "environment=\"REMOTEUSER=m1cr0man\" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINnVLSh0OStxZTkXE6oGgwfFvsbvN6bFPlVfDYOwtnzn m1cr0man@redbrick.dcu.ie"
     "environment=\"REMOTEUSER=m1cr0man\" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPR+OTAIYr02f/WKQSXo7zYy9tkuAHYpy0ajqY6aJ7Nk m1cr0man@redbrick.dcu.ie"
-    "environment=\"REMOTEUSER=m1cr0man\" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDYKnYP4Mmyk4wQE7J6Tyr27XToKtxAhXBZr5HkEXiFq m1cr0man@redbrick.dcu.ie"
+    "environment=\"REMOTEUSER=m1cr0man\" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINV2JF6dDjXlmUgVlzk7y5VwXx4r5+1rd95e+lU4VayA m1cr0man@redbrick.dcu.ie"
     "environment=\"REMOTEUSER=greenday\" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJeCEU7Unc+4tGAMxyxy1bWxjoQ5oMN/igpqEnYZ9vDu greenday@redbrick.dcu.ie"
     "environment=\"REMOTEUSER=mctastic\" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOjro8OS7cWf6xBcrs4erZqjN5JdztoGqpMXFQwzd9pV mctastic@azazel.redbrick.dcu.ie"
     "environment=\"REMOTEUSER=ylmcc\" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINmFQb5NlYOUT5fnMNmlK6ainrAF2fGH1/egwvHxjIuF ylmcc@redbrick.dcu.ie"
