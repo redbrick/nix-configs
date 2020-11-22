@@ -38,5 +38,17 @@
       default = "136.206.15.3";
       type = lib.types.str;
     };
+
+    znapzendSourceDataset = lib.mkOption {
+      description = "Dataset on the local system to send to Albus";
+      example = "znfs";
+      type = lib.types.str;
+    };
+
+    znapzendDestDataset = lib.mkOption {
+      description = "Dataset on Albus to write the backup to (full path)";
+      example = "zbackup/nfs";
+      type = lib.types.str;
+    };
   };
 }
