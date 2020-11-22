@@ -8,6 +8,7 @@ in {
     ../../services/ssh.nix
     ../../services/gluster.nix
     ../../services/squid.nix
+    ../../services/znapzend.nix
     ../../services/ldap
     ../../services/zfsquota
   ];
@@ -39,4 +40,8 @@ in {
 
   # Sync quotas with LDAP
   redbrick.zfsquotaDataset = "zbackup";
+
+  # Configure backups
+  redbrick.znapzendSourceDataset = "zbackup";
+  redbrick.znapzendDestDataset = "zbackup/nfs";
 }

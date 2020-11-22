@@ -26,4 +26,25 @@ in {
     hostId = "92975c99";
     defaultGateway = "192.168.0.254";
   } // (variables.bondConfig [ "eno1" "eno2" ] "192.168.0.56");
+
+  users.users.znapzend = {
+    useDefaultShell = true;
+    openssh.authorizedKeys.keys = [
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGjw3ENwy/fBX6EOqwppSv1c0m5buvKE8OaS810BTaFo root@icarus"
+    ];
+  };
+
+  systemd.services.znapzend-permissions = {
+    description = "Configure ZFS permissions for znapzend user";
+    after = [ "zfs-import.target" ];
+    wantedBy = [ "multi-user.target" ];
+    restartIfChanged = true;
+    path = with pkgs; [ zfs ];
+    script = ''
+      zfs allow -u znapzend create,destroy,mount,receive,userprop zbackup
+    '';
+    serviceConfig = {
+      Type = "oneshot";
+    };
+  };
 }
