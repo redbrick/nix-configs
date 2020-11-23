@@ -35,7 +35,6 @@ with lib;
   separator = "_";
   irc_listener_name = "discord_bridge";
   # webirc_pass = fileContents /var/secrets/ircd/discord_webirc.secret;
-  insecure = false;
-  no_tls = false;
   webhook_prefix = "(auto-test)";
+  max_nick_length = 12;
 }
