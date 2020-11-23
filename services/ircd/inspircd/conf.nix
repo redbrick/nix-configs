@@ -386,7 +386,7 @@ in {
       certfile = "${config.security.acme.certs."irc.${tld}".directory}/fullchain.pem";
       keyfile = "${common.certsDir}/irc.${tld}/key.pem";
       dhfile = config.security.dhparams.params.ircd.path;
-      hash="sha256";
+      hash="sha1";
       tlsv1="no";
       tlsv11="no";
       tlsv12="yes";
