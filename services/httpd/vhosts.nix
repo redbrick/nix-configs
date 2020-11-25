@@ -129,9 +129,9 @@ in (userVhosts // {
     group = "associat";
   };
   "mcmahon.${tld}" = vhost {
-    documentRoot = "${webtree}/m/mcmahon/wordpress";
+    documentRoot = "${webtree}/m/mcmahon";
     user = "mcmahon";
-    group = "member";
+    group = "associat";
   };
   "packages.${tld}" = vhost {
     documentRoot = "${webtree}/r/rbpkg/apt";
