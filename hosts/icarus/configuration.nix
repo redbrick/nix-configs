@@ -22,7 +22,10 @@ in {
   # Use the GRUB 2 boot loader.
   boot.loader.grub.enable = true;
   boot.loader.grub.version = 2;
-  boot.loader.grub.device = "/dev/sda";
+  boot.loader.grub.devices = [
+    "/dev/disk/by-id/wwn-0x6001ec90d17f2400275982c55f7fa380"
+    "/dev/disk/by-id/wwn-0x6001ec90d17f2400275bf01649f1e3d1"
+  ];
 
   networking = {
     hostName = "icarus";
