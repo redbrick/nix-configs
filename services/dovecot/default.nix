@@ -1,4 +1,4 @@
-{config, pkgs, ...}:
+{config, pkgs, lib, ...}:
 let
   tld = config.redbrick.tld;
   tldCertsDir = config.security.acme.certs."${tld}".directory;
