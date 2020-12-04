@@ -3,6 +3,8 @@
 {config, pkgs, lib, ...}:
 let
   tld = config.redbrick.tld;
+  tldCertsDir = config.security.acme.certs."${tld}".directory;
+
   common = import ../../common/variables.nix;
 
   aliases = import ./aliases.nix { inherit tld; };
@@ -81,6 +83,10 @@ in {
   security.dhparams.params.smtpd_512.bits = 512;
   security.dhparams.params.smtpd_2048.bits = 2048;
 
+  security.acme.certs."${tld}".postRun = ''
+    systemctl restart postfix
+  '';
+
   services.postfix = {
     enable = true;
     setSendmail = true;
@@ -89,8 +95,8 @@ in {
     destination = [tld "localhost"];
     recipientDelimiter = "+";
 
-    sslCert = "${common.certsDir}/${tld}/fullchain.pem";
-    sslKey = "${common.certsDir}/${tld}/key.pem";
+    sslCert = "${tldCertsDir}/fullchain.pem";
+    sslKey = "${tldCertsDir}/key.pem";
 
     # disable authentication on port 25. This port should only be used by other
     # mail servers

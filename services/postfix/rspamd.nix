@@ -41,9 +41,14 @@ in {
       path = "/var/secrets/$domain.$selector.dkim.key";
       selector = "${config.networking.hostName}";
       allow_username_mismatch = true;
+      allow_hdrfrom_mismatch = true;
       sign_local = false;
       sign_authenticated = true;
-	  use_esld = false;
+      use_esld = false;
+    '';
+    # Given the volume of logs we get from mail, this is nothing, and it's very useful.
+    locals."logging.inc".text = ''
+      debug_modules = ["dkim_signing"];
     '';
     locals."worker-controller.inc".text = ''
       # generate a password hash using the `rspamadm pw` command and put it here

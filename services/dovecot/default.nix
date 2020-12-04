@@ -1,6 +1,7 @@
 {config, pkgs, ...}:
 let
   tld = config.redbrick.tld;
+  tldCertsDir = config.security.acme.certs."${tld}".directory;
 
   common = import ../../common/variables.nix;
 
@@ -48,6 +49,10 @@ in {
   # Increase ulimit due to service_auth client_limit (2000)
   systemd.services.dovecot2.serviceConfig.LimitNOFILE = 2500;
 
+  security.acme.certs."${tld}".postRun = ''
+    systemctl restart dovecot2
+  '';
+
   services.dovecot2 = {
     enable = true;
     modules = [ pigeonhole ];
@@ -57,8 +62,8 @@ in {
     enablePAM = false;
     showPAMFailure = false;
 
-    sslServerCert = "${common.certsDir}/${tld}/fullchain.pem";
-    sslServerKey = "${common.certsDir}/${tld}/key.pem";
+    sslServerCert = "${tldCertsDir}/fullchain.pem";
+    sslServerKey = "${tldCertsDir}/key.pem";
     sslCACert = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
 
     # We don't want all members to be able to read other member's mail
