@@ -83,7 +83,7 @@ in {
   security.dhparams.params.smtpd_512.bits = 512;
   security.dhparams.params.smtpd_2048.bits = 2048;
 
-  security.acme.certs."${tld}".postRun = lib.mkMerge ''
+  security.acme.certs."${tld}".postRun = ''
     systemctl restart postfix
   '';
 

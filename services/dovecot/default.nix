@@ -1,4 +1,4 @@
-{config, pkgs, lib, ...}:
+{config, pkgs, ...}:
 let
   tld = config.redbrick.tld;
   tldCertsDir = config.security.acme.certs."${tld}".directory;
@@ -49,7 +49,7 @@ in {
   # Increase ulimit due to service_auth client_limit (2000)
   systemd.services.dovecot2.serviceConfig.LimitNOFILE = 2500;
 
-  security.acme.certs."${tld}".postRun = lib.mkMerge ''
+  security.acme.certs."${tld}".postRun = ''
     systemctl restart dovecot2
   '';
 
