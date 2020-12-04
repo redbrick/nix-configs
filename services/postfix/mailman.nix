@@ -89,6 +89,7 @@ in {
       smtp_user: ${secrets.emailUser}
       smtp_pass: ${secrets.emailPassword}
       smtp_secure_mode: starttls
+      remove_dkim_headers: yes
     '';
   };
 
