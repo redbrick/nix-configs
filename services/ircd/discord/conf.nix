@@ -11,6 +11,7 @@ with lib;
     #"#corona-time"="692071508662550579";
     "#committee-contact"="568810777407127562";
     "#events"="769154545544462336"; # external-events
+    "#devchat" = "801466562959114331";
     #"#first-year-hub"="760849311948210196";
     "#foodie"="694653366583951403"; # food
     "#gamessoc"="613450224144482314"; # video-games
