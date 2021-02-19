@@ -3,6 +3,7 @@ with lib;
 {
   discord_token = fileContents /var/secrets/ircd/discord.secret;
   irc_server = "irc.redbrick.dcu.ie:6697";
+  irc_server_name = "intersocs";
   guild_id = "568403963595063307";
   channel_mappings = {
     "#beverages"="716026722738241536";
@@ -28,10 +29,10 @@ with lib;
     "#rbEvents"="601797137000300563"; # events
     "#sports"="753969788920922193";
   };
-  suffix = "_d2";
+  suffix = "[d]";
   separator = "_";
   irc_listener_name = "discord_bridge";
   # webirc_pass = fileContents /var/secrets/ircd/discord_webirc.secret;
   webhook_prefix = "(auto-test)";
-  max_nick_length = 12; # The default is 30
+  max_nick_length = 18; # The default is 30
 }
