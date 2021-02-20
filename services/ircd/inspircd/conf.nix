@@ -379,19 +379,15 @@ in {
     cmd="PRIVMSG $nickrequired :IDENTIFY $pass";
   }];
   randquote = [{ file=./quotes.txt; }];
-  sslprofile = {
-    Clients = {
-      provider="openssl";
-      ciphers ="DEFAULT:AES256-SHA256";
-      certfile = "${config.security.acme.certs."irc.${tld}".directory}/fullchain.pem";
-      keyfile = "${common.certsDir}/irc.${tld}/key.pem";
-      dhfile = config.security.dhparams.params.ircd.path;
-      hash="sha1";
-      tlsv1="no";
-      tlsv11="no";
-      tlsv12="yes";
-    };
-  };
+  openssl = [{
+    ciphers = "DEFAULT:AES256-SHA256";
+    certfile = "${common.certsDir}/irc.${tld}/fullchain.pem";
+    keyfile = "${common.certsDir}/irc.${tld}/key.pem";
+    dhfile = config.security.dhparams.params.ircd.path;
+    hash="sha1";
+    sslv1="false";
+    tlsv1="false";
+  }];
 
   uline = [ { server="services.${tld}"; silent="yes"; } ];
   link = {
