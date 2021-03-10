@@ -1,3 +1,6 @@
+# AUTO-GENERATED FILE - DO NOT EDIT!! Use ldapmodify.
+# CRC32 c1213f10
+# Original comment:
 #
 # Redbrick User Database LDAP Schema
 #
@@ -10,8 +13,10 @@
 # User database information
 #
 # Attribute Type Definitions
-
-attributetype ( 1.3.6.1.4.1.9736.15.1.1.1.1
+dn: cn=common,cn=schema,cn=config
+objectClass: olcSchemaConfig
+cn: common
+olcAttributeTypes: {0}( 1.3.6.1.4.1.9736.15.1.1.1.1
         NAME ( 'username' )
         DESC 'A username'
         EQUALITY caseIgnoreMatch
