@@ -5,6 +5,8 @@
 { pkgs, config, lib, ... }:
 let
   rootpwFile = "/var/secrets/ldap.secret";
+  baseDN = "o=redbrick";
+  slurpdDN = "uid=slurpd,ou=services,${baseDN}";
   slurpdpwFile = "/var/secrets/slurpd.secret";
   dbDirectory = "/var/db/openldap";
 in {
@@ -35,12 +37,13 @@ in {
           olcSizeLimit = "unlimited";
           olcLastMod = "TRUE";
           olcAccess = [
-            "{0}to dn.children=ou=2002,ou=accounts,o=redbrick  by dn.regex=cn=root,ou=ldap,o=redbrick write  by dn.regex=cn=slurpd,ou=ldap,o=redbrick read by * none"
-            "{1}to dn.children=ou=accounts,o=redbrick  attrs=cn  by dn.regex=cn=root,ou=ldap,o=redbrick write  by dn.regex=cn=slurpd,ou=ldap,o=redbrick read  by dn.regex=cn=mediawiki,ou=reserved,o=redbrick read  by self read by * none"
-            "{2}to attrs=yearsPaid,year,course,id,newbie,altmail  by dn.regex=cn=root,ou=ldap,o=redbrick write  by dn.regex=cn=slurpd,ou=ldap,o=redbrick read  by dn.regex=cn=mediawiki,ou=reserved,o=redbrick read  by self read  by * none"
-            "{3}to attrs=userPassword  by dn.regex=cn=root,ou=ldap,o=redbrick write continue  by dn.regex=cn=slurpd,ou=ldap,o=redbrick read  by dn.regex=cn=dovecot,ou=reserved,o=redbrick read  by self write  by anonymous auth  by * none"
-            "{4}to attrs=gecos,loginShell  by dn.regex=cn=root,ou=ldap,o=redbrick write continue  by dn.regex=cn=slurpd,ou=ldap,o=redbrick read  by self write  by * read"
-            "{5}to *  by * read"
+            "{0}to dn.subtree=${baseDN} by dn.exact=${slurpdDN} manage"
+            "{1}to dn.children=ou=2002,ou=accounts,${baseDN}  by dn.regex=cn=root,ou=ldap,${baseDN} write by * none"
+            "{2}to dn.children=ou=accounts,${baseDN}  attrs=cn  by dn.regex=cn=root,ou=ldap,${baseDN} write  by dn.regex=cn=mediawiki,ou=reserved,${baseDN} read  by self read by * none"
+            "{3}to attrs=yearsPaid,year,course,id,newbie,altmail  by dn.regex=cn=root,ou=ldap,${baseDN} write  by dn.regex=cn=mediawiki,ou=reserved,${baseDN} read  by self read  by * none"
+            "{4}to attrs=userPassword  by dn.regex=cn=root,ou=ldap,${baseDN} write continue  by dn.regex=cn=dovecot,ou=reserved,${baseDN} read  by self write  by anonymous auth  by * none"
+            "{5}to attrs=gecos,loginShell  by dn.regex=cn=root,ou=ldap,${baseDN} write continue  by self write  by * read"
+            "{6}to *  by * read"
           ];
         };
         "olcDatabase={0}config".attrs = {
@@ -57,15 +60,15 @@ in {
             olcLastMod = "TRUE";
             olcMonitoring = "TRUE";
             olcDbDirectory = dbDirectory;
-            olcSuffix = "o=redbrick";
-            olcRootDN = "cn=root,ou=ldap,o=redbrick";
+            olcSuffix = baseDN;
+            olcRootDN = "cn=root,ou=ldap,${baseDN}";
             olcRootPW = {
               path = rootpwFile;
             };
             olcSyncrepl = builtins.map (srv: (
               "rid=${lib.fixedWidthNumber 3 srv.replicationId} provider=ldap://${srv.ipAddress}:389"
-              + " searchbase=\"o=redbrick\" scope=sub"
-              + " bindmethod=simple binddn=\"cn=slurpd,ou=ldap,o=redbrick\" credentials=\"${lib.fileContents slurpdpwFile}\""
+              + " searchbase=\"${baseDN}\" scope=sub"
+              + " bindmethod=simple binddn=\"${slurpdDN}\" credentials=\"${lib.fileContents slurpdpwFile}\""
               + " type=refreshOnly interval=00:00:00:10 retry=\"5 5 300 +\" timeout=1 network-timeout=5"
             )) config.redbrick.ldapServers;
             olcDbIndex = [
