@@ -2,7 +2,6 @@
 # Add /var/secrets/ldap.secret
 # Add /var/secrets/slurpd.secret if setting up a slave
 # Add /var/db/ldap/DB_CONFIG
-# TODO change RID based on IP address of host
 { pkgs, config, lib, ... }:
 let
   rootpwFile = "/var/secrets/ldap.secret";
@@ -14,7 +13,10 @@ in {
 
     settings = {
       attrs = {
-        olcLogLevel = "0";
+        olcLogLevel = "sync";
+        olcServerID = builtins.map (srv: (
+          "${builtins.toString srv.replicationId} ldap://${srv.ipAddress}:389"
+        )) config.redbrick.ldapServers;
         # Used in emergencies
         # olcReadOnly = "TRUE";
       };
@@ -60,13 +62,21 @@ in {
             olcRootPW = {
               path = rootpwFile;
             };
-          } // (lib.optionalAttrs (config.redbrick.ldapSlaveTo != null) {
-              olcSyncrepl = "rid=000 provider=ldap://${config.redbrick.ldapSlaveTo}:389 bindmethod=simple timeout=0 network-timeout=0 binddn=\"cn=slurpd,ou=ldap,o=redbrick\" credentials=\"${lib.fileContents slurpdpwFile}\" keepalive=0:0:0 starttls=no filter=\"(objectclass=*)\" searchbase=\"o=redbrick\" scope=sub attrs=\"*,+\" schemachecking=off type=refreshAndPersist retry=\"5 5 300 +\"";
-              olcMirrorMode = "FALSE";
-          });
+            olcSyncrepl = builtins.map (srv: (
+              "rid=${lib.fixedWidthNumber 3 srv.replicationId} provider=ldap://${srv.ipAddress}:389"
+              + " searchbase=\"o=redbrick\" scope=sub"
+              + " bindmethod=simple binddn=\"cn=slurpd,ou=ldap,o=redbrick\" credentials=\"${lib.fileContents slurpdpwFile}\""
+              + " type=refreshOnly interval=00:00:00:10 retry=\"5 5 300 +\" timeout=1 network-timeout=5"
+            )) config.redbrick.ldapServers;
+            olcDbIndex = [
+              "entryUUID  eq"
+              "entryCSN  eq"
+            ];
+            # TODO figure out how to set this correctly...
+            olcMirrorMode = "TRUE";
+          };
           children = {
-            # TODO test + repl config
-            "olcOverlay={0}syncprov".attrs = lib.optionalAttrs (config.redbrick.ldapSlaveTo == null) {
+            "olcOverlay={0}syncprov".attrs = {
               objectClass = [ "olcOverlayConfig" "olcSyncProvConfig" ];
               olcOverlay = "{0}syncprov";
               olcSpCheckpoint = "100 10";

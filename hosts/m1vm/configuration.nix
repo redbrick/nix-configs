@@ -10,6 +10,7 @@
     ../../services/dovecot
     ../../services/certs
     ../../services/postgres.nix
+    ../../services/ldap
   ];
 
   # This value determines the NixOS release with which your system is to be
