@@ -5,6 +5,7 @@ let
 in {
   imports = [
     ./options.nix
+    ./ldap.nix
     ../packages/overlays
   ];
 

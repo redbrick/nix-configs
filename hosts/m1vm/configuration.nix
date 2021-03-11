@@ -40,6 +40,8 @@
   redbrick.smtpBindAddress = "192.168.0.135";
   redbrick.smtpExternalAddress = "136.206.15.5";
 
+  services.openldap.urlList = [ "ldap://192.168.0.135:389" ];
+
   users.users.lucasade = {
     isNormalUser = true;
     home = "/home/lucasade";

@@ -6,6 +6,7 @@ in {
     ./hardware-configuration.nix
     ../../common/sysconfig.nix
     ../../services/ssh.nix
+    ../../services/ldap
   ];
 
   # This value determines the NixOS release with which your system is to be
@@ -26,6 +27,8 @@ in {
     hostId = "92975c99";
     defaultGateway = "192.168.0.254";
   } // (variables.bondConfig [ "eno1" "eno2" ] "192.168.0.56");
+
+  services.openldap.urlList = [ "ldap://192.168.0.56:389" ];
 
   users.users.znapzend = {
     useDefaultShell = true;
