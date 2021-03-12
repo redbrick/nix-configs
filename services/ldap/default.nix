@@ -13,6 +13,8 @@ let
 in {
   services.openldap = {
     enable = true;
+    # Host-specific listening IP should go into host's configuration.nix
+    urlList = [ "ldap://127.0.0.1:389" ];
 
     settings = {
       attrs = {
@@ -40,12 +42,11 @@ in {
           olcSizeLimit = "unlimited";
           olcLastMod = "TRUE";
           olcAccess = [
-            "{0}to dn.children=ou=accounts,${baseDN}  attrs=cn  by dn.regex=cn=mediawiki,ou=reserved,${baseDN} read  by self read by * none"
-            "{1}to attrs=yearsPaid,year,course,id,newbie,altmail  by dn.regex=cn=mediawiki,ou=reserved,${baseDN} read  by self read  by * none"
-            "{2}to attrs=userPassword  by dn.regex=cn=dovecot,ou=reserved,${baseDN} read  by self write  by anonymous auth  by * none"
-            "{3}to attrs=gecos,loginShell  by self write  by * read"
-            "{4}to dn.subtree=${baseDN} by dn.exact=${slurpdDN} manage  by * none"
-            "{5}to *  by * read"
+            "{0}to attrs=cn,yearsPaid,year,course,id,newbie,altmail  by dn.regex=cn=mediawiki,ou=reserved,${baseDN} read  by self read  by * none"
+            "{1}to attrs=userPassword  by dn.regex=cn=dovecot,ou=reserved,${baseDN} read  by self write  by anonymous auth  by * none"
+            "{2}to attrs=gecos,loginShell  by self write"
+            "{3}to dn.subtree=${baseDN} by dn.exact=${slurpdDN} manage"
+            "{4}to *  by * read"
           ];
         };
         "olcDatabase={0}config".attrs = {
@@ -76,8 +77,8 @@ in {
             olcDbIndex = [
               "entryUUID  eq"
               "entryCSN  eq"
+              "uid  eq"
             ];
-            # TODO figure out how to set this correctly...
             olcMirrorMode = "TRUE";
           };
           children = {
