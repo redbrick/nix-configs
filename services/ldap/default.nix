@@ -6,7 +6,8 @@
 let
   rootpwFile = "/var/secrets/ldap.secret";
   baseDN = "o=redbrick";
-  slurpdDN = "uid=slurpd,ou=services,${baseDN}";
+  rootDN = "cn=root,ou=services,o=redbrick";
+  slurpdDN = "cn=slurpd,ou=services,${baseDN}";
   slurpdpwFile = "/var/secrets/slurpd.secret";
   dbDirectory = "/var/db/openldap";
 in {
@@ -37,12 +38,11 @@ in {
           olcSizeLimit = "unlimited";
           olcLastMod = "TRUE";
           olcAccess = [
-            "{0}to dn.subtree=${baseDN} by dn.exact=${slurpdDN} manage"
-            "{1}to dn.children=ou=2002,ou=accounts,${baseDN}  by dn.regex=cn=root,ou=ldap,${baseDN} write by * none"
-            "{2}to dn.children=ou=accounts,${baseDN}  attrs=cn  by dn.regex=cn=root,ou=ldap,${baseDN} write  by dn.regex=cn=mediawiki,ou=reserved,${baseDN} read  by self read by * none"
-            "{3}to attrs=yearsPaid,year,course,id,newbie,altmail  by dn.regex=cn=root,ou=ldap,${baseDN} write  by dn.regex=cn=mediawiki,ou=reserved,${baseDN} read  by self read  by * none"
-            "{4}to attrs=userPassword  by dn.regex=cn=root,ou=ldap,${baseDN} write continue  by dn.regex=cn=dovecot,ou=reserved,${baseDN} read  by self write  by anonymous auth  by * none"
-            "{5}to attrs=gecos,loginShell  by dn.regex=cn=root,ou=ldap,${baseDN} write continue  by self write  by * read"
+            "{0}to dn.subtree=${baseDN} by dn.exact=${slurpdDN} manage  by dn.exact=${rootDN} manage"
+            "{2}to dn.children=ou=accounts,${baseDN}  attrs=cn write  by dn.regex=cn=mediawiki,ou=reserved,${baseDN} read  by self read by * none"
+            "{3}to attrs=yearsPaid,year,course,id,newbie,altmail write  by dn.regex=cn=mediawiki,ou=reserved,${baseDN} read  by self read  by * none"
+            "{4}to attrs=userPassword write continue  by dn.regex=cn=dovecot,ou=reserved,${baseDN} read  by self write  by anonymous auth  by * none"
+            "{5}to attrs=gecos,loginShell write continue  by self write  by * read"
             "{6}to *  by * read"
           ];
         };
@@ -61,7 +61,7 @@ in {
             olcMonitoring = "TRUE";
             olcDbDirectory = dbDirectory;
             olcSuffix = baseDN;
-            olcRootDN = "cn=root,ou=ldap,${baseDN}";
+            olcRootDN = rootDN;
             olcRootPW = {
               path = rootpwFile;
             };
