@@ -20,6 +20,10 @@ with lib;
       default = [];
       type = types.listOf (types.submodule {
         options = {
+          hostName = mkOption {
+            description = "DNS name of the LDAP host";
+            type = types.str;
+          };
           ipAddress = mkOption {
             description = "IP address of the LDAP host";
             type = types.str;
