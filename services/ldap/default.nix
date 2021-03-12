@@ -16,10 +16,12 @@ in {
 
     settings = {
       attrs = {
-        olcLogLevel = "Sync Stats";
         olcServerID = builtins.map (srv: (
           "${builtins.toString srv.replicationId} ldap://${srv.ipAddress}:389"
         )) config.redbrick.ldapServers;
+        olcLogLevel = "0";
+        # Used for debugging
+        # olcLogLevel = "Sync Stats";
         # Used in emergencies
         # olcReadOnly = "TRUE";
       };
