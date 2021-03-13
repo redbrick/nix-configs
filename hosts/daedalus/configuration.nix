@@ -27,4 +27,6 @@ in {
     hostId = "0f127302";
     defaultGateway = "192.168.0.254";
   } // (variables.bondConfig [ "eno1" "eno2" ] "192.168.0.50");
+
+  services.openldap.urlList = [ "ldap://192.168.0.50:389" ];
 }
