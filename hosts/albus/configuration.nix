@@ -30,21 +30,22 @@ in {
 
   services.openldap.urlList = [ "ldap://192.168.0.56:389" ];
 
-  users.users.znapzend = {
+  users.users.rbbackup = {
     useDefaultShell = true;
     openssh.authorizedKeys.keys = [
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHM+HZVUPkFX/Xlxla/2JYpFrt2vEG2nJVcjRpJhGU3c root@daedalus"
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGjw3ENwy/fBX6EOqwppSv1c0m5buvKE8OaS810BTaFo root@icarus"
     ];
   };
 
-  systemd.services.znapzend-permissions = {
-    description = "Configure ZFS permissions for znapzend user";
+  systemd.services.rbbackup-permissions = {
+    description = "Configure ZFS permissions for rbbackup user";
     after = [ "zfs-import.target" ];
     wantedBy = [ "multi-user.target" ];
     restartIfChanged = true;
     path = with pkgs; [ zfs ];
     script = ''
-      zfs allow -u znapzend create,destroy,mount,receive,userprop zbackup
+      zfs allow -u rbbackup create,destroy,mount,receive,userprop zbackup
     '';
     serviceConfig = {
       Type = "oneshot";

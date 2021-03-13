@@ -12,7 +12,7 @@
       plan = "1d=>1h,1m=>1d,6m=>1m";
       recursive = true;
       destinations.albus = {
-        host = "znapzend@albus.internal";
+        host = "rbbackup@albus.internal";
         dataset = config.redbrick.znapzendDestDataset;
       };
     };
