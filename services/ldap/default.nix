@@ -44,8 +44,8 @@ in {
           olcAccess = [
             "{0}to attrs=cn,yearsPaid,year,course,id,newbie,altmail  by dn.regex=cn=mediawiki,ou=reserved,${baseDN} read  by self read  by * none"
             "{1}to attrs=userPassword  by dn.regex=cn=dovecot,ou=reserved,${baseDN} read  by self write  by anonymous auth  by * none"
-            "{2}to attrs=gecos,loginShell  by self write"
-            "{3}to dn.subtree=${baseDN} by dn.exact=${slurpdDN} manage"
+            "{2}to attrs=gecos,loginShell  by self write  by * read"
+            "{3}to dn.subtree=${baseDN} by dn.exact=${slurpdDN} manage  by users read"
             "{4}to *  by * read"
           ];
         };
