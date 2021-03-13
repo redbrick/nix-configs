@@ -25,6 +25,11 @@
       fsType = "vfat";
     };
 
+  fileSystems."/zbackup/generic" =
+    { device = "zbackup/generic";
+      fsType = "zfs";
+    };
+
   swapDevices =
     [ { device = "/dev/disk/by-uuid/3bb3b7df-a7eb-402f-91a7-037403d36d05"; }
     ];
