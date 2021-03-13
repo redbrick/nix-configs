@@ -15,11 +15,11 @@ let
       ipAddress = "192.168.0.150";
       replicationId = 150;
     }
-    # {
-    #   hostName = "albus.internal";
-    #   ipAddress = "192.168.0.56";
-    #   replicationId = 56;
-    # }
+    {
+      hostName = "albus.internal";
+      ipAddress = "192.168.0.56";
+      replicationId = 56;
+    }
   ];
 in {
   redbrick.ldapServers = servers;
