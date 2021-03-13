@@ -45,10 +45,10 @@ in {
           olcSizeLimit = "unlimited";
           olcLastMod = "TRUE";
           olcAccess = [
-            "{0}to attrs=cn,yearsPaid,year,course,id,newbie,altmail  by dn.exact=${slurpdDN} manage  by dn.exact=cn=mediawiki,ou=reserved,${baseDN} read  by self read  by * none"
+            "{0}to attrs=yearsPaid,year,course,id,newbie,altmail  by dn.exact=${slurpdDN} manage  by dn.exact=cn=mediawiki,ou=reserved,${baseDN} read  by self read  by * none"
             "{1}to attrs=userPassword  by dn.exact=${slurpdDN} manage  by dn.exact=cn=dovecot,ou=reserved,${baseDN} read  by self write  by anonymous auth  by * none"
             "{2}to attrs=gecos,loginShell  by dn.exact=${slurpdDN} manage  by self write  by * read"
-            "{3}to dn.subtree=${baseDN} by dn.exact=${slurpdDN} manage  by users read"
+            "{3}to dn.subtree=${baseDN} by dn.exact=${slurpdDN} manage  by * read"
             "{4}to *  by * read"
           ];
         };

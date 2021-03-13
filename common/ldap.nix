@@ -2,6 +2,7 @@
 # Add new servers here.
 # IP Address used instead of DNS to mitigate
 # LDAP failures if DNS goes down.
+{ config, lib, ... }:
 let
   servers = [
     {
@@ -31,13 +32,17 @@ in {
     base = "o=redbrick";
     # Two maps over LDAP servers - so that IP address comes after
     # host redundancy.
-    server = builtins.concatStringsSep " " ((builtins.map
-      (srv: "ldap://${srv.hostName}")
-      servers
-    ) ++ (builtins.map
-      (srv: "ldap://${srv.ipAddress}")
-      servers
-    ));
+    # Always use localhost when available
+    server = builtins.concatStringsSep " " (
+      (lib.optional (config.services.openldap.enable) "ldap://127.0.0.1")
+      ++ (builtins.map
+        (srv: "ldap://${srv.hostName}")
+        servers
+      ) ++ (builtins.map
+        (srv: "ldap://${srv.ipAddress}")
+        servers
+      )
+    );
   };
 
   # Increasing this limit helps with phpfpm/httpd startup issues
