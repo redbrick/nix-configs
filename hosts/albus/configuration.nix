@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 let
   variables = import ../../common/variables.nix;
 in {
@@ -29,6 +29,9 @@ in {
   } // (variables.bondConfig [ "eno1" "eno2" ] "192.168.0.56");
 
   services.openldap.urlList = [ "ldap://192.168.0.56:389" ];
+
+  # Keep longer monthly snapshots
+  services.zfs.autoSnapshot.monthly = lib.mkForce 3;
 
   users.users.rbbackup = {
     useDefaultShell = true;
