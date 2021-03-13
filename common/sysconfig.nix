@@ -47,6 +47,9 @@ in {
   services.prometheus.exporters.node = {
     enable = true;
     openFirewall = true;
+    # This is a temporary fix for an upstream bug. Try removing it and rebuilding config
+    # whenever you can.
+    firewallFilter = "-p tcp -m tcp --dport 9100";
     enabledCollectors = [
       "systemd"
       "conntrack"
