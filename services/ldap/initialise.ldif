@@ -1,0 +1,15 @@
+dn: o=redbrick
+description: Redbrick DCU
+objectClass: top
+objectClass: organization
+
+dn: ou=services,o=redbrick
+objectClass: organizationalUnit
+ou: services
+
+dn: uid=slurpd,ou=services,o=redbrick
+objectClass: top
+objectClass: account
+objectClass: shadowAccount
+uid: slurpd
+userPassword:< file:///var/secrets/slurpd.secret

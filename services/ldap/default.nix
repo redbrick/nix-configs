@@ -7,12 +7,23 @@ let
   rootpwFile = "/var/secrets/ldap.secret";
   baseDN = "o=redbrick";
   rootDN = "cn=root,ou=services,o=redbrick";
-  slurpdDN = "cn=slurpd,ou=services,${baseDN}";
+  slurpdDN = "uid=slurpd,ou=services,${baseDN}";
   slurpdpwFile = "/var/secrets/slurpd.pwd.secret";
   dbDirectory = "/var/db/openldap";
 in {
   # Enable quick graceful shutdown
   systemd.services.openldap.serviceConfig.KillSignal = "SIGINT";
+
+  # Create DB_CONFIG file on startup
+  systemd.services.openldap.preStart = ''
+    mkdir -p ${dbDirectory}
+    cat > ${dbDirectory}/DB_CONFIG << EOF
+    set_cachesize 0 2097152 0
+    set_lk_max_objects 1500
+    set_lk_max_locks 1500
+    set_lk_max_lockers 1500
+    EOF
+  '';
 
   services.openldap = {
     enable = true;
