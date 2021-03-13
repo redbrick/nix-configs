@@ -14,11 +14,11 @@
     logfile = "/var/log/redis/redis.log";
     syslog = false;
 
-    extraConfig = ''
-      rdbcompression yes
-      maxmemory 2G
-      maxmemory-policy allkeys-lru
-      unixsocketperm 660
-    '';
+    settings = {
+      rdbcompression = "yes";
+      maxmemory = "2G";
+      maxmemory-policy = "allkeys-lru";
+      unixsocketperm = "660";
+    };
   };
 }
