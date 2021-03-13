@@ -6,20 +6,20 @@
 let
   servers = [
     {
-      hostName = "m1cr0man.internal";
-      ipAddress = "192.168.0.135";
-      replicationId = 135;
+      hostName = "daedalus.internal";
+      ipAddress = "192.168.0.50";
+      replicationId = 50;
     }
     {
-      hostName = "butlerxvm.internal";
-      ipAddress = "192.168.0.136";
-      replicationId = 136;
+      hostName = "icarus.internal";
+      ipAddress = "192.168.0.150";
+      replicationId = 150;
     }
-    {
-      hostName = "albus.internal";
-      ipAddress = "192.168.0.56";
-      replicationId = 56;
-    }
+    # {
+    #   hostName = "albus.internal";
+    #   ipAddress = "192.168.0.56";
+    #   replicationId = 56;
+    # }
   ];
 in {
   redbrick.ldapServers = servers;
