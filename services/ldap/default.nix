@@ -11,6 +11,9 @@ let
   slurpdpwFile = "/var/secrets/slurpd.pwd.secret";
   dbDirectory = "/var/db/openldap";
 in {
+  # Enable quick graceful shutdown
+  systemd.services.openldap.serviceConfig.KillSignal = "SIGINT";
+
   services.openldap = {
     enable = true;
     # Host-specific listening IP should go into host's configuration.nix
