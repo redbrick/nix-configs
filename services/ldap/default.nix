@@ -108,5 +108,13 @@ in {
     };
   };
 
+  # Configure backups of LDAP
+  redbrick.rbbackup.sources = [ "ldap.ldif.gz" ];
+  redbrick.rbbackup.extraPackages = with pkgs; [ openldap gzip ];
+  redbrick.rbbackup.commands = ''
+    ldapsearch -b o=redbrick -xLLL -D ${slurpdDN} -y ${slurpdpwFile} | gzip -8 > ldap.ldif.gz
+    chmod 400 ldap.ldif.gz
+  '';
+
   networking.firewall.allowedTCPPorts = [ 389 ];
 }

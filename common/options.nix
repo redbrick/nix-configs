@@ -71,6 +71,35 @@ with lib;
       example = "zbackup/nfs";
       type = types.str;
     };
+
+    rbbackup = with types; {
+      destination = mkOption {
+        description = "Where to rsync the backup data to.";
+        default = "rbbackup@albus.internal:/zbackup/generic/${config.networking.hostName}/";
+        type = str;
+      };
+
+      sources = mkOption {
+        description = "Paths on the current system to be backed up.";
+        default = [];
+        type = listOf str;
+      };
+
+      commands = mkOption {
+        description = (
+          "Commands to run before commencing copy of backups. Files created"
+          + " in the current working directory will be deleted after backups are completed."
+        );
+        default = "";
+        type = str;
+      };
+
+      extraPackages = mkOption {
+        description = "Packages to make available in the backup commands scripts.";
+        default = [];
+        type = listOf path;
+      };
+    };
   };
 
   config.assertions = [

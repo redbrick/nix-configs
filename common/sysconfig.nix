@@ -7,6 +7,7 @@ in {
     ./options.nix
     ./ldap.nix
     ../packages/overlays
+    ../services/rbbackup.nix
   ];
 
   time.timeZone = "Europe/Dublin";

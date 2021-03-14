@@ -33,6 +33,9 @@ in {
   # Keep longer monthly snapshots
   services.zfs.autoSnapshot.monthly = lib.mkForce 3;
 
+  # Albus _is_ the backup hosts - change rbbackup destination
+  redbrick.rbbackup.destination = "/zbackup/generic/albus/";
+
   users.users.rbbackup = {
     useDefaultShell = true;
     openssh.authorizedKeys.keys = [
