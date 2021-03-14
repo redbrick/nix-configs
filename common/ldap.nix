@@ -4,23 +4,38 @@
 # LDAP failures if DNS goes down.
 { config, lib, ... }:
 let
-  servers = [
-    {
-      hostName = "daedalus.internal";
-      ipAddress = "192.168.0.50";
-      replicationId = 50;
-    }
-    {
-      hostName = "icarus.internal";
-      ipAddress = "192.168.0.150";
-      replicationId = 150;
-    }
-    {
-      hostName = "albus.internal";
-      ipAddress = "192.168.0.56";
-      replicationId = 56;
-    }
-  ];
+  servers = {
+    redbrick = [
+      {
+        hostName = "daedalus.internal";
+        ipAddress = "192.168.0.50";
+        replicationId = 50;
+      }
+      {
+        hostName = "icarus.internal";
+        ipAddress = "192.168.0.150";
+        replicationId = 150;
+      }
+      {
+        hostName = "albus.internal";
+        ipAddress = "192.168.0.56";
+        replicationId = 56;
+      }
+    ];
+    redbricktest = [
+      {
+        hostName = "m1cr0man.internal";
+        ipAddress = "192.168.0.135";
+        replicationId = 135;
+      }
+      {
+        hostName = "butlerxvm.internal";
+        ipAddress = "192.168.0.136";
+        replicationId = 136;
+      }
+    ];
+  };
+  cluster = servers.${config.redbrick.ldapCluster};
 in {
   redbrick.ldapServers = servers;
 
@@ -37,10 +52,10 @@ in {
       (lib.optional (config.services.openldap.enable) "ldap://127.0.0.1")
       ++ (builtins.map
         (srv: "ldap://${srv.hostName}")
-        servers
+        cluster
       ) ++ (builtins.map
         (srv: "ldap://${srv.ipAddress}")
-        servers
+        cluster
       )
     );
   };

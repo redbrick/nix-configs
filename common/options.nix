@@ -1,11 +1,11 @@
-{ lib, ... }:
+{ config, lib, ... }:
 with lib;
 {
   options.redbrick = {
     tld = mkOption {
       description = "Source of truth of TLD for entire Nix config";
       default = "redbrick.dcu.ie";
-      type = types.nullOr types.str;
+      type = types.str;
     };
 
     skipCustomVhosts = mkOption {
@@ -18,22 +18,28 @@ with lib;
     ldapServers = mkOption {
       description = "Configuration of LDAP servers to cluster together";
       default = [];
-      type = types.listOf (types.submodule {
+      type = with types; attrsOf (listOf (submodule {
         options = {
           hostName = mkOption {
             description = "DNS name of the LDAP host";
-            type = types.str;
+            type = str;
           };
           ipAddress = mkOption {
             description = "IP address of the LDAP host";
-            type = types.str;
+            type = str;
           };
           replicationId = mkOption {
             description = "MAX 3 digit number to use as the host's replication ID";
-            type = types.int;
+            type = int;
           };
         };
-      });
+      }));
+    };
+
+    ldapCluster = mkOption {
+      description = "LDAP Cluster this host should utilise/be part of. Must be in config.redbrick.ldapServers.";
+      default = "redbrick";
+      type = types.str;
     };
 
     smtpBindAddress = mkOption {
@@ -66,4 +72,11 @@ with lib;
       type = types.str;
     };
   };
+
+  config.assertions = [
+    {
+      assertion = hasAttr config.redbrick.ldapCluster config.redbrick.ldapServers;
+      message = "The ldapCluster ${config.redbrick.ldapCluster} is not configured in config.redbrick.ldapServers";
+    }
+  ];
 }

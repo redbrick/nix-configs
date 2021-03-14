@@ -29,5 +29,7 @@
     }];
   };
 
+  # Is an LDAP server - set cluster and server's listen address
+  redbrick.ldapCluster = "redbricktest";
   services.openldap.urlList = [ "ldap://192.168.0.136:389" ];
 }

@@ -10,6 +10,7 @@ let
   slurpdDN = "uid=slurpd,ou=services,${baseDN}";
   slurpdpwFile = "/var/secrets/slurpd.pwd.secret";
   dbDirectory = "/var/db/openldap";
+  cluster = config.redbrick.ldapServers.${config.redbrick.ldapCluster};
 in {
   # Enable quick graceful shutdown
   systemd.services.openldap.serviceConfig.KillSignal = "SIGINT";
@@ -34,8 +35,8 @@ in {
       attrs = {
         olcServerID = builtins.map (srv: (
           "${builtins.toString srv.replicationId} ldap://${srv.ipAddress}:389"
-        )) config.redbrick.ldapServers;
-        olcLogLevel = "Config";
+        )) cluster;
+        olcLogLevel = "0";
         # Used for debugging
         # olcLogLevel = "Sync Stats";
         # Used in emergencies
@@ -87,7 +88,7 @@ in {
               + " searchbase=\"${baseDN}\" scope=sub"
               + " bindmethod=simple binddn=\"${slurpdDN}\" credentials=\"${lib.fileContents slurpdpwFile}\""
               + " type=refreshOnly interval=00:00:00:10 retry=\"15 20 60 +\""
-            )) config.redbrick.ldapServers;
+            )) cluster;
             olcDbIndex = [
               "entryUUID  eq"
               "entryCSN  eq"
