@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 let
   variables = import ../../common/variables.nix;
 in {
@@ -6,6 +6,7 @@ in {
     ./hardware-configuration.nix
     ../../common/sysconfig.nix
     ../../services/ssh.nix
+    ../../services/ldap
   ];
 
   # This value determines the NixOS release with which your system is to be
@@ -27,21 +28,33 @@ in {
     defaultGateway = "192.168.0.254";
   } // (variables.bondConfig [ "eno1" "eno2" ] "192.168.0.56");
 
-  users.users.znapzend = {
+  services.openldap.urlList = [ "ldap://192.168.0.56:389" ];
+
+  # Keep longer monthly snapshots
+  services.zfs.autoSnapshot.monthly = lib.mkForce 3;
+
+  # Albus _is_ the backup hosts - change rbbackup destination
+  redbrick.rbbackup.destination = "/zbackup/generic/albus/";
+
+  users.users.rbbackup = {
     useDefaultShell = true;
     openssh.authorizedKeys.keys = [
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHM+HZVUPkFX/Xlxla/2JYpFrt2vEG2nJVcjRpJhGU3c root@daedalus"
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGjw3ENwy/fBX6EOqwppSv1c0m5buvKE8OaS810BTaFo root@icarus"
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOLnjvcD8MnRKf5YDvKqDWK+kGMfYhSb9l54jW8nd0H1 root@m1cr0man"
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBvBThPI3TmXVOKrY39l0rFLOdaLl0a0Xh/IaRQ+tAA+ root@butlerxvm"
     ];
   };
 
-  systemd.services.znapzend-permissions = {
-    description = "Configure ZFS permissions for znapzend user";
+  systemd.services.rbbackup-permissions = {
+    description = "Configure ZFS permissions for rbbackup user";
     after = [ "zfs-import.target" ];
     wantedBy = [ "multi-user.target" ];
     restartIfChanged = true;
     path = with pkgs; [ zfs ];
     script = ''
-      zfs allow -u znapzend create,destroy,mount,receive,userprop zbackup
+      zfs allow -u rbbackup create,destroy,mount,receive,userprop zbackup
+      chown -R rbbackup /zbackup/generic
     '';
     serviceConfig = {
       Type = "oneshot";

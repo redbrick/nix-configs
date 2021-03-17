@@ -33,8 +33,7 @@ in {
     defaultGateway = "192.168.0.254";
   } // (variables.bondConfig [ "eno1" "eno2" ] "192.168.0.150");
 
-  # Set as ldap slave to daedalus
-  redbrick.ldapSlaveTo = "daedalus.internal";
+  services.openldap.urlList = [ "ldap://192.168.0.150:389" ];
 
   # Icarus is providing /storage for now
   services.nfs.server.exports = ''

@@ -10,6 +10,7 @@
     ../../services/dovecot
     ../../services/certs
     ../../services/postgres.nix
+    ../../services/ldap
   ];
 
   # This value determines the NixOS release with which your system is to be
@@ -38,6 +39,10 @@
   redbrick.skipCustomVhosts = true;
   redbrick.smtpBindAddress = "192.168.0.135";
   redbrick.smtpExternalAddress = "136.206.15.5";
+
+  # Is an LDAP server - set cluster and server's listen address
+  redbrick.ldapCluster = "redbricktest";
+  services.openldap.urlList = [ "ldap://192.168.0.135:389" ];
 
   users.users.lucasade = {
     isNormalUser = true;

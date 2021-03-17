@@ -2,90 +2,119 @@
 # Add /var/secrets/ldap.secret
 # Add /var/secrets/slurpd.secret if setting up a slave
 # Add /var/db/ldap/DB_CONFIG
-# TODO change RID based on IP address of host
 { pkgs, config, lib, ... }:
 let
   rootpwFile = "/var/secrets/ldap.secret";
-  slurpdpwFile = "/var/secrets/slurpd.secret";
+  baseDN = "o=redbrick";
+  rootDN = "cn=root,ou=services,o=redbrick";
+  slurpdDN = "uid=slurpd,ou=services,${baseDN}";
+  slurpdpwFile = "/var/secrets/slurpd.pwd.secret";
+  dbDirectory = "/var/db/openldap";
+  cluster = config.redbrick.ldapServers.${config.redbrick.ldapCluster};
 in {
+  # Enable quick graceful shutdown
+  systemd.services.openldap.serviceConfig.KillSignal = "SIGINT";
+
+  # Create DB_CONFIG file on startup
+  systemd.services.openldap.preStart = ''
+    mkdir -p ${dbDirectory}
+    cat > ${dbDirectory}/DB_CONFIG << EOF
+    set_cachesize 0 2097152 0
+    set_lk_max_objects 1500
+    set_lk_max_locks 1500
+    set_lk_max_lockers 1500
+    EOF
+  '';
+
   services.openldap = {
-    inherit rootpwFile;
     enable = true;
-    suffix = "o=redbrick";
-    rootdn = "cn=root,ou=ldap,o=redbrick";
-    defaultSchemas = false; # We don't use the nis.schema
-    database = "hdb";
-    extraDatabaseConfig = ''
-      cachesize 100000
-    '' + (if (config.redbrick.ldapSlaveTo == null) then ''
+    # Host-specific listening IP should go into host's configuration.nix
+    urlList = [ "ldap://127.0.0.1:389" ];
 
-      # Master config
-      overlay syncprov
-      syncprov-checkpoint 100 10
-    '' else ''
-      syncrepl rid=000
-        provider=ldap://${config.redbrick.ldapSlaveTo}:389
-        type=refreshAndPersist
-        retry="5 5 300 +"
-        attrs="*,+"
-        binddn="cn=slurpd,ou=ldap,o=redbrick"
-        bindmethod=simple
-        credentials=${lib.fileContents slurpdpwFile}
-        searchbase="o=redbrick"
-    '');
-    extraConfig = ''
-      include ${pkgs.openldap.out}/etc/schema/core.schema
-      include ${pkgs.openldap.out}/etc/schema/cosine.schema
-      include ${pkgs.openldap.out}/etc/schema/inetorgperson.schema
-      include ${./schema/common.schema}
-      include ${./schema/system.schema}
-      include ${./schema/userdb.schema}
-
-      backend hdb
-      lastmod on
-
-      sizelimit unlimited
-      loglevel ${config.services.openldap.logLevel}
-
-      # ACLs
-      access to dn.children="ou=2002,ou=accounts,o=redbrick"
-        by dn.regex="cn=root,ou=ldap,o=redbrick" write
-        by dn.regex="cn=slurpd,ou=ldap,o=redbrick" read
-        by * none
-
-      access to dn.children="ou=accounts,o=redbrick" attrs=cn
-        by dn.regex="cn=root,ou=ldap,o=redbrick" write
-        by dn.regex="cn=slurpd,ou=ldap,o=redbrick" read
-        by dn.regex="cn=mediawiki,ou=reserved,o=redbrick" read
-        by self read
-        by * none
-
-      access to attrs=yearsPaid,year,course,id,newbie,altmail
-        by dn.regex="cn=root,ou=ldap,o=redbrick" write
-        by dn.regex="cn=slurpd,ou=ldap,o=redbrick" read
-        by dn.regex="cn=mediawiki,ou=reserved,o=redbrick" read
-        by self read
-        by * none
-
-      access to attrs=userPassword
-        by dn.regex="cn=root,ou=ldap,o=redbrick" write continue
-        by dn.regex="cn=slurpd,ou=ldap,o=redbrick" read
-        by dn.regex="cn=dovecot,ou=reserved,o=redbrick" read
-        by self write
-        by anonymous auth
-        by * none
-
-      access to attrs=gecos,loginShell
-        by dn.regex="cn=root,ou=ldap,o=redbrick" write continue
-        by dn.regex="cn=slurpd,ou=ldap,o=redbrick" read
-        by self write
-        by * read
-
-      # Default ACL
-      access to *
-        by * read
-    '';
+    settings = {
+      attrs = {
+        olcServerID = builtins.map (srv: (
+          "${builtins.toString srv.replicationId} ldap://${srv.ipAddress}:389"
+        )) cluster;
+        olcLogLevel = "0";
+        # Used for debugging
+        # olcLogLevel = "Sync Stats";
+        # Used in emergencies
+        # olcReadOnly = "TRUE";
+      };
+      children = {
+        "cn=schema".includes = [
+          "${pkgs.openldap.out}/etc/schema/core.ldif"
+          "${pkgs.openldap.out}/etc/schema/cosine.ldif"
+          "${pkgs.openldap.out}/etc/schema/inetorgperson.ldif"
+          "${./schema/common.ldif}"
+          "${./schema/system.ldif}"
+          "${./schema/userdb.ldif}"
+        ];
+        "olcDatabase={-1}frontend".attrs = {
+          objectClass = [ "olcDatabaseConfig" "olcFrontendConfig" ];
+          olcDatabase = "{-1}frontend";
+          olcSizeLimit = "unlimited";
+          olcLastMod = "TRUE";
+          olcAccess = [
+            "{0}to attrs=yearsPaid,year,course,id,newbie,altmail  by dn.exact=${slurpdDN} manage  by dn.exact=cn=mediawiki,ou=reserved,${baseDN} read  by self read  by * none"
+            "{1}to attrs=userPassword  by dn.exact=${slurpdDN} manage  by dn.exact=cn=dovecot,ou=reserved,${baseDN} read  by self write  by anonymous auth  by * none"
+            "{2}to attrs=gecos,loginShell  by dn.exact=${slurpdDN} manage  by self write  by * read"
+            "{3}to dn.subtree=${baseDN} by dn.exact=${slurpdDN} manage  by * read"
+            "{4}to *  by * read"
+          ];
+        };
+        "olcDatabase={0}config".attrs = {
+          objectClass = "olcDatabaseConfig";
+          olcDatabase = "{0}config";
+          olcAccess = [ "{0}to * by * none break" ];
+        };
+        "olcDatabase={1}hdb" = {
+          attrs = {
+            objectClass = [ "olcDatabaseConfig" "olcHdbConfig" ];
+            olcDatabase = "{1}hdb";
+            olcAccess = [ "{0}to * by * read break" ];
+            olcDbCacheSize = "100000";
+            olcLastMod = "TRUE";
+            olcMonitoring = "TRUE";
+            olcDbDirectory = dbDirectory;
+            olcSuffix = baseDN;
+            olcRootDN = rootDN;
+            olcRootPW = {
+              path = rootpwFile;
+            };
+            olcSyncrepl = builtins.map (srv: (
+              "rid=${lib.fixedWidthNumber 3 srv.replicationId} provider=ldap://${srv.ipAddress}:389"
+              + " searchbase=\"${baseDN}\" scope=sub"
+              + " bindmethod=simple binddn=\"${slurpdDN}\" credentials=\"${lib.fileContents slurpdpwFile}\""
+              + " type=refreshOnly interval=00:00:00:10 retry=\"15 20 60 +\""
+            )) cluster;
+            olcDbIndex = [
+              "entryUUID  eq"
+              "entryCSN  eq"
+              "uid  eq"
+            ];
+            olcMirrorMode = "TRUE";
+          };
+          children = {
+            "olcOverlay={0}syncprov".attrs = {
+              objectClass = [ "olcOverlayConfig" "olcSyncProvConfig" ];
+              olcOverlay = "{0}syncprov";
+              olcSpCheckpoint = "100 10";
+            };
+          };
+        };
+      };
+    };
   };
+
+  # Configure backups of LDAP
+  redbrick.rbbackup.sources = [ "ldap.ldif.gz" ];
+  redbrick.rbbackup.extraPackages = with pkgs; [ openldap gzip ];
+  redbrick.rbbackup.commands = ''
+    ldapsearch -b o=redbrick -xLLL -D ${slurpdDN} -y ${slurpdpwFile} | gzip -8 > ldap.ldif.gz
+    chmod 400 ldap.ldif.gz
+  '';
 
   networking.firewall.allowedTCPPorts = [ 389 ];
 }

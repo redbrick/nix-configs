@@ -5,6 +5,7 @@
     ../../services/ssh.nix
     ../../services/prometheus.nix
     ../../services/promtail.nix
+    ../../services/ldap
   ];
 
   # This value determines the NixOS release with which your system is to be
@@ -27,4 +28,8 @@
       prefixLength = 24;
     }];
   };
+
+  # Is an LDAP server - set cluster and server's listen address
+  redbrick.ldapCluster = "redbricktest";
+  services.openldap.urlList = [ "ldap://192.168.0.136:389" ];
 }
