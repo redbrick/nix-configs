@@ -128,11 +128,6 @@ in (userVhosts // {
     user = "mak";
     group = "associat";
   };
-  "mcmahon.${tld}" = vhost {
-    documentRoot = "${webtree}/m/mcmahon/wordpress";
-    user = "mcmahon";
-    group = "member";
-  };
   "packages.${tld}" = vhost {
     documentRoot = "${webtree}/r/rbpkg/apt";
     user = "rbpkg";
