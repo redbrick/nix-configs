@@ -27,6 +27,7 @@ in lib.mkIf (sources != []) {
       Type = "oneshot";
       CacheDirectory = "redbrick-backups";
       WorkingDirectory = "/var/cache/redbrick-backups";
+      UMask = 0077;
     };
   };
 
