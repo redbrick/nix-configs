@@ -32,6 +32,8 @@ in {
 
   # Keep longer monthly snapshots
   services.zfs.autoSnapshot.monthly = lib.mkForce 3;
+  services.zfs.autoSnapshot.hourly = lib.mkForce 23;
+  services.zfs.autoSnapshot.frequent = lib.mkForce 2;
 
   # Albus _is_ the backup hosts - change rbbackup destination
   redbrick.rbbackup.destination = "/zbackup/generic/albus/";
