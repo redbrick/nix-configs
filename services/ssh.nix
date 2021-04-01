@@ -36,7 +36,8 @@ in {
     "environment=\"REMOTEUSER=mcmahon\" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBPzJW/r9XddCBa8Y1wLCt1FGNvGB3OD/fFzo19AE6/B mcmahon@redbrick.dcu.ie"
     "environment=\"REMOTEUSER=mcmahon\" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBimqBdbDEMad8eYwR5FDmBXNeSLQ3XjrGO0EEcISapq mcmahon@redbrick.dcu.ie"
     "environment=\"REMOTEUSER=cianky\" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIH3V7R686cBj5GbFRHUF7AnQvbPDfhW2CtZ7E5X4S3JS cianky@redbrick.dcu.ie"
-    "environment=\"REMOTEUSER=h_mzah\" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILFEh4xmAPcK7HvSRiFhHzyG6Tf1KjT4DH6KJv+Wrekk h_mzah@pygmalion.redbrick.dcu.ie"
+    "environment=\"REMOTEUSER=distro\" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDunUsPaNZ/+e2J8S0QAFqfqZSfTWboMfmf1R6iCnLeK distro@redbrick.dcu.ie"
+    "environment=\"REMOTEUSER=h_mzah\" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILFEh4xmAPcK7HvSRiFhHzyG6Tf1KjT4DH6KJv+Wrekk h_mzah@redbrick.dcu.ie"
     "environment=\"REMOTEUSER=skins\" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOM3F35Ac7SsoVbeaytbvtjtO00ROfWsg5PMhXswZQVd skins@redbrick.dcu.ie"
   ];
 
