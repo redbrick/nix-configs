@@ -93,7 +93,7 @@ in {
       
       [database]
       class: mailman.database.postgresql.PostgreSQLDatabase
-      url: 'postgresql://${secrets.dbUser}:${secrets.dbPassword}@localhost/migrated_mailman'
+      url: postgresql://${secrets.dbUser}:${secrets.dbPassword}@localhost/migrated_mailman
     '';
   };
 
