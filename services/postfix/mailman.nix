@@ -90,6 +90,10 @@ in {
       smtp_pass: ${secrets.emailPassword}
       smtp_secure_mode: starttls
       remove_dkim_headers: yes
+      
+      [database]
+      class: mailman.database.postgresql.PostgreSQLDatabase
+      url: 'postgresql://${secrets.dbUser}:${secrets.dbPassword}@localhost/migrated_mailman'
     '';
   };
 
