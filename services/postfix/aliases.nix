@@ -67,6 +67,7 @@
   "dcu-admin-list" = "sysops@dcu.ie, mcgorman@compapp.dcu.ie";
 
   # Admin Mailing lists
+  "rb-admins" = "rb-admins@lists.${tld}";
   "redbrick-admins" = "redbrick-admins@lists.${tld}";
   "elected-admins" = "elected-admins-2021@lists.${tld}";
   "admin-discuss" = "admin-discuss@lists.${tld}";
