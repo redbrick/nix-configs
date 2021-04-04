@@ -26,7 +26,7 @@
   "uucp" = "root";
   "xten" = "root";
   "postfix" = "root";
-  "abuse" = "rb-admins,chair,sec";
+  "abuse" = "redbrick-admins,chair,sec";
   "security" = "root";
   "ftp" = "root";
   "ftp-bugs" = "ftp";
@@ -43,18 +43,18 @@
   "mailman-admin" = "mailman";
 
   # Where root mail goes. VERY IMPORTANT!
-  "root" = "rb-admins";
+  "root" = "redbrick-admins";
 
   #----------------#
   # Administrators #
   #----------------#
 
   # Who wants to get system reports, cron job output etc.
-  "system-reports" = "rb-admins";
+  "system-reports" = "redbrick-admins";
   "audit_warn" = "system-reports";
 
   # Offical way to contact admins for requests.
-  "admin-request" = "rb-admins, ticket";
+  "admin-request" = "redbrick-admins, ticket";
   "elected-admin" = "elected-admins";
 
   # Where mail addressed to generic 'admins' goes.
@@ -64,11 +64,11 @@
   # DCU admin list.
   #
   # <plop>: Thu May 28 11:07:05 BST 1998
-  "dcu-admin-list" = "rb-admins, sysops@dcu.ie, mcgorman@compapp.dcu.ie";
+  "dcu-admin-list" = "sysops@dcu.ie, mcgorman@compapp.dcu.ie";
 
   # Admin Mailing lists
-  "rb-admins" = "rb-admins@lists.${tld}";
-  "elected-admins" = "elected-admins@lists.${tld}";
+  "redbrick-admins" = "redbrick-admins@lists.${tld}";
+  "elected-admins" = "elected-admins-2021@lists.${tld}";
   "admin-discuss" = "admin-discuss@lists.${tld}";
   "trainee-admins" = "trainee-admins@lists.${tld}";
 
@@ -79,7 +79,7 @@
   # webmaster is a mailman list
   "httpd" = "webmaster";
   "www" = "webmaster";
-  "webmaster" = "webmaster@lists.${tld}";
+  "webmaster" = "webmaster-2021@lists.${tld}";
 
   #---------------------#
   # Committee & Society #
@@ -89,14 +89,14 @@
   "founders" = "drjolt, wibble, sandman, fergus, swipe, hyper";
 
   # Committee is a mailing list (handled by mailman)
-  "committee" = "committee@lists.${tld}";
+  "committee" = "committee-2021@lists.${tld}";
 
   # HELP! requests.
   "help" = "helpdesk";
   "support" = "helpdesk";
   "help-request" = "helpdesk";
   "helpdesk-request" = "helpdesk";
-  "helpdesk" = "helpdesk@lists.${tld}";
+  "helpdesk" = "helpdesk-2021@lists.${tld}";
 
   # Chairperson alias.
   "chairperson" = "chair";
