@@ -90,10 +90,10 @@ in {
       smtp_pass: ${secrets.emailPassword}
       smtp_secure_mode: starttls
       remove_dkim_headers: yes
-      
+
       [database]
       class: mailman.database.postgresql.PostgreSQLDatabase
-      url: postgresql://${secrets.dbUser}:${secrets.dbPassword}@localhost/migrated_mailman
+      url: postgresql://${secrets.dbUser}:${secrets.dbPassword}@${postgresHost}/mailman_core
     '';
   };
 
@@ -166,7 +166,7 @@ in {
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
-            'NAME': 'mailman',
+            'NAME': 'mailman_archive',
             'USER': secrets['db_user'],
             'PASSWORD': secrets['db_password'],
             'HOST': '${postgresHost}',

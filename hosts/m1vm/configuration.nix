@@ -11,6 +11,7 @@
     ../../services/certs
     ../../services/postgres.nix
     ../../services/ldap
+    ../../services/mysql.nix
   ];
 
   # This value determines the NixOS release with which your system is to be

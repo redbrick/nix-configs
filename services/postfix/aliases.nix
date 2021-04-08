@@ -69,7 +69,7 @@
   # Admin Mailing lists
   "rb-admins" = "redbrick-admins@lists.${tld}";
   "redbrick-admins" = "redbrick-admins@lists.${tld}";
-  "elected-admins" = "elected-admins-2021@lists.${tld}";
+  "elected-admins" = "elected-admins@lists.${tld}";
   "admin-discuss" = "admin-discuss@lists.${tld}";
   "trainee-admins" = "trainee-admins@lists.${tld}";
 
@@ -80,7 +80,7 @@
   # webmaster is a mailman list
   "httpd" = "webmaster";
   "www" = "webmaster";
-  "webmaster" = "webmaster-2021@lists.${tld}";
+  "webmaster" = "webmaster@lists.${tld}";
 
   #---------------------#
   # Committee & Society #
@@ -90,14 +90,14 @@
   "founders" = "drjolt, wibble, sandman, fergus, swipe, hyper";
 
   # Committee is a mailing list (handled by mailman)
-  "committee" = "committee-2021@lists.${tld}";
+  "committee" = "committee@lists.${tld}";
 
   # HELP! requests.
   "help" = "helpdesk";
   "support" = "helpdesk";
   "help-request" = "helpdesk";
   "helpdesk-request" = "helpdesk";
-  "helpdesk" = "helpdesk-2021@lists.${tld}";
+  "helpdesk" = "helpdesk@lists.${tld}";
 
   # Chairperson alias.
   "chairperson" = "chair";
