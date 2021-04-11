@@ -8,14 +8,13 @@ let
   secretsFile = "/var/secrets/mailman.json";
   secrets = import /var/secrets/mailman.nix;
   postgresHost = "127.0.0.1";
+  postgresCoreDb = "mailman_core";
+  postgresArchiveDb = "mailman_archive";
 
   mailServer = "localmail.${tld}";
 
   # Mailman needs access to hyperkitty, which is on the same host
   hyperkittyLocal = mailServer;
-
-  # We have some custom overrides in settings.py which means we need to generate this ourselves
-  webSettingsJSON = pkgs.writeText "settings.json" (builtins.toJSON config.services.mailman.webSettings);
 in {
   services.mailman = rec {
     enable = true;
@@ -36,23 +35,9 @@ in {
       TIME_ZONE = "Europe/Dublin";
       DEFAULT_FROM_EMAIL = "mailmgr@${tld}";
       SERVER_EMAIL = "mailmgr@${tld}";
-      ALLOWED_HOSTS = [ "localhost" "127.0.0.1" ] ++ webHosts;
-      COMPRESS_OFFLINE = true;
-      STATIC_ROOT = "/var/lib/mailman-web-static";
-      MEDIA_ROOT = "/var/lib/mailman-web/media";
-      LOGGING = {
-        version = 1;
-        disable_existing_loggers = true;
-        handlers.console.class = "logging.StreamHandler";
-        loggers.django = {
-          handlers = [ "console" ];
-          level = "INFO";
-        };
-      };
-      HAYSTACK_CONNECTIONS.default = {
-        ENGINE = "haystack.backends.whoosh_backend.WhooshEngine";
-        PATH = "/var/lib/mailman-web/fulltext-index";
-      };
+
+      # Hide list information to anonymous users
+      HIDE_ANONYMOUS = true;
 
       # Auth settings
       ACCOUNT_EMAIL_VERIFICATION = "none";
@@ -93,7 +78,7 @@ in {
 
       [database]
       class: mailman.database.postgresql.PostgreSQLDatabase
-      url: postgresql://${secrets.dbUser}:${secrets.dbPassword}@${postgresHost}/mailman_core
+      url: postgresql://${secrets.dbUser}:${secrets.dbPassword}@${postgresHost}/${postgresCoreDb}
     '';
   };
 
@@ -137,22 +122,7 @@ in {
         def ready(self):
             import rbapp.signals
   '';
-  environment.etc."mailman3/settings.py".text = ''
-    import json
-    import os
-
-    # Required by mailman_web.settings, but will be overridden when
-    # settings_local.json is loaded.
-    os.environ["SECRET_KEY"] = ""
-
-    from mailman_web.settings import *
-
-    with open('${webSettingsJSON}') as f:
-        globals().update(json.load(f))
-
-    with open('/var/lib/mailman-web/settings_local.json') as f:
-        globals().update(json.load(f))
-
+  environment.etc."mailman3/settings.py".text = lib.mkAfter ''
     import ldap
     from django_auth_ldap.config import LDAPSearch, PosixGroupType
 
@@ -166,7 +136,7 @@ in {
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
-            'NAME': 'mailman_archive',
+            'NAME': '${postgresArchiveDb}',
             'USER': secrets['db_user'],
             'PASSWORD': secrets['db_password'],
             'HOST': '${postgresHost}',
@@ -189,4 +159,13 @@ in {
   };
 
   networking.firewall.allowedTCPPorts = [ 80 ];
+
+  redbrick.rbbackup.sources = [ "${postgresCoreDb}.sql" "${postgresArchiveDb}.sql" "/var/lib/mailman/templates" ];
+  redbrick.rbbackup.extraPackages = with pkgs; [ jq postgresql ];
+  redbrick.rbbackup.commands = ''
+    export MMPGUSER="$(jq -r .db_user ${secretsFile})"
+    export MMPGPASS="$(jq -r .db_password ${secretsFile})"
+    echo "$MMPGPASS" | pg_dump -f ${postgresCoreDb}.sql -h '${postgresHost}' -U "$MMPGUSER" -W -b ${postgresCoreDb}
+    echo "$MMPGPASS" | pg_dump -f ${postgresArchiveDb}.sql -h '${postgresHost}' -U "$MMPGUSER" -W -b ${postgresArchiveDb}
+  '';
 }

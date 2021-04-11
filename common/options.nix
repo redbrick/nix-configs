@@ -91,7 +91,7 @@ with lib;
           + " in the current working directory will be deleted after backups are completed."
         );
         default = "";
-        type = str;
+        type = lines;
       };
 
       extraPackages = mkOption {

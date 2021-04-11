@@ -1,3 +1,4 @@
+{ lib, ... }:
 {
   users.groups.redis = {};
   users.users.redis.group = "redis";
@@ -18,7 +19,7 @@
       rdbcompression = "yes";
       maxmemory = "2G";
       maxmemory-policy = "allkeys-lru";
-      unixsocketperm = "660";
+      unixsocketperm = lib.mkForce "660";
     };
   };
 }
