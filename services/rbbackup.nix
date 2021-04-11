@@ -20,7 +20,7 @@ in lib.mkIf (sources != []) {
       echo "Backup successful"
     '';
     preStart = commands;
-    postStart = ''
+    postStop = ''
       rm -rf $CACHE_DIRECTORY
     '';
     serviceConfig = {
