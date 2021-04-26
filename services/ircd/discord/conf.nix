@@ -8,12 +8,9 @@ with lib;
   channel_mappings = {
     "#beverages"="716026722738241536";
     "#bots"="601104484692656168";
-    "#bridge-testing"="775364868327866369";
     #"#corona-time"="692071508662550579";
     "#committee-contact"="568810777407127562";
     "#events"="769154545544462336"; # external-events
-    "#devchat" = "801466562959114331";
-    #"#first-year-hub"="760849311948210196";
     "#foodie"="694653366583951403"; # food
     "#gamessoc"="613450224144482314"; # video-games
     #"#hackerclub"="568809835844337704";
