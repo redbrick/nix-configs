@@ -72,7 +72,7 @@ in {
 
   # Enabled Spare cpu cycles to be used for folding@home
   services.foldingathome = {
-    enable = true;
+    enable = false;
     user = "redbrick";
     team = 43166;
     extraArgs = [ "--power" "light" ];
