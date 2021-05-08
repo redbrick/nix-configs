@@ -33,4 +33,5 @@ with lib;
   # webirc_pass = fileContents /var/secrets/ircd/discord_webirc.secret;
   webhook_prefix = "(auto-test)";
   max_nick_length = 18; # The default is 30
+  avatar_url = "https://avatars.dicebear.com/api/gridy/\${USERNAME}.svg";
 }

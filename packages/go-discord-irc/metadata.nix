@@ -1,5 +1,5 @@
 {
-  vendorSha256 = "1l505jjc8pbgjppb8wl745dl1kwgwhrsgy7d2ayyyb45czk69r3w";
-  rev = "e810d6b2109825a0e15f4cd01690846c1b75a147";
-  sha256 = "1n9g1siqid79h7138qb63jnmjvgjvy8wfjs9p8n72qlcvy0frhpm";
+  vendorSha256 = "0w0q0m14w41z9fbsg43rbank8f9l3yvdjpqgc511y6mdj2iicaq5";
+  rev = "v1.0.0";
+  sha256 = "0d21280n1cgf6n5zn4brv5b2s4crs7hn455n5nwk6ng0vf903r3m";
 }
