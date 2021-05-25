@@ -243,6 +243,7 @@ in {
     "sha256" = {};
     "spanningtree" = {};
     "ssl_openssl" = {};
+    "sslrehashsignal" = {};
     "sslmodes" = {};
     "timedbans" = {};
     "uninvite" = {};
