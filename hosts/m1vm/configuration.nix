@@ -9,6 +9,7 @@
     ../../services/postfix
     ../../services/dovecot
     ../../services/certs
+    ../../services/icecast.nix
     ../../services/postgres.nix
     ../../services/ldap
     ../../services/mysql.nix
@@ -40,6 +41,7 @@
   redbrick.skipCustomVhosts = true;
   redbrick.smtpBindAddress = "192.168.0.135";
   redbrick.smtpExternalAddress = "136.206.15.5";
+  redbrick.internalInterface = "enp1s0";
 
   # Is an LDAP server - set cluster and server's listen address
   redbrick.ldapCluster = "redbricktest";

@@ -100,6 +100,12 @@ with lib;
         type = listOf path;
       };
     };
+
+    internalInterface = lib.mkOption {
+      description = "The interface name which owns the host's internal address. Default is the internal VLAN";
+      default = "internal";
+      type = lib.types.str;
+    };
   };
 
   config.assertions = [

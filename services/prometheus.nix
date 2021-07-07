@@ -55,6 +55,10 @@ in {
         static_configs = [{ targets = ["m1cr0man.internal:9119"]; }];
       }
       {
+        job_name = "icecast";
+        static_configs = [{ targets = ["localhost:9146"]; }];
+      }
+      {
         job_name = "collectd";
         static_configs = [{ targets = ["zeus.internal:9103"]; }];
       }
