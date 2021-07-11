@@ -21,7 +21,7 @@ let
   };
 
   redbrickVhost = let
-    documentRoot = "${common.webtreeDir}/redbrick/htdocs";
+    documentRoot = "${common.webtreeDir}/redbrick/mkdocs-site/site";
   in {
     inherit adminAddr documentRoot;
     onlySSL = true;
