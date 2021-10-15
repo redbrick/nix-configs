@@ -23,6 +23,13 @@
       fsType = "zfs";
     };
 
+  fileSystems."/storage" =
+    { device = "icarus.internal:/zbackup";
+      fsType = "nfs";
+    };
+  systemd.targets.nfs-client.requiredBy = [ "storage.mount" ];
+  systemd.targets.nfs-client.before = [ "storage.mount" ];
+  
   swapDevices =
     [ { device = "/dev/disk/by-uuid/b99bbf80-002b-4c10-9d72-96195bb64f4f"; priority = 100; }
       { device = "/dev/disk/by-uuid/49a2deff-5fcc-4736-895b-130202648b59"; priority = 100; }
