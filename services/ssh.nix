@@ -25,6 +25,10 @@ in {
   services.fail2ban = {
     enable = true;
     maxretry = 5;
+    ignoreIP = [
+      "10.0.0.0/8" 
+      "192.168.0.0/16"
+    ];
   };
 
   users.users.root.openssh.authorizedKeys.keys = [
