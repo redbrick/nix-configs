@@ -21,6 +21,11 @@ in {
       PermitUserEnvironment yes
     '';
   };
+  
+  services.fail2ban = {
+    enable = true;
+    maxretry = 5;
+  };
 
   users.users.root.openssh.authorizedKeys.keys = [
     "environment=\"REMOTEUSER=greenday\" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJeCEU7Unc+4tGAMxyxy1bWxjoQ5oMN/igpqEnYZ9vDu greenday@redbrick.dcu.ie"
