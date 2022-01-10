@@ -8,7 +8,6 @@ in {
     ../../services/ssh.nix
     ../../services/postgres.nix
     ../../services/gitea.nix
-    ../../services/thelounge.nix
     ../../services/certs
     ../../services/httpd
     ../../services/postfix
