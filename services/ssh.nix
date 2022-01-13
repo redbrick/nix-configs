@@ -43,6 +43,7 @@ in {
     "environment=\"REMOTEUSER=distro\" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDunUsPaNZ/+e2J8S0QAFqfqZSfTWboMfmf1R6iCnLeK distro@redbrick.dcu.ie"
     "environment=\"REMOTEUSER=h_mzah\" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILFEh4xmAPcK7HvSRiFhHzyG6Tf1KjT4DH6KJv+Wrekk h_mzah@redbrick.dcu.ie"
     "environment=\"REMOTEUSER=skins\" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOM3F35Ac7SsoVbeaytbvtjtO00ROfWsg5PMhXswZQVd skins@redbrick.dcu.ie"
+    "environment=\"REMOTEUSER=pints\" ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC3yU3wHKPZIaNYFL9HuV6RPdQdmg13VDRXE3lQmAoW5w8CZdFYP2z123Fi8lV4WjCdCVVm7L8q14BZrPTkqZVzE5VXsJ5N8OMgKu8NrGIS2ur4ICmA9cetbNMk/Ie9UI5pD1HwnZ/OupoO0ShBRgNc7JM4K+xTAnfAasyGdlSIdWDLJIAUqDE3EhZn7iivudawM86qNq0n+rG5MdMRbuiGCsOY5bXaYSGZ3dGUu2nRjQWmBaIc3Xlz+C8WfKvZEurT+egf16ghGomKO5dxhGB4tmuceJqLoXR0HrHxaQtJXgEV7E5PPzutOIPjVlB/IkCrYQBgyybR46BtMGlRLtag/+w4nNhZ8VUyyh63DH2rp2vVIV0rfsNnuSh3eo25uqaStuOVuV2cia1MwOkA6/tvqQCFrCqQMTgHWL/RqLyH0KLNb3QdKNjaNCvjo5aFSuzUlFRKW3NWdM5KQ0uU+XrRThKQGy96+FClNF3/QQtyyci3a0/39hzVSw9rSpC+Ve0= pints@DESKTOP-J693KB9"
   ];
 
   environment.loginShellInit = ''
