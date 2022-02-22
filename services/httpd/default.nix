@@ -21,7 +21,7 @@ let
   };
 
   redbrickVhost = let
-    documentRoot = "${common.webtreeDir}/redbrick/mkdocs-site/site";
+    documentRoot = "${common.webtreeDir}/redbrick/main-site/build";
   in {
     inherit adminAddr documentRoot;
     onlySSL = true;
@@ -65,7 +65,7 @@ let
 in {
   imports = [
     ./php-fpm.nix
-    ./mediawiki.nix
+    #./mediawiki.nix
     ./privatebin.nix
     ./mailman.nix
   ];

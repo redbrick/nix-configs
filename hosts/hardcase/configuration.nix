@@ -7,7 +7,7 @@ in {
     ../../common/sysconfig.nix
     ../../services/ssh.nix
     ../../services/postgres.nix
-    ../../services/gitea.nix
+    #../../services/gitea.nix
     ../../services/certs
     ../../services/httpd
     ../../services/postfix
@@ -38,5 +38,5 @@ in {
     hosts = {
       "192.168.0.26" = [ "mail.redbrick.dcu.ie" ];
     };
-  } // (variables.bondConfig [ "eno1" "eno2" ] "192.168.0.158");
+  } // (variables.bondConfig [ "eno1" "eno2" ] "192.168.0.158" );
 }

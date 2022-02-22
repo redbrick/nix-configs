@@ -9,6 +9,7 @@
     enable = true;
     port = 0;
     unixSocket = "/run/redis/redis.sock";
+    unixSocketPerm = 760;
 
     # Journal
     logfile = "/var/log/redis/redis.log";
@@ -18,7 +19,6 @@
       rdbcompression = "yes";
       maxmemory = "2G";
       maxmemory-policy = "allkeys-lru";
-      unixsocketperm = "660";
     };
   };
-}
+} 

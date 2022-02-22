@@ -1,11 +1,11 @@
-{config, pkgs, ...}:
+{config, pkgs, lib, ...}:
 let
   tld = config.redbrick.tld;
   tldCertsDir = config.security.acme.certs."${tld}".directory;
 
   common = import ../../common/variables.nix;
 
-  sieveConfig = import ./sieve.nix { inherit pkgs; };
+  sieveConfig = import ./sieve.nix { inherit pkgs lib; };
   authConfig = import ./auth.nix { inherit common pkgs tld; };
   masterConfig = import ./master.nix { inherit pkgs; };
 

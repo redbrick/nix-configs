@@ -49,6 +49,11 @@ in (userVhosts // {
     group = "associat";
   };
   "birthday.${tld}" = vhost {
+    documentRoot = "${webtree}/r/rmahajan/birthday/redbrick-25";
+    user = "rmahajan";
+    group = "member";
+  };
+  "20birthday.${tld}" = vhost {
     documentRoot = "${webtree}/s/space/Redbrick-Turns-20/resources/public";
     user = "space";
     group = "member";
@@ -204,7 +209,7 @@ in (userVhosts // {
     user = "gamessoc";
     group = "society";
   };
-  "git.${tld}" = vhostProxy "http://localhost:3000";
+  # "git.${tld}" = vhostProxy "http://localhost:3000";
   "prometheus.${tld}" = vhostProxy "http://localhost:9090";
   "graphs.${tld}" = vhostProxy "http://localhost:3001";
   "dcufm.${tld}" = vhostProxy "http://136.206.15.74";
@@ -212,7 +217,7 @@ in (userVhosts // {
   "macspayn.${tld}" = vhostProxy "http://136.206.15.25:3007";
   "portaldev.${tld}" = vhostProxy "http://136.206.15.61:9080";
   "radio.${tld}" = vhostProxy "http://radio.${tld}:8000";
-  "riainccc.${tld}" = vhostProxy "http://http://136.206.15.25:3000";
+  # "riainccc.${tld}" = vhostProxy "http://http://136.206.15.25:3000";
   "tomcat.dregin.${tld}" = vhostProxy "http://136.206.15.14:20002";
   "webchat.${tld}" = vhostProxy "http://127.0.0.1:16667";
   "irc.${tld}" = vhostProxy "http://127.0.0.1:16667";
@@ -241,130 +246,124 @@ in (userVhosts // {
   "ubuntu.${tld}" = vhostRedirect "https://wiki.${tld}/mw/RedBrick_Ubuntu";
 
 } // (if (config.redbrick.skipCustomVhosts) then {} else {
+ "grumble.zone" = vhost {
+   documentRoot = "${webtree}/m/mcmahon";
+   user = "mcmahon";
+   group = "associat";
+   wwwRedirect = true;
+ };
 
-  "abovethefold.es" = vhost {
-    documentRoot = "${webtree}/r/receive/abovethefold";
-    user = "receive";
-    group = "staff";
-    wwwRedirect = true;
-    serverAliases = [ "www.abovethefold.es" ];
-  };
-  "butterflyexplosion.com" = vhost {
-    documentRoot = "${webtree}/c/carr";
-    user = "carr";
-    group = "associat";
-    wwwRedirect = true;
-    serverAliases = [ "www.butterflyexplosion.com" ];
-  };
-  "ciankehoe.ie" = vhost {
-    documentRoot = "${webtree}/c/cianky/ciankehoe.ie/public";
-    user = "cianky";
-    group = "member";
-  };
-  "dcudrama.ie" = vhost {
-    documentRoot = "${webtree}/d/drama";
-    user = "drama";
-    group = "society";
-    wwwRedirect = true;
-    serverAliases = [ "www.dcudrama.ie" ];
-  };
-  "djbdns.now.ie" = vhost {
-    documentRoot = "${webtree}/l/lecter/djbdns";
-    user = "lecter";
-    group = "associat";
-  };
-  "h8.work" = vhost {
-    documentRoot = "${webtree}/a/ainran/domains/h8.work";
-    user = "ainran";
-    group = "member";
-    wwwRedirect = true;
-    serverAliases = [ "www.h8.work" ];
-  };
-  "halenger.com" = vhost {
-    documentRoot = "${home}/associat/h/halenger/domains/halenger.com";
-    user = "halenger";
-    group = "associat";
-    wwwRedirect = true;
-    serverAliases = [ "www.halenger.com" ];
-  };
-  "lessthanthree.be" = vhost {
-    documentRoot = "${webtree}/o/ornat";
-    user = "ornat";
-    group = "member";
-    wwwRedirect = true;
-    serverAliases = [ "www.lessthanthree.be" ];
-  };
-  "blog.lessthanthree.be" = vhost {
-    documentRoot = "${webtree}/o/ornat/blog";
-    user = "ornat";
-    group = "member";
-  };
-  "mlane.org" = vhost {
-    documentRoot = "${webtree}/a/ainran/mlane";
-    user = "ainran";
-    group = "associat";
-    wwwRedirect = true;
-    serverAliases = [ "www.mlane.org" ];
-  };
-  "obrienronan.com" = vhost {
-    documentRoot = "${webtree}/vhosts/www.obrienronan.com";
-    user = "mellow";
-    group = "associat";
-    wwwRedirect = true;
-    serverAliases = [ "www.obrienronan.com" ];
-  };
-  "richardwalsh.ie" = vhost {
-    documentRoot = "${webtree}/k/koffee/";
-    user = "koffee";
-    group = "associat";
-    wwwRedirect = true;
-    serverAliases = [ "www.richardwalsh.ie" ];
-  };
-  "romana.now.ie" = vhost {
-    documentRoot = "${home}/associat/l/lecter/public_html";
-    user = "lecter";
-    group = "associat";
-    serverAliases = [
-      "big.wavingscreamingqueen.com"
-      "dude.coolandgroovy.org"
-      "honk.for.faggots-on-strike.com"
-    ];
-  };
-  "ryanmcdyer.com" = vhost {
-    documentRoot = "${webtree}/r/ryanmcd";
-    user = "ryanmcd";
-    group = "member";
-    wwwRedirect = true;
-    serverAliases = [ "www.ryanmcdyer.com" ];
-  };
-  "shaunneary.com" = vhost {
-    documentRoot = "${webtree}/s/shaun/koken";
-    user = "shaun";
-    group = "member";
-    extraConfig = ''
-      RedirectMatch 301 "^/~shaun/koken(/(.*))?$" "/$1"
-    '';
-    # TODO shout at shaun, his www. NS points to a different server
-  };
-  "solarsystemscanlan.com" = vhost {
-    documentRoot = "${webtree}/s/singer/solarsystemscanlan.com/";
-    user = "singer";
-    group = "associat";
-    wwwRedirect = true;
-    serverAliases = [ "www.solarsystemscanlan.com" ];
-  };
-  "songsfromtheparlour.com" = vhost {
-    documentRoot = "${webtree}/vhosts/www.songsfromtheparlour.com";
-    user = "parlour";
-    group = "guest";
-    wwwRedirect = true;
-    serverAliases = [ "www.songsfromtheparlour.com" ];
-  };
-  "techweek.dcu.ie" = vhost {
-    documentRoot = "${webtree}/t/techwk/dist";
-    user = "techwk";
-    group = "redbrick";
-  };
+ # "butterflyexplosion.com" = vhost {
+ #   documentRoot = "${webtree}/c/carr";
+ #   user = "carr";
+ #   group = "associat";
+ #   wwwRedirect = true;
+ #   serverAliases = [ "www.butterflyexplosion.com" ];
+ # };
+  #"dcudrama.ie" = vhost {
+  #  documentRoot = "${webtree}/d/drama";
+  #  user = "drama";
+  #  group = "society";
+  #  wwwRedirect = true;
+  #  serverAliases = [ "www.dcudrama.ie" ];
+  #};
+  #"djbdns.now.ie" = vhost {
+  #  documentRoot = "${webtree}/l/lecter/djbdns";
+  #  user = "lecter";
+  #  group = "associat";
+  #};
+  #"h8.work" = vhost {
+  #  documentRoot = "${webtree}/a/ainran/domains/h8.work";
+  #  user = "ainran";
+  #  group = "member";
+  #  wwwRedirect = true;
+  #  serverAliases = [ "www.h8.work" ];
+  #};
+  #"halenger.com" = vhost {
+  #  documentRoot = "${home}/associat/h/halenger/domains/halenger.com";
+  #  user = "halenger";
+  #  group = "associat";
+  #  wwwRedirect = true;
+  #  serverAliases = [ "www.halenger.com" ];
+  #};
+  #"lessthanthree.be" = vhost {
+  #  documentRoot = "${webtree}/o/ornat";
+  #  user = "ornat";
+  #  group = "member";
+  #  wwwRedirect = true;
+  #  serverAliases = [ "www.lessthanthree.be" ];
+  #};
+  #"blog.lessthanthree.be" = vhost {
+  #  documentRoot = "${webtree}/o/ornat/blog";
+  #  user = "ornat";
+  #  group = "member";
+  #};
+  #"mlane.org" = vhost {
+  #  documentRoot = "${webtree}/a/ainran/mlane";
+  #  user = "ainran";
+  #  group = "associat";
+  #  wwwRedirect = true;
+  #  serverAliases = [ "www.mlane.org" ];
+  #};
+  #"obrienronan.com" = vhost {
+  #  documentRoot = "${webtree}/vhosts/www.obrienronan.com";
+  #  user = "mellow";
+  #  group = "associat";
+  #  wwwRedirect = true;
+  #  serverAliases = [ "www.obrienronan.com" ];
+  #};
+  #"richardwalsh.ie" = vhost {
+  #  documentRoot = "${webtree}/k/koffee/";
+  #  user = "koffee";
+  #  group = "associat";
+  #  wwwRedirect = true;
+  #  serverAliases = [ "www.richardwalsh.ie" ];
+  #};
+  #"romana.now.ie" = vhost {
+  #  documentRoot = "${home}/associat/l/lecter/public_html";
+  #  user = "lecter";
+  #  group = "associat";
+  #  serverAliases = [
+  #    "big.wavingscreamingqueen.com"
+  #    "dude.coolandgroovy.org"
+  #    "honk.for.faggots-on-strike.com"
+  #  ];
+  #};
+  #"ryanmcdyer.com" = vhost {
+  #  documentRoot = "${webtree}/r/ryanmcd";
+  #  user = "ryanmcd";
+  #  group = "member";
+  #  wwwRedirect = true;
+  #  serverAliases = [ "www.ryanmcdyer.com" ];
+  #};
+  #"shaunneary.com" = vhost {
+  #  documentRoot = "${webtree}/s/shaun/koken";
+  #  user = "shaun";
+  #  group = "member";
+  #  extraConfig = ''
+  #    RedirectMatch 301 "^/~shaun/koken(/(.*))?$" "/$1"
+  #  '';
+  #  # TODO shout at shaun, his www. NS points to a different server
+  #};
+  #"solarsystemscanlan.com" = vhost {
+  #  documentRoot = "${webtree}/s/singer/solarsystemscanlan.com/";
+  #  user = "singer";
+  #  group = "associat";
+  #  wwwRedirect = true;
+  #  serverAliases = [ "www.solarsystemscanlan.com" ];
+  #};
+  #"songsfromtheparlour.com" = vhost {
+  #  documentRoot = "${webtree}/vhosts/www.songsfromtheparlour.com";
+  #  user = "parlour";
+  #  group = "guest";
+  #  wwwRedirect = true;
+  #  serverAliases = [ "www.songsfromtheparlour.com" ];
+  #};
+  #"techweek.dcu.ie" = vhost {
+  #  documentRoot = "${webtree}/t/techwk/dist";
+  #  user = "techwk";
+  #  group = "redbrick";
+  #};
   "thecollegeview.com" = vhost {
     documentRoot = "${webtree}/p/pubsoc";
     user = "pubsoc";
@@ -372,61 +371,59 @@ in (userVhosts // {
     wwwRedirect = true;
     serverAliases = [ "www.thecollegeview.com" ];
   };
-  "theinternets.be" = vhost {
-    documentRoot = "${webtree}/r/receive/internets";
-    user = "receive";
-    group = "staff";
-    wwwRedirect = true;
-    serverAliases = [ "www.theinternets.be" ];
-  };
-  "blog.theinternets.be" = vhost {
-    documentRoot = "${webtree}/r/receive/blog";
-    user = "receive";
-    group = "staff";
-  };
-  "receive.theinternets.be" = vhost {
-    documentRoot = "${webtree}/r/receive";
-    user = "receive";
-    group = "staff";
-  };
-  "someoneiswrong.theinternets.be" = vhost {
-    documentRoot = "${webtree}/r/receive/wrong";
-    user = "receive";
-    group = "staff";
-  };
-  "thelookdcu.com" = vhost {
-    documentRoot = "${webtree}/t/thelook/";
-    user = "thelook";
+  #"theinternets.be" = vhost {
+  #  documentRoot = "${webtree}/r/receive/internets";
+  #  user = "receive";
+  #  group = "staff";
+  #  wwwRedirect = true;
+  #  serverAliases = [ "www.theinternets.be" ];
+  #};
+  #"blog.theinternets.be" = vhost {
+  #  documentRoot = "${webtree}/r/receive/blog";
+  #  user = "receive";
+  #  group = "staff";
+  #};
+  #"receive.theinternets.be" = vhost {
+  #  documentRoot = "${webtree}/r/receive";
+  #  user = "receive";
+  #  group = "staff";
+  #};
+  #"someoneiswrong.theinternets.be" = vhost {
+  #  documentRoot = "${webtree}/r/receive/wrong";
+  #  user = "receive";
+  #  group = "staff";
+  #};
+  "thelookonline.dcu.ie" = vhost {
+    documentRoot = "${webtree}/s/style/";
+    user = "style";
     group = "society";
-    wwwRedirect = true;
-    serverAliases = [ "www.thelookdcu.com" ];
   };
-  "travel.colmreilly.com" = vhost {
-    documentRoot = "${webtree}/n/nettles/travel/";
-    user = "nettles";
-    group = "associat";
-  };
-  "wiki.colmreilly.com" = vhost {
-    documentRoot = "${webtree}/n/nettles/wiki/";
-    user = "nettles";
-    group = "associat";
-  };
-  "ejmitchell.com" = vhost {
-    documentRoot = "${home}/member/d/deadlock/ejmitchellcom";
-    user = "deadlock";
-    group = "member";
-    wwwRedirect = true;
-    serverAliases = [ "www.ejmitchell.com" ];
-  };
-  "www.luxgaa.lu" = vhost {
-    documentRoot = "${webtree}/s/shivo/LuxGAA";
-    user = "shivo";
-    group = "associat";
-  };
-  "unkle77.com" = vhost {
-    documentRoot = "${webtree}/s/shivo/unkle77/wordpress/";
-    user = "shivo";
-    group = "associat";
-  };
-  "radio.theinternets.be" = vhostRedirect "https://radio.${tld}";
+  #"travel.colmreilly.com" = vhost {
+  #  documentRoot = "${webtree}/n/nettles/travel/";
+  #  user = "nettles";
+  #  group = "associat";
+  #};
+  #"wiki.colmreilly.com" = vhost {
+  #  documentRoot = "${webtree}/n/nettles/wiki/";
+  #  user = "nettles";
+  #  group = "associat";
+  #};
+  #"ejmitchell.com" = vhost {
+  #  documentRoot = "${home}/member/d/deadlock/ejmitchellcom";
+  #  user = "deadlock";
+  #  group = "member";
+  #  wwwRedirect = true;
+  #  serverAliases = [ "www.ejmitchell.com" ];
+  #};
+  #"www.luxgaa.lu" = vhost {
+  #  documentRoot = "${webtree}/s/shivo/LuxGAA";
+  #  user = "shivo";
+  #  group = "associat";
+  #};
+  #"unkle77.com" = vhost {
+  #  documentRoot = "${webtree}/s/shivo/unkle77/wordpress/";
+  #  user = "shivo";
+  #  group = "associat";
+  #};
+  #"radio.theinternets.be" = vhostRedirect "https://radio.${tld}";
 }))

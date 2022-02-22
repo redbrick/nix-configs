@@ -1,4 +1,4 @@
-{pkgs}:
+{pkgs, lib}:
 with pkgs.stdenv;
 let
 

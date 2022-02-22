@@ -61,7 +61,7 @@ in {
   };
 
   # Increasing this limit helps with phpfpm/httpd startup issues
-  systemd.services.nscd.serviceConfig.LimitNOFILE = 16384;
+  systemd.services.nscd.serviceConfig.LimitNOFILE = 32768;
   services.nscd.config = ''
     # We basically use nscd as a proxy for forwarding nss requests to appropriate
     # nss modules, as we run nscd with LD_LIBRARY_PATH set to the directory
