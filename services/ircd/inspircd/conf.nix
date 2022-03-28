@@ -102,6 +102,16 @@ in {
       sslonly="yes";
       type="NetAdmin";
     };
+    mcmahon = {
+      hash="sha256";
+      # password: A hash of the password (see above option) hashed
+      # with /mkpasswd <hash> <password>. See password_hash in modules.conf
+      # for more information about password hashing.
+      password=lib.fileContents /var/secrets/ircd/mcmahon.sha256.pass;
+      host="*@*";
+      sslonly="yes";
+      type="NetAdmin";
+    };
   };
   files = [{
     motd = ./motd.txt;
