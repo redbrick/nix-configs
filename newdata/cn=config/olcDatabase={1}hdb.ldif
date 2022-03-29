@@ -1,0 +1,44 @@
+# AUTO-GENERATED FILE - DO NOT EDIT!! Use ldapmodify.
+# CRC32 d21e8661
+dn: olcDatabase={1}hdb
+objectClass: olcDatabaseConfig
+objectClass: olcHdbConfig
+olcDatabase: {1}hdb
+olcSuffix: o=redbrick
+olcAddContentAcl: FALSE
+olcLastMod: TRUE
+olcMaxDerefDepth: 15
+olcReadOnly: FALSE
+olcRootDN: cn=root,ou=ldap,o=redbrick
+olcRootPW:: e0NSWVBUfVRDdXJnZXN6NVMzc0k=
+olcSyncUseSubentry: FALSE
+olcSyncrepl: rid=000 provider=ldap://daedalus.internal:389 bindmethod=simple
+  timeout=0 network-timeout=0 binddn="cn=slurpd,ou=ldap,o=redbrick" credenti
+ als="B0r!sY0rk$hir3<IsIt" keepalive=0:0:0 starttls=no filter="(objectclass=
+ *)" searchbase="o=redbrick" scope=sub attrs="*,+" schemachecking=off type=r
+ efreshAndPersist retry="5 5 300 +"
+olcMirrorMode: FALSE
+olcMonitoring: TRUE
+olcDbDirectory: /var/db/openldap
+olcDbCacheSize: 100000
+olcDbChecksum: FALSE
+olcDbConfig: {0}set_cachesize 0 2097152 0
+olcDbConfig: {1}set_lk_max_objects 1500
+olcDbConfig: {2}set_lk_max_locks 1500
+olcDbConfig: {3}set_lk_max_lockers 1500
+olcDbNoSync: FALSE
+olcDbDirtyRead: FALSE
+olcDbIDLcacheSize: 0
+olcDbLinearIndex: FALSE
+olcDbMode: 0600
+olcDbSearchStack: 16
+olcDbShmKey: 0
+olcDbCacheFree: 1
+olcDbDNcacheSize: 0
+structuralObjectClass: olcHdbConfig
+entryUUID: 4d28f192-c876-103a-8fee-ff86b6f49a93
+creatorsName: cn=config
+createTimestamp: 20201201231135Z
+entryCSN: 20201201231135.037182Z#000000#000#000000
+modifiersName: cn=config
+modifyTimestamp: 20201201231135Z

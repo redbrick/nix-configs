@@ -1,0 +1,40 @@
+# AUTO-GENERATED FILE - DO NOT EDIT!! Use ldapmodify.
+# CRC32 1330793f
+dn: olcDatabase={-1}frontend
+objectClass: olcDatabaseConfig
+objectClass: olcFrontendConfig
+olcDatabase: {-1}frontend
+olcAccess: {0}to dn.children="ou=2002,ou=accounts,o=redbrick"  by dn.regex="
+ cn=root,ou=ldap,o=redbrick" write  by dn.regex="cn=slurpd,ou=ldap,o=redbric
+ k" read  by * none
+olcAccess: {1}to dn.children="ou=accounts,o=redbrick"  attrs=cn  by dn.regex
+ ="cn=root,ou=ldap,o=redbrick" write  by dn.regex="cn=slurpd,ou=ldap,o=redbr
+ ick" read  by dn.regex="cn=mediawiki,ou=reserved,o=redbrick" read  by self 
+ read  by * none
+olcAccess: {2}to attrs=yearsPaid,year,course,id,newbie,altmail  by dn.regex=
+ "cn=root,ou=ldap,o=redbrick" write  by dn.regex="cn=slurpd,ou=ldap,o=redbri
+ ck" read  by dn.regex="cn=mediawiki,ou=reserved,o=redbrick" read  by self r
+ ead  by * none
+olcAccess: {3}to attrs=userPassword  by dn.regex="cn=root,ou=ldap,o=redbrick
+ " write continue  by dn.regex="cn=slurpd,ou=ldap,o=redbrick" read  by dn.re
+ gex="cn=dovecot,ou=reserved,o=redbrick" read  by self write  by anonymous a
+ uth  by * none
+olcAccess: {4}to attrs=gecos,loginShell  by dn.regex="cn=root,ou=ldap,o=redb
+ rick" write continue  by dn.regex="cn=slurpd,ou=ldap,o=redbrick" read  by s
+ elf write  by * read
+olcAccess: {5}to *  by * read
+olcAddContentAcl: FALSE
+olcLastMod: TRUE
+olcMaxDerefDepth: 0
+olcReadOnly: FALSE
+olcSchemaDN: cn=Subschema
+olcSizeLimit: unlimited
+olcSyncUseSubentry: FALSE
+olcMonitoring: FALSE
+structuralObjectClass: olcDatabaseConfig
+entryUUID: 4d28dc20-c876-103a-8fec-ff86b6f49a93
+creatorsName: cn=config
+createTimestamp: 20201201231135Z
+entryCSN: 20201201231135.037182Z#000000#000#000000
+modifiersName: cn=config
+modifyTimestamp: 20201201231135Z

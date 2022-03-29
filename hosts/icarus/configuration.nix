@@ -10,6 +10,7 @@ in {
     ../../services/squid.nix
     ../../services/znapzend.nix
     ../../services/ldap
+    ../../services/mysql.nix
     ../../services/zfsquota
   ];
 
@@ -19,6 +20,7 @@ in {
   # should.
   system.stateVersion = "19.09";
 
+  boot.kernelParams = [ "fsck.mode=skip" ];
   # Use the GRUB 2 boot loader.
   boot.loader.grub.enable = true;
   boot.loader.grub.version = 2;

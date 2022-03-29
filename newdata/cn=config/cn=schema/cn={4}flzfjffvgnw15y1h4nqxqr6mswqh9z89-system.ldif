@@ -1,0 +1,61 @@
+# AUTO-GENERATED FILE - DO NOT EDIT!! Use ldapmodify.
+# CRC32 cb0fd395
+dn: cn={4}flzfjffvgnw15y1h4nqxqr6mswqh9z89-system
+objectClass: olcSchemaConfig
+cn: {4}flzfjffvgnw15y1h4nqxqr6mswqh9z89-system
+olcAttributeTypes: {0}( 1.3.6.1.4.1.9736.15.1.2.1.3 NAME 'gecos' DESC 'The G
+ ECOS field' EQUALITY caseIgnoreMatch SUBSTR caseIgnoreSubstringsMatch SYNTA
+ X 1.3.6.1.4.1.1466.115.121.1.15 SINGLE-VALUE )
+olcAttributeTypes: {1}( 1.3.6.1.4.1.9736.15.1.2.1.4 NAME 'homeDirectory' DES
+ C 'The home directory' EQUALITY caseExactIA5Match SYNTAX 1.3.6.1.4.1.1466.1
+ 15.121.1.26 SINGLE-VALUE )
+olcAttributeTypes: {2}( 1.3.6.1.4.1.9736.15.1.2.1.5 NAME 'loginShell' DESC '
+ The login shell' EQUALITY caseExactIA5Match SYNTAX 1.3.6.1.4.1.1466.115.121
+ .1.26 SINGLE-VALUE )
+olcAttributeTypes: {3}( 1.3.6.1.4.1.9736.15.1.2.1.6 NAME 'shadowLastChange' 
+ EQUALITY integerMatch SYNTAX 1.3.6.1.4.1.1466.115.121.1.27 SINGLE-VALUE )
+olcAttributeTypes: {4}( 1.3.6.1.4.1.9736.15.1.2.1.7 NAME 'shadowMin' EQUALIT
+ Y integerMatch SYNTAX 1.3.6.1.4.1.1466.115.121.1.27 SINGLE-VALUE )
+olcAttributeTypes: {5}( 1.3.6.1.4.1.9736.15.1.2.1.8 NAME 'shadowMax' EQUALIT
+ Y integerMatch SYNTAX 1.3.6.1.4.1.1466.115.121.1.27 SINGLE-VALUE )
+olcAttributeTypes: {6}( 1.3.6.1.4.1.9736.15.1.2.1.9 NAME 'shadowWarning' EQU
+ ALITY integerMatch SYNTAX 1.3.6.1.4.1.1466.115.121.1.27 SINGLE-VALUE )
+olcAttributeTypes: {7}( 1.3.6.1.4.1.9736.15.1.2.1.10 NAME 'shadowInactive' E
+ QUALITY integerMatch SYNTAX 1.3.6.1.4.1.1466.115.121.1.27 SINGLE-VALUE )
+olcAttributeTypes: {8}( 1.3.6.1.4.1.9736.15.1.2.1.11 NAME 'shadowExpire' EQU
+ ALITY integerMatch SYNTAX 1.3.6.1.4.1.1466.115.121.1.27 SINGLE-VALUE )
+olcAttributeTypes: {9}( 1.3.6.1.4.1.9736.15.1.2.1.12 NAME 'shadowFlag' EQUAL
+ ITY integerMatch SYNTAX 1.3.6.1.4.1.1466.115.121.1.27 SINGLE-VALUE )
+olcAttributeTypes: {10}( 1.3.6.1.4.1.9736.15.1.2.1.13 NAME 'memberUid' EQUAL
+ ITY caseExactIA5Match SUBSTR caseExactIA5SubstringsMatch SYNTAX 1.3.6.1.4.1
+ .1466.115.121.1.26 )
+olcAttributeTypes: {11}( 1.3.6.1.4.1.9736.15.1.2.1.14 NAME 'flag' DESC 'A ge
+ neric flags associated with this user' EQUALITY caseIgnoreIA5Match SYNTAX 1
+ .3.6.1.4.1.1466.115.121.1.26 )
+olcAttributeTypes: {12}( 1.3.6.1.4.1.9736.15.1.2.1.15 NAME 'quota' DESC 'Quo
+ ta information' EQUALITY caseIgnoreIA5Match SYNTAX 1.3.6.1.4.1.1466.115.121
+ .1.26 )
+olcAttributeTypes: {13}( 1.3.6.1.4.1.9736.15.1.2.1.16 NAME 'sambaPassword' D
+ ESC 'The samba password of user' EQUALITY octetStringMatch SYNTAX 1.3.6.1.4
+ .1.1466.115.121.1.40{128} SINGLE-VALUE )
+olcObjectClasses: {0}( 1.3.6.1.4.1.9736.15.1.2.2.1 NAME 'posixAccount' DESC 
+ 'An account with standard POSIX attributes' SUP top STRUCTURAL MUST ( uid $
+  uidNumber $ gidNumber $ homeDirectory $ userPassword $ loginShell ) MAY ( 
+ cn $ gecos $ description $ flag $ quota $ sambaPassword ) )
+olcObjectClasses: {1}( 1.3.6.1.4.1.9736.15.1.2.2.2 NAME 'shadowAccount' DESC
+  'Standard shadow parameters' SUP top AUXILIARY MUST uid MAY ( userPassword
+  $ shadowLastChange $ shadowMin $ shadowMax $ shadowWarning $ shadowInactiv
+ e $ shadowExpire $ shadowFlag $ description $ sambaPassword ) )
+olcObjectClasses: {2}( 1.3.6.1.4.1.9736.15.1.2.2.3 NAME 'posixGroup' DESC 'A
+  unix group' SUP top STRUCTURAL MUST ( cn $ gidNumber ) MAY ( userPassword 
+ $ memberUid $ description ) )
+olcObjectClasses: {3}( 1.3.6.1.4.1.9736.15.1.2.2.4 NAME 'dcuAccount' DESC 'A
+  DCU account' SUP top STRUCTURAL MUST cn MAY ( gecos $ mail $ givenName $ s
+ n $ l ) )
+structuralObjectClass: olcSchemaConfig
+entryUUID: 4d28c000-c876-103a-8fea-ff86b6f49a93
+creatorsName: cn=config
+createTimestamp: 20201201231135Z
+entryCSN: 20201201231135.037182Z#000000#000#000000
+modifiersName: cn=config
+modifyTimestamp: 20201201231135Z
