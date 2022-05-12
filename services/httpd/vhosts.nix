@@ -359,17 +359,22 @@ in (userVhosts // {
   #  wwwRedirect = true;
   #  serverAliases = [ "www.songsfromtheparlour.com" ];
   #};
-  #"techweek.dcu.ie" = vhost {
-  #  documentRoot = "${webtree}/t/techwk/dist";
-  #  user = "techwk";
-  #  group = "redbrick";
-  #};
+  "techweek.dcu.ie" = vhost {
+    documentRoot = "${webtree}/t/techwk/dist";
+    user = "techwk";
+    group = "redbrick";
+  };
   "thecollegeview.com" = vhost {
     documentRoot = "${webtree}/p/pubsoc";
     user = "pubsoc";
     group = "society";
     wwwRedirect = true;
     serverAliases = [ "www.thecollegeview.com" ];
+  };
+  "thelookonline.dcu.ie" = vhost {
+    documentRoot = "${webtree}/s/style";
+    user = "style";
+    group = "society";
   };
   #"theinternets.be" = vhost {
   #  documentRoot = "${webtree}/r/receive/internets";
@@ -393,11 +398,6 @@ in (userVhosts // {
   #  user = "receive";
   #  group = "staff";
   #};
-  "thelookonline.dcu.ie" = vhost {
-    documentRoot = "${webtree}/s/style/";
-    user = "style";
-    group = "society";
-  };
   #"travel.colmreilly.com" = vhost {
   #  documentRoot = "${webtree}/n/nettles/travel/";
   #  user = "nettles";

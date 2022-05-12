@@ -16,6 +16,7 @@ rec {
     "techweek.dcu.ie" = "techweek.dcu.ie";
     "games.dcu.ie" = "www.games.dcu.ie";
     "www.games.dcu.ie" = "www.games.dcu.ie";
+    "thelookonline.dcu.ie" = "thelookonline.dcu.ie";
   };
 
   userWebtree = uid: "${webtreeDir}/${builtins.substring 0 1 uid}/${uid}";
@@ -34,7 +35,7 @@ rec {
   in if isOurTld then tld else theirTld;
 
   # Hard coded otherwise NSCD will crash systems during boot if network is down
-  # 50 = daedalus
+  # 150 = icarus
   ldapHostIp = "192.168.0.50";
   ldapHost = "ldap.internal";
 

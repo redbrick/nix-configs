@@ -33,7 +33,8 @@ in {
 
       # Basic settings. Most of these are actually in the Nix module, but we can't merge with
       # those unfortunately.
-      TIME_ZONE = "Europe/Dublin";
+      # TIME_ZONE = "Europe/Dublin";
+      TIME_ZONE = "UTC";
       DEFAULT_FROM_EMAIL = "mailmgr@${tld}";
       SERVER_EMAIL = "mailmgr@${tld}";
       ALLOWED_HOSTS = [ "localhost" "127.0.0.1" ] ++ webHosts;
@@ -46,7 +47,7 @@ in {
         handlers.console.class = "logging.StreamHandler";
         loggers.django = {
           handlers = [ "console" ];
-          level = "INFO";
+          level = "DEBUG";
         };
       };
       HAYSTACK_CONNECTIONS.default = {

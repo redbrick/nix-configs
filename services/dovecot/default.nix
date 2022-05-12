@@ -95,8 +95,8 @@ in {
 
     extraConfig = ''
       # Having trouble? Try enabling these
-      auth_verbose = no
-      mail_debug = no
+      auth_verbose = yes
+      mail_debug = yes
 
       namespace inbox {
         separator = /
