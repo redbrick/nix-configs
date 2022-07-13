@@ -100,6 +100,9 @@ in {
     maxClients = 250;
     logPerVirtualHost = false;
     extraConfig = ''
+      ServerSignature off
+      ServerTokens Prod
+
       ProxyRequests off
       ProxyVia Off
       ProxyPreserveHost On
