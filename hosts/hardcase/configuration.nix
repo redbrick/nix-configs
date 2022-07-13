@@ -12,7 +12,7 @@ in {
     ../../services/httpd
     ../../services/postfix
     ../../services/dovecot
-    ../../services/grafana
+    #../../services/grafana
     ../../services/loki.nix
     ../../services/prometheus.nix
     ../../services/promtail.nix
