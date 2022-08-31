@@ -331,15 +331,15 @@ in (userVhosts // {
   #  wwwRedirect = true;
   #  serverAliases = [ "www.ryanmcdyer.com" ];
   #};
-  #"shaunneary.com" = vhost {
-  #  documentRoot = "${webtree}/s/shaun/koken";
-  #  user = "shaun";
-  #  group = "member";
-  #  extraConfig = ''
-  #    RedirectMatch 301 "^/~shaun/koken(/(.*))?$" "/$1"
-  #  '';
-  #  # TODO shout at shaun, his www. NS points to a different server
-  #};
+  "shaunneary.com" = vhost {
+    documentRoot = "${webtree}/s/shaun/koken";
+    user = "shaun";
+    group = "member";
+    extraConfig = ''
+      RedirectMatch 301 "^/~shaun/koken(/(.*))?$" "/$1"
+    '';
+    # TODO shout at shaun, his www. NS points to a different server
+  };
   #"solarsystemscanlan.com" = vhost {
   #  documentRoot = "${webtree}/s/singer/solarsystemscanlan.com/";
   #  user = "singer";
