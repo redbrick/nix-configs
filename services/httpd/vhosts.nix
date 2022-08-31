@@ -53,11 +53,6 @@ in (userVhosts // {
     user = "rmahajan";
     group = "member";
   };
-  "20birthday.${tld}" = vhost {
-    documentRoot = "${webtree}/s/space/Redbrick-Turns-20/resources/public";
-    user = "space";
-    group = "member";
-  };
   "bricket.${tld}" = vhost {
     documentRoot = "${webtree}/w/werdz/bricket";
     user = "werdz";
