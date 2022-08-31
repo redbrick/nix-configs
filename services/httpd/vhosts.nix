@@ -332,11 +332,11 @@ in (userVhosts // {
   #  serverAliases = [ "www.ryanmcdyer.com" ];
   #};
   "shaunneary.com" = vhost {
-    documentRoot = "${webtree}/s/shaun/koken";
+    documentRoot = "${webtree}/s/shaun/photos";
     user = "shaun";
     group = "member";
     extraConfig = ''
-      RedirectMatch 301 "^/~shaun/koken(/(.*))?$" "/$1"
+      RedirectMatch 301 "^/~shaun/photos(/(.*))?$" "/$1"
     '';
     # TODO shout at shaun, his www. NS points to a different server
   };
