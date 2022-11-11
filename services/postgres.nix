@@ -2,7 +2,7 @@
 {
   services.postgresql = {
     enable = true;
-    package = pkgs.postgresql_9_6;
+    package = pkgs.postgresql_10;
     dataDir = "/var/db/postgres";
     authentication = lib.mkForce ''
     # Generated file; do not edit!

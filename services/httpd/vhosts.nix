@@ -23,6 +23,11 @@ let
     };
   }) (filter (user: !elem user.uid userBlacklist) users));
 in (userVhosts // {
+  "dasho.${tld}" = vhost {
+    documentRoot = "${webtree}/d/dasho";
+    user = "dasho";
+    group = "member";
+  };
   "bash.${tld}" = vhost {
     documentRoot = "${webtree}/y/yosarian/bash";
     user = "yosarian";
@@ -321,7 +326,6 @@ in (userVhosts // {
   #  serverAliases = [
   #    "big.wavingscreamingqueen.com"
   #    "dude.coolandgroovy.org"
-  #    "honk.for.faggots-on-strike.com"
   #  ];
   #};
   #"ryanmcdyer.com" = vhost {
@@ -332,11 +336,11 @@ in (userVhosts // {
   #  serverAliases = [ "www.ryanmcdyer.com" ];
   #};
   "shaunneary.com" = vhost {
-    documentRoot = "${webtree}/s/shaun/koken";
+    documentRoot = "${webtree}/s/shaun/photos";
     user = "shaun";
     group = "member";
     extraConfig = ''
-      RedirectMatch 301 "^/~shaun/koken(/(.*))?$" "/$1"
+      RedirectMatch 301 "^/~shaun/photos(/(.*))?$" "/$1"
     '';
     # TODO shout at shaun, his www. NS points to a different server
   };
@@ -363,7 +367,7 @@ in (userVhosts // {
     documentRoot = "${webtree}/p/pubsoc";
     user = "pubsoc";
     group = "society";
-    wwwRedirect = true;
+    wwwRedirect = false;
     serverAliases = [ "www.thecollegeview.com" ];
   };
   "thelookonline.dcu.ie" = vhost {
