@@ -23,7 +23,7 @@ in {
     webHosts = [ "lists.${tld}" "localmail.${tld}" ];
     hyperkitty = {
       enable = true;
-      baseUrl = "https://${hyperkittyLocal}/hyperkitty/";
+      baseUrl = "https://${hyperkittyLocal}/archives/";
     };
     extraPythonPackages = with pkgs.python3Packages; [ ldap pyasn1-modules django-auth-ldap ];
     webSettings = {
@@ -57,24 +57,24 @@ in {
 
       # Auth settings
       ACCOUNT_EMAIL_VERIFICATION = "none";
-      AUTHENTICATION_BACKENDS = [
-        "django_auth_ldap.backend.LDAPBackend"
-        "django.contrib.auth.backends.ModelBackend"
-      ];
+      #AUTHENTICATION_BACKENDS = [
+      #  "django_auth_ldap.backend.LDAPBackend"
+      #  "django.contrib.auth.backends.ModelBackend"
+      #];
       # Use the user's own credentials to bind to LDAP. Allows for reading of
       # special fields, and no need for a mailman LDAP user
-      AUTH_LDAP_SERVER_URI = "ldap://${common.ldapHost}";
-      AUTH_LDAP_BIND_AS_AUTHENTICATING_USER = true;
-      AUTH_LDAP_USER_ATTRLIST = ["*" "+"];
-      AUTH_LDAP_USER_DN_TEMPLATE = "uid=%(user)s,ou=accounts,o=redbrick";
-      AUTH_LDAP_USER_ATTR_MAP = {
-        username = "uid";
-        first_name = "cn";
-      };
-      AUTH_LDAP_MIRROR_GROUPS = true;
-      AUTH_LDAP_USER_FLAGS_BY_GROUP = {
-        is_superuser = "cn=mailadm,ou=groups,o=redbrick";
-      };
+      #AUTH_LDAP_SERVER_URI = "ldap://${common.ldapHost}";
+      #AUTH_LDAP_BIND_AS_AUTHENTICATING_USER = true;
+      #AUTH_LDAP_USER_ATTRLIST = ["*" "+"];
+      #AUTH_LDAP_USER_DN_TEMPLATE = "uid=%(user)s,ou=accounts,o=redbrick";
+      #AUTH_LDAP_USER_ATTR_MAP = {
+      #  username = "uid";
+      #  first_name = "cn";
+      #};
+      #AUTH_LDAP_MIRROR_GROUPS = true;
+      #AUTH_LDAP_USER_FLAGS_BY_GROUP = {
+      #  is_superuser = "cn=mailadm,ou=groups,o=redbrick";
+      #};
     };
   };
 
@@ -154,12 +154,12 @@ in {
     with open('/var/lib/mailman-web/settings_local.json') as f:
         globals().update(json.load(f))
 
-    import ldap
-    from django_auth_ldap.config import LDAPSearch, PosixGroupType
+    #import ldap
+    #from django_auth_ldap.config import LDAPSearch, PosixGroupType
 
-    AUTH_LDAP_GROUP_TYPE = PosixGroupType()
-    AUTH_LDAP_USER_SEARCH = LDAPSearch("ou=accounts,o=redbrick", ldap.SCOPE_SUBTREE, "(uid=%(user)s)")
-    AUTH_LDAP_GROUP_SEARCH = LDAPSearch("ou=groups,o=redbrick", ldap.SCOPE_SUBTREE, "(objectClass=posixGroup)")
+    #AUTH_LDAP_GROUP_TYPE = PosixGroupType()
+    #AUTH_LDAP_USER_SEARCH = LDAPSearch("ou=accounts,o=redbrick", ldap.SCOPE_SUBTREE, "(uid=%(user)s)")
+    #AUTH_LDAP_GROUP_SEARCH = LDAPSearch("ou=groups,o=redbrick", ldap.SCOPE_SUBTREE, "(objectClass=posixGroup)")
 
     with open('${secretsFile}', 'r') as db_pass_file:
         secrets = json.load(db_pass_file)
