@@ -396,6 +396,7 @@
   "christopher.boyle" = "greyman";
   "cboyle" = "greyman";
   "cliodhna.harrison" = "thegirl";
+  "james.hackett" = "distro";
   "safrole" = "saf";
   "jonny" = "banjo";
   "xmeabhx" = "timelady";
