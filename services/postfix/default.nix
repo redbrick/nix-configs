@@ -113,21 +113,15 @@ in {
 
 
     # the following checks are used to prevent backscatter mail
+    enableHeaderChecks = true;
     extraHeaderChecks = ''
       /^Received: +from +(mail\.redbrick\.dcu\.ie) +/
           reject forged client name in Received: header: $1
       /^Received: +from +[^ ]+ +\(([^ ]+ +[he]+lo=|[he]+lo +)(mail\.redbrick\.dcu\.ie)\)/
           reject forged client name in Received: header: $2
     '';
-    extraBodyChecks = ''
-      /^[> ]*Received: +from +(mail\.redbrick\.dcu\.ie) /
-          reject forged client name in Received: header: $1
-      /^[> ]*Received: +from +[^ ]+ +\(([^ ]+ +[he]+lo=|[he]+lo +)(mail\.redbrick\.dcu\.ie)\)/
-          reject forged client name in Received: header: $2
-    ''; 
     extraConfig = ''
       header_checks = regexp:${config.services.postfix.extraHeaderChecks}
-      body_checks = regexp:${config.services.postfix.extraBodyChecks}
     '';
 
     # Files that need postmap run on them
