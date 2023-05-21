@@ -1,3 +1,7 @@
 # /etc/postfix/header_checks
-/^(From|Return-Path):.*[[:<:]](*@redbrick.dcu.ie)[[:>:]]/ 
+/^(From|Return-Path):.*[[:<:]](*@redbrick\.dcu\.ie)[[:>:]]/ 
     reject forged sender address in \$1: message header: \$2
+/^Received: +from +(redbrick\.dcu\.ie) +/
+    reject forged client name in Received: header: \$1
+/^Received: +from +[^ ]+ +\(([^ ]+ +[he]+lo=|[he]+lo +)(redbrick\.dcu\.ie)\)/
+    reject forged client name in Received: header: \$2
