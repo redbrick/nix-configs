@@ -306,9 +306,31 @@ in {
         "warn_if_reject" "reject_unknown_client_hostname"
       ]);
       
-      # used to prevent backscatter mail
-      header_checks = regexp:/etc/postfix/header_checks;
-      body_checks = regexp:/etc/postfix/body_checks;
+    };
+
+    #
+    # extraConfig and extraFiles are used to prevent backscatter mail
+    #
+    extraConfig = ''
+      header_checks = regexp:/etc/postfix/header_checks
+      body_checks = regexp:/etc/postfix/body_checks
+    '';
+
+    extraFiles = {
+      "header_checks".text = ''
+        /^Received: +from +(mail\.redbrick\.dcu\.ie) +/
+            reject forged client name in Received: header: \$1
+        /^Received: +from +[^ ]+ +\(([^ ]+ +[he]+lo=|[he]+lo +)(mail\.redbrick\.dcu\.ie)\)/
+            reject forged client name in Received: header: \$2
+      '';
+
+      "body_checks".text = ''
+        /^[> ]*Received: +from +(mail\.redbrick\.dcu\.ie) /
+            reject forged client name in Received: header: \$1
+        /^[> ]*Received: +from +[^ ]+ +\(([^ ]+ +[he]+lo=|[he]+lo +)(mail\.redbrick\.dcu\.ie)\)/
+            reject forged client name in Received: header: \$2
+      '';
+      };
     };
   };
 }
