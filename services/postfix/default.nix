@@ -291,6 +291,10 @@ in {
         # restrictive check and may reject legitimate mail.
         "warn_if_reject" "reject_unknown_client_hostname"
       ]);
+      
+      # used to prevent backscatter mail
+      header_checks = regexp:/etc/postfix/header_checks
+      body_checks = regexp:/etc/postfix/body_checks
     };
   };
 }
