@@ -293,8 +293,8 @@ in {
       ]);
       
       # used to prevent backscatter mail
-      header_checks = regexp:/etc/postfix/header_checks
-      body_checks = regexp:/etc/postfix/body_checks
+      header_checks = regexp:/etc/postfix/header_checks;
+      body_checks = regexp:/etc/postfix/body_checks;
     };
   };
 }
