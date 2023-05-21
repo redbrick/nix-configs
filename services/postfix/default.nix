@@ -87,19 +87,20 @@ in {
     systemctl restart postfix
   '';
   
-  environment.etc."postfix/header_checks".text = ''
+  environment.etc = {
+  "postfix/header_checks".text = ''
     /^Received: +from +(redbrick\.dcu\.ie) +/
         reject forged client name in Received: header: $1
     /^Received: +from +[^ ]+ +\(([^ ]+ +[he]+lo=|[he]+lo +)(redbrick\.dcu\.ie)\)/
         reject forged client name in Received: header: $2
   '';
-  
-  environment.etc."postfix/body_checks".text = ''
+  "postfix/body_checks".text = ''
     /^[> ]*Received: +from +(redbrick\.\dcu\.ie) /
         reject forged client name in Received: header: $1
     /^[> ]*Received: +from +[^ ]+ +\(([^ ]+ +[he]+lo=|[he]+lo +)(redbrick\.dcu\.ie)\)/
         reject forged client name in Received: header: $2
   '';
+  };
 
   services.postfix = {
     enable = true;
