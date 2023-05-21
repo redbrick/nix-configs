@@ -305,7 +305,6 @@ in {
         # restrictive check and may reject legitimate mail.
         "warn_if_reject" "reject_unknown_client_hostname"
       ]);
-      
     };
 
     #
@@ -330,7 +329,6 @@ in {
         /^[> ]*Received: +from +[^ ]+ +\(([^ ]+ +[he]+lo=|[he]+lo +)(mail\.redbrick\.dcu\.ie)\)/
             reject forged client name in Received: header: \$2
       '';
-      };
     };
   };
-}
+};
