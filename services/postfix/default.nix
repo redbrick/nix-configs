@@ -291,6 +291,6 @@ in {
         # restrictive check and may reject legitimate mail.
         "warn_if_reject" "reject_unknown_client_hostname"
       ]);
-    };   
+    };
   };
 }
