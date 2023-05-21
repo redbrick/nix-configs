@@ -12,7 +12,7 @@
 
   # Redirections for system and pseudo accounts.
   "MAILER-DAEMON" = "postmaster";
-  "postmaster" = "/dev/null";
+  "postmaster" = "root";
   "bin" = "root";
   "daemon" = "root";
   "man" = "root";
