@@ -111,16 +111,6 @@ in {
     # smtp_inet found in https://github.com/NixOS/nixpkgs/blob/54361cde9226ae6346b53b34acea9b493f803509/nixos/modules/services/mail/postfix.nix#L768
     masterConfig.smtp_inet.args = [ "-o" "smtpd_sasl_auth_enable=no" ];
 
-
-    # the following checks are used to prevent backscatter mail
-    enableHeaderChecks = true;
-    extraHeaderChecks = ''
-      /^Received: +from +(mail\.redbrick\.dcu\.ie) +/
-          reject forged client name in Received: header: $1
-      /^Received: +from +[^ ]+ +\(([^ ]+ +[he]+lo=|[he]+lo +)(mail\.redbrick\.dcu\.ie)\)/
-          reject forged client name in Received: header: $2
-    '';
-
     # Files that need postmap run on them
     # Added to /var/lib/postfix/conf/<name>
     mapFiles.sender_whitelist = sender_whitelist;
