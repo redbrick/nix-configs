@@ -120,9 +120,6 @@ in {
       /^Received: +from +[^ ]+ +\(([^ ]+ +[he]+lo=|[he]+lo +)(mail\.redbrick\.dcu\.ie)\)/
           reject forged client name in Received: header: $2
     '';
-    extraConfig = ''
-      header_checks = regexp:${config.services.postfix.extraHeaderChecks}
-    '';
 
     # Files that need postmap run on them
     # Added to /var/lib/postfix/conf/<name>
