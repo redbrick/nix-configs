@@ -1,0 +1,3 @@
+# /etc/postfix/header_checks
+/^(From|Return-Path):.*[[:<:]](user@domain\.tld)[[:>:]]/ 
+    reject forged sender address in \$1: message header: \$2
