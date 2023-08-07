@@ -33,7 +33,9 @@ in {
     hostName = "hardcase";
     hostId = "0ae64a79";
     defaultGateway = "192.168.0.254";
-
+    
+    timeServers = options.networking.timeServers.default ++ [ "pool.ntp.org" ]; 
+    
     # Allow rainloop to connect to mail server over SSL
     hosts = {
       "192.168.0.26" = [ "mail.redbrick.dcu.ie" ];
