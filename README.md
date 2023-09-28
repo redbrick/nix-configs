@@ -15,11 +15,17 @@ nixos-rebuild switch
 
 ## Deploying Apache/httpd
 
-`users.nix` needs to be generated before deploying Apache. Use this command:
+`users.nix` needs to be generated before deploying Apache. This is important to run after users have been created or moved. Use this command:
 
 ```bash
 cd services/httpd
 ldapsearch -b o=redbrick -h ldap.internal -xLLL objectClass=posixAccount uid homeDirectory gidNumber | python3 ldap2nix.py /storage/webtree/ > users.nix
+```
+
+A rebuild will need to happen for these new users to be picked up by apache.
+
+```bash
+cd /etc/nixos && nixos-rebuild switch
 ```
 
 Then generate the preliminary certs for every domain so that httpd can start:
