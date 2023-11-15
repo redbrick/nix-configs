@@ -16,11 +16,6 @@ let
         version = "1.4.0";
         sha256 = "05vhdmzhjmr9g0zqzxgixpwhk111kcrl022qi1jhghs6vjc2dcx8";
       }
-      {
-        name = "grafana-clock-panel";
-        version = "1.0.3";
-        sha256 = "0bn40619gxzbsx8gnsql0i87b3019ggjxchbi73sgiiaiqf9066q";
-      }
     ];
   };
 in {

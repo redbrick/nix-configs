@@ -363,13 +363,13 @@ in (userVhosts // {
     user = "techwk";
     group = "redbrick";
   };
-  "thecollegeview.com" = vhost {
-    documentRoot = "${webtree}/p/pubsoc";
-    user = "pubsoc";
-    group = "society";
-    wwwRedirect = false;
-    serverAliases = [ "www.thecollegeview.com" ];
-  };
+ #"thecollegeview.com" = vhost {
+ #  documentRoot = "${webtree}/p/pubsoc";
+ #  user = "pubsoc";
+ #  group = "society";
+ #  wwwRedirect = false;
+ #  serverAliases = [ "www.thecollegeview.com" ];
+ #};
   "thelookonline.dcu.ie" = vhost {
     documentRoot = "${webtree}/s/style";
     user = "style";
