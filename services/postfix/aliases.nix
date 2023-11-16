@@ -404,6 +404,7 @@
   "cliodhna.harrison" = "thegirl";
   "james.hackett" = "distro";
   "dominic.connor" = "wizzdom";
+  "habibi" = "ayden";
   "safrole" = "saf";
   "jonny" = "banjo";
   "xmeabhx" = "timelady";
