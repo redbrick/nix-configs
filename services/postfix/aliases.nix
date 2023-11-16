@@ -397,6 +397,7 @@
   "cboyle" = "greyman";
   "cliodhna.harrison" = "thegirl";
   "james.hackett" = "distro";
+  "dominic.connor" = "wizzdom";
   "safrole" = "saf";
   "jonny" = "banjo";
   "xmeabhx" = "timelady";
