@@ -387,6 +387,12 @@
   "gamessoc12" = "gamessoc";
   "gamessoc13" = "gamessoc";
 
+  # esports soc aliases
+  "announce-esports" = "announce-esports@lists.${tld}";
+  "esports-committee" = "esports-committee@lists.${tld}";
+  "esports-cmt" = "esports-committee@lists.${tld}";
+
+
   "jennyf" = "ribbons";
   "niall.gaffney" = "gamma";
   "richard.walsh" = "koffee";
