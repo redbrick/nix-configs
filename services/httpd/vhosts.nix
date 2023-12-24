@@ -374,6 +374,13 @@ in (userVhosts // {
  #  wwwRedirect = false;
  #  serverAliases = [ "www.thecollegeview.com" ];
  #};
+  "thecollegeview.${tld}" = vhost {
+    documentRoot = "${webtree}/p/pubsoc";
+    user = "pubsoc";
+    group = "society";
+    wwwRedirect = true;
+    serverAliases = [ "www.thecollegeview.${tld}" ];
+  };
   "thelookonline.dcu.ie" = vhost {
     documentRoot = "${webtree}/s/style";
     user = "style";
