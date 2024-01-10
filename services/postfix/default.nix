@@ -266,6 +266,11 @@ in {
       ]);
       smtpd_data_restrictions = builtins.concatStringsSep ", " (commonRestrictions ++ [
         "reject_multi_recipient_bounce"
+        "reject_unauth_pipelining"
+      ]);
+      smtpd_discard_ehlo_keywords = builtins.concatStringsSep ", " (commonRestrictions ++ [
+	"chunking"
+	"silent-discard"
       ]);
       smtpd_relay_restrictions = builtins.concatStringsSep ", " [
         # Check the user isn't mailmgr
