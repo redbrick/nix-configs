@@ -214,6 +214,11 @@ in (userVhosts // {
     user = "wwwrun";
     group = "wwwrun";
   };
+  "blueblock.${tld}" = vhost {
+    documentRoot = "${webtree}/vhosts/blueblock";
+    user = "wwwrun";
+    group = "wwwrun";
+  };
   # "git.${tld}" = vhostProxy "http://localhost:3000";
   "prometheus.${tld}" = vhostProxy "http://localhost:9090";
   "graphs.${tld}" = vhostProxy "http://localhost:3001";
@@ -229,6 +234,7 @@ in (userVhosts // {
   "werdztomcat.${tld}" = vhostProxy "http://136.206.15.14:20001";
   "www.${tld}" = vhostRedirect "https://${tld}/";
   "admin.${tld}" = vhostRedirect "https://blog.${tld}/";
+  "thecollegeview.${tld}" = vhostRedirect "https://thecollegeview.ie/";
   "admins.${tld}" = vhostRedirect "https://blog.${tld}/";
   "ajaxterm.${tld}" = vhostRedirect "https://term.${tld}/";
   "anyterm.${tld}" = vhostRedirect "https://term.${tld}/";
@@ -248,6 +254,8 @@ in (userVhosts // {
   "techweek.${tld}" = vhostRedirect "https://techweek.dcu.ie/";
   "tickets.${tld}" = vhostRedirect "https://dcusu.ticketsolve.com/shows/873599383/events/128190598";
   "ubuntu.${tld}" = vhostRedirect "https://wiki.${tld}/mw/RedBrick_Ubuntu";
+  "chat.${tld}" = vhostRedirect "https://discord.com/invite/uF8RA7U";
+  "webgroup.${tld}" = vhostRedirect "https://github.com/search?q=org%3Aredbrick%20topic%3Awebgroup&type=repositories";
 
 } // (if (config.redbrick.skipCustomVhosts) then {} else {
  "grumble.zone" = vhost {
@@ -367,20 +375,20 @@ in (userVhosts // {
     user = "techwk";
     group = "redbrick";
   };
- #"thecollegeview.com" = vhost {
- #  documentRoot = "${webtree}/p/pubsoc";
- #  user = "pubsoc";
- #  group = "society";
- #  wwwRedirect = false;
- #  serverAliases = [ "www.thecollegeview.com" ];
- #};
-  "thecollegeview.${tld}" = vhost {
+  "thecollegeview.ie" = vhost {
     documentRoot = "${webtree}/p/pubsoc";
     user = "pubsoc";
     group = "society";
     wwwRedirect = true;
-    serverAliases = [ "www.thecollegeview.${tld}" ];
+    serverAliases = [ "www.thecollegeview.ie" ];
   };
+ #"thecollegeview.${tld}" = vhost {
+ #  documentRoot = "${webtree}/p/pubsoc";
+ #  user = "pubsoc";
+ #  group = "society";
+ #  wwwRedirect = true;
+ #  serverAliases = [ "www.thecollegeview.${tld}" ];
+ #};
   "thelookonline.dcu.ie" = vhost {
     documentRoot = "${webtree}/s/style";
     user = "style";
