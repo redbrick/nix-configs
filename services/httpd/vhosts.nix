@@ -235,6 +235,7 @@ in (userVhosts // {
   "www.${tld}" = vhostRedirect "https://${tld}/";
   "admin.${tld}" = vhostRedirect "https://blog.${tld}/";
   "thecollegeview.${tld}" = vhostRedirect "https://thecollegeview.ie/";
+  "www.thecollegeview.${tld}" = vhostRedirect "https://thecollegeview.ie/";
   "admins.${tld}" = vhostRedirect "https://blog.${tld}/";
   "ajaxterm.${tld}" = vhostRedirect "https://term.${tld}/";
   "anyterm.${tld}" = vhostRedirect "https://term.${tld}/";
@@ -255,6 +256,7 @@ in (userVhosts // {
   "tickets.${tld}" = vhostRedirect "https://dcusu.ticketsolve.com/shows/873599383/events/128190598";
   "ubuntu.${tld}" = vhostRedirect "https://wiki.${tld}/mw/RedBrick_Ubuntu";
   "chat.${tld}" = vhostRedirect "https://discord.com/invite/uF8RA7U";
+  "discord.${tld}" = vhostRedirect "https://discord.com/invite/uF8RA7U";
   "webgroup.${tld}" = vhostRedirect "https://github.com/search?q=org%3Aredbrick%20topic%3Awebgroup&type=repositories";
 
 } // (if (config.redbrick.skipCustomVhosts) then {} else {
@@ -264,7 +266,23 @@ in (userVhosts // {
    group = "associat";
    wwwRedirect = true;
  };
-
+ "callumbrowne.ie" = vhost {
+   documentRoot = "${webtree}/b/browner";
+   user = "browner";
+   group = "member";
+   wwwRedirect = true;
+ };
+ "ihateipv6.org" = vhost {
+   documentRoot = "${webtree}/w/wizzdom/ihateipv6";
+   user = "wizzdom";
+   group = "member";
+   wwwRedirect = true;
+ };
+ "weeb.${tld}" = vhost {
+   documentRoot = "${webtree}/a/ayden/weeb";
+   user = "ayden";
+   group = "member";
+ };
  # "butterflyexplosion.com" = vhost {
  #   documentRoot = "${webtree}/c/carr";
  #   user = "carr";
