@@ -245,7 +245,6 @@ in (userVhosts // {
   "devrandom.${tld}" = vhostRedirect "https://marvin.${tld}/";
   "events.${tld}" = vhostRedirect "https://${tld}/events/";
   "fosdem.${tld}" = vhostRedirect "https://redbrickdcu.typeform.com/to/ZwETj0";
-  "github.${tld}" = vhostRedirect "https://github.com/redbrick/";
   "help.${tld}" = vhostRedirect "https://wiki.${tld}/mw/Helpdesk";
   "helpdeskexam.${tld}" = vhostRedirect "https://md.${tld}/s/SJzip7F9X#";
   "mail.${tld}" = vhostRedirect "https://webmail.${tld}/";
@@ -255,9 +254,17 @@ in (userVhosts // {
   "techweek.${tld}" = vhostRedirect "https://techweek.dcu.ie/";
   "tickets.${tld}" = vhostRedirect "https://dcusu.ticketsolve.com/shows/873599383/events/128190598";
   "ubuntu.${tld}" = vhostRedirect "https://wiki.${tld}/mw/RedBrick_Ubuntu";
-  "chat.${tld}" = vhostRedirect "https://discord.com/invite/uF8RA7U";
-  "discord.${tld}" = vhostRedirect "https://discord.com/invite/uF8RA7U";
   "webgroup.${tld}" = vhostRedirect "https://github.com/search?q=org%3Aredbrick%20topic%3Awebgroup&type=repositories";
+  "webgroup-issues.${tld}" = vhostRedirect "https://github.com/orgs/redbrick/projects/4";
+  "github.${tld}" = vhostRedirect "https://github.com/redbrick/";
+  # Social Links
+  "chat.${tld}" = vhostRedirect "https://discord.com/invite/MttnTq9UyK";
+  "discord.${tld}" = vhostRedirect "https://discord.com/invite/MttnTq9UyK";
+  "facebook.${tld}" = vhostRedirect "https://www.facebook.com/dcuredbrick";
+  "twitter.${tld}" = vhostRedirect "https://www.twitter.com/@RedbrickDCU";
+  "instagram.${tld}" = vhostRedirect "https://www.instagram.com/redbrickdcu/";
+  "linkedin.${tld}" = vhostRedirect "https://www.linkedin.com/company/redbrickdcu";
+
 
 } // (if (config.redbrick.skipCustomVhosts) then {} else {
  "grumble.zone" = vhost {
