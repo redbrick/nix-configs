@@ -50,7 +50,7 @@ in {
     "environment=\"REMOTEUSER=wizzdom\" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIPb9B8bJohwDXxNTkdt4qnCTKJeOnRe2zP+r/7A18FG wizzdom@redbrick.dcu.ie"
     "environment=\"REMOTEUSER=cathalog\" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJITEcseJCDdmwPAKFKI4sLN/EdPUSyn4QPyPy/cNMBk cathalog@redbrick.dcu.ie"
     "environment=\"REMOTEUSER=ymacomp\" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICsl1p/5FASxldsNV2fMGx05R88wR0lKiVjTBARc2Ol1 ymacomp@redbrick.dcu.ie"
-    "environment=\"REMOTEUSER=hypnoant\" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOmuvF9UaEM6X/qtphksGaBnMablsq8o9BG3rYdbILdx hypnoant@pygmalion.redbrick.dcu.ie"
+    "environment=\"REMOTEUSER=hypnoant\" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOmuvF9UaEM6X/qtphksGaBnMablsq8o9BG3rYdbILdx hypnoant@redbrick.dcu.ie"
   ];
 
   environment.loginShellInit = ''
