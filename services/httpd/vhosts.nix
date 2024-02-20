@@ -254,9 +254,11 @@ in (userVhosts // {
   "techweek.${tld}" = vhostRedirect "https://techweek.dcu.ie/";
   "tickets.${tld}" = vhostRedirect "https://dcusu.ticketsolve.com/shows/873599383/events/128190598";
   "ubuntu.${tld}" = vhostRedirect "https://wiki.${tld}/mw/RedBrick_Ubuntu";
+  "mps.${tld}" = vhostRedirect "https://dcumps.ie";
   "webgroup.${tld}" = vhostRedirect "https://github.com/search?q=org%3Aredbrick%20topic%3Awebgroup&type=repositories";
   "webgroup-issues.${tld}" = vhostRedirect "https://github.com/orgs/redbrick/projects/4";
   "github.${tld}" = vhostRedirect "https://github.com/redbrick/";
+  "drive.${tld}" = vhostRedirect "https://drive.google.com/drive/u/0/folders/1J82f89bfD7vnDI9GN9zwbUS9IjNZU27B";
   # Social Links
   "chat.${tld}" = vhostRedirect "https://discord.com/invite/MttnTq9UyK";
   "discord.${tld}" = vhostRedirect "https://discord.com/invite/MttnTq9UyK";
@@ -264,7 +266,6 @@ in (userVhosts // {
   "twitter.${tld}" = vhostRedirect "https://www.twitter.com/@RedbrickDCU";
   "instagram.${tld}" = vhostRedirect "https://www.instagram.com/redbrickdcu/";
   "linkedin.${tld}" = vhostRedirect "https://www.linkedin.com/company/redbrickdcu";
-
 
 } // (if (config.redbrick.skipCustomVhosts) then {} else {
  "grumble.zone" = vhost {
@@ -275,6 +276,12 @@ in (userVhosts // {
  };
  "callumbrowne.ie" = vhost {
    documentRoot = "${webtree}/b/browner";
+   user = "browner";
+   group = "member";
+   wwwRedirect = true;
+ };
+ "kittybrowner.${tld}" = vhost {
+   documentRoot = "${webtree}/b/browner/kitty";
    user = "browner";
    group = "member";
    wwwRedirect = true;
