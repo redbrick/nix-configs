@@ -266,6 +266,7 @@ in (userVhosts // {
   "twitter.${tld}" = vhostRedirect "https://www.twitter.com/@RedbrickDCU";
   "instagram.${tld}" = vhostRedirect "https://www.instagram.com/redbrickdcu/";
   "linkedin.${tld}" = vhostRedirect "https://www.linkedin.com/company/redbrickdcu";
+  "join.${tld}" = vhostRedirect "https://dcuclubsandsocs.ie/society/redbrick";
 
 } // (if (config.redbrick.skipCustomVhosts) then {} else {
  "grumble.zone" = vhost {
