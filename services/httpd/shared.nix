@@ -22,6 +22,9 @@ in {
         <FilesMatch \.php\d*$>
           SetHandler "proxy:unix:/run/phpfpm/${user}.sock|fcgi://localhost/"
         </FilesMatch>
+        <Files ~ "(.log)">
+          Require all denied
+        </Files>
 
         Options +Includes
         AllowOverride AuthConfig FileInfo Indexes Limit AuthConfig Options=ExecCGI,Includes,IncludesNoExec,Indexes,MultiViews,SymlinksIfOwnerMatch NonFatal=Unknown
