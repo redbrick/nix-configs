@@ -35,6 +35,14 @@ let
   # Addresses we reject mail from over port 25
   sender_blacklist = pkgs.writeText "sender_blacklist" ''
     ${tld} REJECT
+
+  '';
+
+  # Reject
+  check_backscatterer = pkgs.writeText "check_backscatterer" ''
+    <> reject_rbl_client ips.backscatterer.org
+    postmaster reject_rbl_client ips.backscatterer.org
+
   '';
 
   # IPs we reject unauthenticated connections from
@@ -115,6 +123,7 @@ in {
     # Added to /var/lib/postfix/conf/<name>
     mapFiles.sender_whitelist = sender_whitelist;
     mapFiles.sender_blacklist = sender_blacklist;
+    mapFiles.check_backscatterer = check_backscatterer;
     mapFiles.unauth_ip_blacklist = unauth_ip_blacklist;
 
     # Aliases
@@ -263,6 +272,7 @@ in {
       smtpd_recipient_restrictions = builtins.concatStringsSep ", " (commonRestrictions ++ [
         "reject_non_fqdn_recipient" "reject_unknown_recipient_domain"
         "reject_unverified_recipient"
+        "check_sender_access dbm:/etc/postfix/check_backscatterer"
       ]);
       smtpd_data_restrictions = builtins.concatStringsSep ", " (commonRestrictions ++ [
         "reject_multi_recipient_bounce"
