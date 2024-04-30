@@ -272,7 +272,7 @@ in {
       smtpd_recipient_restrictions = builtins.concatStringsSep ", " (commonRestrictions ++ [
         "reject_non_fqdn_recipient" "reject_unknown_recipient_domain"
         "reject_unverified_recipient"
-        "check_sender_access dbm:/etc/postfix/check_backscatterer"
+        "check_sender_access hash:/etc/postfix/check_backscatterer"
       ]);
       smtpd_data_restrictions = builtins.concatStringsSep ", " (commonRestrictions ++ [
         "reject_multi_recipient_bounce"
