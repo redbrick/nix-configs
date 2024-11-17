@@ -15,7 +15,8 @@ let
 
   poolConfig = users: with builtins; pkgs.writeText "phpfpm.conf" (concatStringsSep "\n" ([ ''
       [global]
-      error_log = /proc/self/fd/1
+      error_log = /var/log/phpfpm/error.log
+      log_level = debug
       daemonize = false
     '' ] ++ (map (user: ''
       [${replaceStrings ["global" "wwwrun"] ["global_user" "wwwrun_user"] user.uid}]
