@@ -33,11 +33,11 @@ in (userVhosts // {
     user = "yosarian";
     group = "associat";
   };
-  "blog.${tld}" = vhost {
-    documentRoot = "${webtree}/vhosts/blog.redbrick.dcu.ie";
-    user = "wwwrun";
-    group = "wwwrun";
-  };
+  "oldblog.${tld}" = vhost {
+     documentRoot = "${webtree}/vhosts/blog.redbrick.dcu.ie";
+     user = "wwwrun";
+     group = "wwwrun";
+   };
   "alanwalsh.${tld}" = vhost {
     documentRoot = "${webtree}/s/sonic/cv";
     user = "sonic";
@@ -259,6 +259,7 @@ in (userVhosts // {
   "webgroup-issues.${tld}" = vhostRedirect "https://github.com/orgs/redbrick/projects/4";
   "github.${tld}" = vhostRedirect "https://github.com/redbrick/";
   "drive.${tld}" = vhostRedirect "https://drive.google.com/drive/u/0/folders/1J82f89bfD7vnDI9GN9zwbUS9IjNZU27B";
+  "blog.${tld}" = vhostRedirect "https://${tld}//blog/readme.html";
   # Social Links
   "chat.${tld}" = vhostRedirect "https://discord.com/invite/MttnTq9UyK";
   "discord.${tld}" = vhostRedirect "https://discord.com/invite/MttnTq9UyK";
@@ -266,6 +267,7 @@ in (userVhosts // {
   "twitter.${tld}" = vhostRedirect "https://www.twitter.com/@RedbrickDCU";
   "instagram.${tld}" = vhostRedirect "https://www.instagram.com/redbrickdcu/";
   "linkedin.${tld}" = vhostRedirect "https://www.linkedin.com/company/redbrickdcu";
+  "youtube.${tld}" = vhostRedirect "https://www.youtube.com/redbrickdcu";
   "join.${tld}" = vhostRedirect "https://dcuclubsandsocs.ie/society/redbrick";
 
 } // (if (config.redbrick.skipCustomVhosts) then {} else {
