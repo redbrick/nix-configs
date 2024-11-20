@@ -268,6 +268,7 @@ in (userVhosts // {
   "instagram.${tld}" = vhostRedirect "https://www.instagram.com/redbrickdcu/";
   "linkedin.${tld}" = vhostRedirect "https://www.linkedin.com/company/redbrickdcu";
   "youtube.${tld}" = vhostRedirect "https://www.youtube.com/redbrickdcu";
+  "twitch.${tld}" = vhostRedirect "https://www.twitch.tv/redbrickdcu";
   "tiktok.${tld}" = vhostRedirect "https://www.tiktok.com/@redbrickdcu";
   "join.${tld}" = vhostRedirect "https://dcuclubsandsocs.ie/society/redbrick";
 
