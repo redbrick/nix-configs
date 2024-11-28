@@ -1,18 +1,22 @@
 {
-  users.groups.redis = {};
-  users.users.redis.group = "redis";
+  users.groups.redis = { };
+  users.users.redis = {
+    group = "redis";
+    isSystemUser = true;
+  };
 
   # Create a log directory with systemd <3
   systemd.services.redis.serviceConfig.LogsDirectory = "redis";
 
-  services.redis = {
+  services.redis.servers.redis = {
     enable = true;
     port = 0;
     unixSocket = "/run/redis/redis.sock";
-    unixSocketPerm = 760;
+    unixSocketPerm = 0760;
 
     # Journal
-    logfile = "/var/log/redis/redis.log";
+    # logfile = "/var/log/redis/redis.log";
+    logfile = "/dev/null";
     syslog = false;
 
     settings = {
@@ -21,4 +25,4 @@
       maxmemory-policy = "allkeys-lru";
     };
   };
-} 
+}
