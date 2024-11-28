@@ -40,6 +40,12 @@ in {
   192.168.0.158 mail.redbrick.dcu.ie
   '';
 
+  # clean up after yourself
+  nix.gc = {
+    automatic = true;
+    options = "--delete-older-than 30d";
+  };
+
   # Enable rsyslog
   # services.rsyslogd.enable = true;
   # services.rsyslogd.extraConfig = "*.* @@log.internal:514;RSYSLOG_SyslogProtocol23Format";
