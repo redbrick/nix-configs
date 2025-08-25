@@ -1,7 +1,8 @@
 { config, pkgs, lib, ... }:
 let
   variables = import ../../common/variables.nix;
-in {
+in
+{
   imports = [
     ./hardware-configuration.nix
     ../../common/sysconfig.nix
@@ -20,15 +21,15 @@ in {
   boot.loader.grub.version = 2;
   boot.loader.grub.device = "/dev/sda";
 
-  networking = lib.recursiveUpdate {
-    hostName = "motherlode";
-    hostId = "fccc9415";
-    defaultGateway = "192.168.0.254";
-    vlans.dculife = {
-      id = 5;
-      interface = "eno4";
-    };
-   interfaces.eno4.useDHCP = false;
-   interfaces.dculife.useDHCP = false;
-  } (variables.bondConfig [ "eno1" "eno2" ] "192.168.0.130");
+  networking = lib.recursiveUpdate
+    {
+      hostName = "motherlode";
+      useDHCP = true;
+
+      vlans.dculife = {
+        id = 5;
+        interface = "eno4";
+      };
+    }
+    (variables.bondConfig [ "eno1" "eno2" ] null);
 }
